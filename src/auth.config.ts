@@ -13,7 +13,7 @@ export default {
             clientSecret: process.env.GITHUB_CLIENT_SECRET!,
             authorization: {
                 url: "https://github.com/login/oauth/authorize",
-                params: { scope: "read:user user:email" }, 
+                params: { scope: "read:user user:email" },
             },
             async profile(profile, tokens) {
                 let email = profile.email;
@@ -34,7 +34,7 @@ export default {
                 return {
                     id: profile.id.toString(),
                     name: profile.name || profile.login,
-                    email: email ?? `${profile.login}.github@local.com`, 
+                    email: email ?? `${profile.login}.github@local.com`,
                 };
             },
         }),
@@ -45,15 +45,27 @@ export default {
         Credentials({
             async authorize(credentials) {
                 const validatedFields = LoginSchema.safeParse(credentials);
-                if (validatedFields.success) {
-                    const { email, password } = validatedFields.data;
-                    const user = await getUserByEmail(email);
-                    if (!user || !user.hashedPassword) return null;
-                    const passwordMatch = await bcrypt.compare(password, user.hashedPassword);
-                    if (passwordMatch) return user;
-                }
-                return null;
-            }
+
+                if (!validatedFields.success) return null;
+
+                const { email, password } = validatedFields.data;
+
+                const user = await getUserByEmail(email);
+                if (!user || !user.hashedPassword) return null;
+
+                const passwordMatch = await bcrypt.compare(
+                    password,
+                    user.hashedPassword
+                );
+
+                if (!passwordMatch) return null;
+
+                return {
+                    id: user.u_id,
+                    email: user.email,
+                    name: user.name,
+                };
+            },
         })
     ],
 } satisfies NextAuthConfig

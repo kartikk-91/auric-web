@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -12,87 +7,77 @@ datasource db {
   provider = "postgresql"
 }
 
-
 model User {
-  u_id           String       @id @default(cuid())
-  name           String    @db.VarChar(255)
   email          String    @unique @db.VarChar(255)
+  name           String    @db.VarChar(255)
+  createdAt      DateTime  @default(now())
   hashedPassword String    @db.VarChar(255)
   isVerified     Boolean   @default(false)
-  createdAt      DateTime  @default(now())
-
+  u_id           String    @id @default(cuid())
   companies      Company[]
 }
 
 model VerificationToken {
-  v_id    String      @id @default(cuid())
+  v_id    String   @id @default(cuid())
   email   String   @db.VarChar(255)
   token   String   @unique @db.VarChar(255)
   expires DateTime
 }
 
 model Company {
-  c_id        String      @id @default(cuid())
+  c_id        String         @id @default(cuid())
   u_id        String
-  cname       String   @db.VarChar(255)
-  phoneNumber String   @db.VarChar(20)
-  address     String   @db.VarChar(255)
-  logoUrl     String?  @db.VarChar(255)
-  description String?  @db.VarChar(255)
-  website     String?  @db.VarChar(255)
-
-  user        User     @relation(fields: [u_id], references: [u_id])
-  forms       FeedbackForm[]
+  cname       String         @db.VarChar(255)
+  phoneNumber String         @db.VarChar(20)
+  address     String         @db.VarChar(255)
+  logoUrl     String?        @db.VarChar(255)
+  description String?        @db.VarChar(255)
+  website     String?        @db.VarChar(255)
+  createdAt   DateTime       @default(now())
   analytics   Analytics?
-
-  createdAt   DateTime @default(now())
+  user        User           @relation(fields: [u_id], references: [u_id])
+  forms       FeedbackForm[]
 }
 
 model FeedbackForm {
-  formId  String     @id @default(cuid())
-  c_id    String
-  schema  Json
-  title   String? @db.VarChar(255)
-  tagLine String? @db.VarChar(255)
-
-  company Company @relation(fields: [c_id], references: [c_id])
+  formId    String     @id @default(cuid())
+  c_id      String
+  schema    Json
+  title     String?    @db.VarChar(255)
+  tagLine   String?    @db.VarChar(255)
+  createdAt DateTime   @default(now())
   feedbacks Feedback[]
-
-  createdAt DateTime @default(now())
+  company   Company    @relation(fields: [c_id], references: [c_id])
 }
 
 model Feedback {
-  f_id     String     @id @default(cuid())
-  formId   String
-  name     String  @db.VarChar(255)
-  state    String  @db.VarChar(255)
-  country  String  @db.VarChar(255)
-  age      Int
-  data     Json
-
-  form     FeedbackForm @relation(fields: [formId], references: [formId])
-  result   FeedbackResult?
-
-  createdAt DateTime @default(now())
+  f_id      String          @id @default(cuid())
+  formId    String
+  name      String          @db.VarChar(255)
+  state     String          @db.VarChar(255)
+  country   String          @db.VarChar(255)
+  age       Int
+  data      Json
+  createdAt DateTime        @default(now())
+  form      FeedbackForm    @relation(fields: [formId], references: [formId])
+  result    FeedbackResult?
 }
 
 model FeedbackResult {
-  id        String     @id @default(cuid())
-  f_id      String     @unique
+  id        String   @id @default(cuid())
+  f_id      String   @unique
   sentiment Float
   rating    Int
-
   feedback  Feedback @relation(fields: [f_id], references: [f_id])
 }
 
 model Analytics {
-  c_id          String     @id
-  avgRating     Float
-  auricScore    Float
+  c_id           String  @id
+  avgRating      Float
+  auricScore     Float
   totalFeedbacks Int
-  sentiment     Json?
-  features      Json?
-  ratings       Json?
-
-  company       Company @relation(fields: [c_id], references: [c_id])
+  sentiment      Json?
+  features       Json?
+  ratings        Json?
+  company        Company @relation(fields: [c_id], references: [c_id])
 }
