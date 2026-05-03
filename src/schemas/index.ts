@@ -30,6 +30,14 @@ export const RegisterSchema = z
     message: "Passwords do not match",
   });
 
+export const companySchema = z.object({
+  cname: z.string().min(1, "Company name is required"),
+  phoneNumber: z.string().min(7, "Invalid phone number"),
+  address: z.string().min(1, "Address is required"),
+  website: z.string().url("Invalid URL").optional().or(z.literal("")),
+  description: z.string().max(255).optional(),
+  logo: z.any().optional(),
+});
 
 
 
