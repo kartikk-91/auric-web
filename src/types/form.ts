@@ -1,6 +1,5 @@
 export type FieldType =
   | "short-answer"
-  | "long-answer"
   | "rating"
   | "multiple-choice"
   | "checkboxes"

@@ -14,14 +14,6 @@ export default function FieldPreview({ field }: any) {
         />
       );
 
-    case "long-answer":
-      return (
-        <textarea
-          rows={3}
-          placeholder="Type your answer..."
-          className={`${baseInput} resize-none`}
-        />
-      );
 
     case "rating":
       return (

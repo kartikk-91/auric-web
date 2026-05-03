@@ -6,14 +6,13 @@ import PersonalInfo from './personal-info'
 import VerifyIdentity from './verify-identity'
 
 const MainForm = ({ form }: { form: any }) => {
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(3)
 
   const [email, setEmail] = useState<string | null>(null)
   const [personalInfo, setPersonalInfo] = useState<any>(null)
-  const [feedbackData, setFeedbackData] = useState<any[]>([])
 
   return (
-    <div className='relative z-10 w-1/2 h-5/6 bg-[#ffffff] rounded-3xl shadow-2xl p-8'>
+    <div className='relative z-10 w-1/2 h-5/6 min-h-fit bg-[#ffffff] rounded-3xl shadow-2xl p-8'>
 
       {step === 1 && (
         <VerifyIdentity
@@ -36,9 +35,7 @@ const MainForm = ({ form }: { form: any }) => {
       {step === 3 && (
         <FeedbackQuestions
           schema={form.schema}
-          answers={feedbackData}
-          setAnswers={setFeedbackData}
-          onSubmit={() => {
+          onSubmit={(feedbackData) => {
             console.log({
               email,
               personalInfo,

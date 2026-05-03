@@ -25,7 +25,6 @@ interface Props {
 
 const fieldTypes = [
   { type: "short-answer", icon: AlignLeft, label: "Short Answer" },
-  { type: "long-answer", icon: AlignJustify, label: "Long Answer" },
   { type: "rating", icon: Star, label: "Rating" },
   { type: "multiple-choice", icon: CheckSquare, label: "Multiple Choice" },
   { type: "checkboxes", icon: CheckSquare, label: "Checkboxes" },

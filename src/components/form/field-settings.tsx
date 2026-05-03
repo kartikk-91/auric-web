@@ -11,7 +11,6 @@ interface Props {
 
 const fieldTypes: { type: FieldType; label: string }[] = [
   { type: "short-answer", label: "Short Answer" },
-  { type: "long-answer", label: "Long Answer" },
   { type: "rating", label: "Rating" },
   { type: "multiple-choice", label: "Multiple Choice" },
   { type: "checkboxes", label: "Checkboxes" },
