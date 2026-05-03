@@ -1,6 +1,30 @@
 import { Check, Eye, Send, MoreHorizontal } from "lucide-react";
 
-export default function FormBuilderHeader() {
+export default function FormBuilderHeader({ form ,title, tagline}: any) {
+
+    const handlePublish = async () => {
+        try {
+            const res = await fetch("/api/form/create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    title: title,
+                    tagLine: tagline,
+                    schema: {
+                        fields: form.fields,
+                        settings: {},
+                    },
+                }),
+            });
+
+            const data = await res.json();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     return (
         <header className="w-full px-8 pt-8 pb-4 bg-white space-y-6">
             <div className="flex items-center justify-between">
@@ -21,7 +45,7 @@ export default function FormBuilderHeader() {
                     </button>
 
 
-                    <button className="flex items-center gap-1.5 px-4 py-2 text-l5 font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+                    <button onClick={handlePublish} className="flex items-center gap-1.5 px-4 py-2 text-l5 font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
                         <Send className="w-5 h-5" />
                         Publish
                     </button>

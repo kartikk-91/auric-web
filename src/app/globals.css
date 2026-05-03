@@ -128,3 +128,40 @@
     @apply font-sans;
   }
 }
+
+
+/* Global Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Track (background) */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(100, 116, 139, 0.4),
+    rgba(100, 116, 139, 0.2)
+  );
+  border-radius: 999px;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(100, 116, 139, 0.6),
+    rgba(100, 116, 139, 0.3)
+  );
+}
+
+/* Optional: active/dragging */
+::-webkit-scrollbar-thumb:active {
+  background: rgba(59, 130, 246, 0.6); 
+}

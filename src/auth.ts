@@ -38,12 +38,26 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     async session({ token, session }) {
       if (token.sub && session.user) {
         session.user.id = token.sub;
+        session.user.c_id = token.c_id as string;
       }
+
       type SessionUser = typeof session.user & { image?: string };
       delete (session.user as SessionUser).image;
+
       return session;
     },
     async jwt({ token }) {
+      if (!token.sub) return token;
+
+      const company = await prisma.company.findFirst({
+        where: { u_id: token.sub },
+        select: { c_id: true },
+      });
+
+      if (company) {
+        token.c_id = company.c_id;
+      }
+
       return token;
     }
   },

@@ -1,3 +1,4 @@
+'use client';
 import { useState } from "react";
 import { FormField, FieldType } from "@/types/form";
 

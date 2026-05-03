@@ -2,19 +2,17 @@
 
 import Sidebar from "./sidebar";
 import FieldSettings from "./field-settings";
-import { useFormBuilder } from "@/hooks/useFormBuilder";
 import FormCanvas from "./form-canvas";
 
-export default function FormBuilder() {
-  const form = useFormBuilder();
+export default function FormBuilder({ form, title, setTitle, tagline, setTagline }: any) {
 
   const selectedField = form.fields.find(
-    (f) => f.id === form.selectedFieldId
+    (f: any) => f.id === form.selectedFieldId
   );
 
   return (
     <div className="h-[calc(100vh-130px)] bg-[#ffffff] flex overflow-hidden">
-      
+
       <div className="w-[240px] ml-4 border border-gray-200 rounded-xl shadow-sm bg-white h-full overflow-hidden">
         <Sidebar addField={form.addField} />
       </div>
@@ -28,6 +26,10 @@ export default function FormBuilder() {
             setSelectedFieldId={form.setSelectedFieldId}
             deleteField={form.deleteField}
             duplicateField={form.duplicateField}
+            title={title}
+            setTitle={setTitle}
+            tagline={tagline}
+            setTagline={setTagline}
           />
         </div>
       </div>

@@ -37,6 +37,7 @@ model Company {
   analytics   Analytics?
   user        User           @relation(fields: [u_id], references: [u_id])
   forms       FeedbackForm[]
+  feedbacks   Feedback[]
 }
 
 model FeedbackForm {
@@ -46,21 +47,32 @@ model FeedbackForm {
   title     String?    @db.VarChar(255)
   tagLine   String?    @db.VarChar(255)
   createdAt DateTime   @default(now())
+  isActive Boolean @default(true)
   feedbacks Feedback[]
   company   Company    @relation(fields: [c_id], references: [c_id])
 }
 
 model Feedback {
-  f_id      String          @id @default(cuid())
-  formId    String
-  name      String          @db.VarChar(255)
-  state     String          @db.VarChar(255)
-  country   String          @db.VarChar(255)
-  age       Int
-  data      Json
-  createdAt DateTime        @default(now())
-  form      FeedbackForm    @relation(fields: [formId], references: [formId])
-  result    FeedbackResult?
+  f_id        String   @id @default(cuid())
+  formId      String
+  c_id        String
+  email       String   @db.VarChar(255)
+  ipAddress   String?  @db.VarChar(100)
+
+  name        String   @db.VarChar(255)
+  state       String   @db.VarChar(255)
+  country     String   @db.VarChar(255)
+  age         Int
+  
+  data        Json
+
+  createdAt   DateTime @default(now())
+
+  form        FeedbackForm @relation(fields: [formId], references: [formId])
+  company     Company        @relation(fields: [c_id], references: [c_id])
+  result      FeedbackResult?
+
+  @@index([email, formId])
 }
 
 model FeedbackResult {

@@ -1,5 +1,6 @@
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import FieldItem from "./field-item";
+import EditableHeader from "./editable-hearder";
 
 export default function FormCanvas({
   fields,
@@ -8,6 +9,10 @@ export default function FormCanvas({
   setSelectedFieldId,
   deleteField,
   duplicateField,
+  title,
+  setTitle,
+  tagline,
+  setTagline,
 }: any) {
   const onDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -22,15 +27,12 @@ export default function FormCanvas({
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-4xl bg-white border border-gray-200 rounded-xl shadow-sm px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-xl font-semibold text-gray-900 mb-1">
-            Customer Feedback
-          </h1>
-          <p className="text-sm text-gray-500">
-            We'd love to hear your thoughts! Your feedback helps us improve and
-            serve you better.
-          </p>
-        </div>
+        <EditableHeader
+          title={title}
+          setTitle={setTitle}
+          tagline={tagline}
+          setTagline={setTagline}
+        />
 
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="fields">

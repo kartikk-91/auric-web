@@ -14,6 +14,7 @@ export default async function ProtectedLayout({
   children,
 }: ProtectedLayoutProps){
     const session=await auth();
+    console.log(session)
     if(!session) redirect("/auth/login");
 
     const orgExists=await CheckOrgExists(session.user.id);
