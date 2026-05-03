@@ -2,7 +2,7 @@ import { Check, Eye, Send, MoreHorizontal } from "lucide-react";
 
 export default function FormBuilderHeader() {
     return (
-        <header className="w-full px-8 py-8 bg-white space-y-6">
+        <header className="w-full px-8 pt-8 pb-4 bg-white space-y-6">
             <div className="flex items-center justify-between">
                 <div className="flex flex-col">
                     <h1 className="text-2xl font-semibold text-gray-900">

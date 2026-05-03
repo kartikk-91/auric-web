@@ -4,7 +4,7 @@ import Sidebar from "@/components/shared/sidebar"
 
 const FeedbackForm = () => {
   return (
-    <div className="w-full flex">
+    <div className="w-full h-screen flex overflow-y-hidden">
       <div><Sidebar/></div>
       <div className="w-full">
         <FormBuilderHeader/>
