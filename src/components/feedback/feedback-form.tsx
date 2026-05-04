@@ -17,7 +17,7 @@ const FeedbackForm = async ({formId}:{formId:string}) => {
   }
 
   return (
-    <div className="min-h-screen h-screen w-full bg-linear-to-br from-pink-50 via-white to-purple-50 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen h-screen w-full bg-linear-to-br from-pink-50 via-white to-purple-50 flex flex-col items-center justify-center gap-5 p-4 relative overflow-hidden">
 
       <FeedbackBackground />
 

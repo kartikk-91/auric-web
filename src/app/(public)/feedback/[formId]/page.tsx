@@ -5,9 +5,7 @@ const Feedback = async ({
 }: {
   params: Promise<{ formId: string }>
 }) => {
-
   const { formId } = await params
-
   return (
     <div className='h-screen w-screen'>
       <FeedbackForm formId={formId} />

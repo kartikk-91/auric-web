@@ -40,7 +40,7 @@ export default function MultiStepForm({
         brandColor={brandColor}
       />
 
-      <div className="mb-10">
+      <div className="mb-10 max-h-36 overflow-x-scroll">
         <FieldRenderer
           field={currentField}
           value={responses[currentField.id]}

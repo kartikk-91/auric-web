@@ -66,7 +66,7 @@ export function FieldRenderer({
           options={field.options || []}
           value={value}
           onChange={onChange}
-          placeholder={"Enter your answer"}
+          placeholder={"Select an option"}
         />
       );
 
@@ -75,7 +75,7 @@ export function FieldRenderer({
         <EmailField
           value={value}
           onChange={onChange}
-          placeholder={"Enter your answer"}
+          placeholder={"e.g. name@example.com"}
         />
       );
 
@@ -84,7 +84,7 @@ export function FieldRenderer({
         <PhoneField
           value={value}
           onChange={onChange}
-          placeholder={"Enter your answer"}
+          placeholder={"e.g. +91 98765 43210"}
         />
       );
 
@@ -93,17 +93,11 @@ export function FieldRenderer({
         <WebsiteField
           value={value}
           onChange={onChange}
-          placeholder={"Enter your answer"}
+          placeholder={"https://yourwebsite.com"}
         />
       );
 
-    case "date":
-      return (
-        <DateField
-          value={value}
-          onChange={onChange}
-        />
-      );
+    case "date": return (<DateField value={value} onChange={onChange} />);
 
     case "short-answer":
     default:
@@ -111,7 +105,7 @@ export function FieldRenderer({
         <ShortAnswerField
           value={value}
           onChange={onChange}
-          placeholder={"Enter your answer"}
+          placeholder={"Type your answer here..."}
         />
       );
   }

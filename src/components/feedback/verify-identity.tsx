@@ -68,15 +68,9 @@ const VerifyIdentity = ({
                     Let's get started!
                 </h2>
 
-                <p className="text-center mb-1">
+                <p className="text-center mb-6">
                     <span className="text-purple-600 font-semibold">Verify</span>
                     <span className="text-gray-900"> your email to continue</span>
-                </p>
-
-                <p className="text-sm text-gray-500 text-center mb-8 leading-relaxed">
-                    This helps us ensure your feedback is authentic
-                    <br />
-                    and keep your data secure.
                 </p>
 
                 <button

@@ -15,7 +15,7 @@ const FeedbackQuestions = ({
   const fields = schema?.fields || []
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full min-h-fit flex flex-col">
       <Timeline currentStep={3} />
 
       <div className="flex-1 flex flex-col items-center px-6">

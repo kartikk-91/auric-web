@@ -40,7 +40,7 @@ export default function FieldSettings({
 
   return (
     <div className="h-full flex flex-col">
-      
+
       <div className="px-6 pt-6 pb-4 border-b">
         <h2 className="text-sm font-semibold text-gray-800">
           Field Settings
@@ -48,7 +48,7 @@ export default function FieldSettings({
       </div>
 
       <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
-        
+
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-2">
             FIELD TYPE
@@ -57,11 +57,22 @@ export default function FieldSettings({
           <div className="relative">
             <select
               value={selectedField.type}
-              onChange={(e) =>
-                updateField(selectedField.id, {
-                  type: e.target.value as FieldType,
-                })
-              }
+              onChange={(e) => {
+                const newType = e.target.value as FieldType;
+
+                const updates: Partial<FormField> = {
+                  type: newType,
+                };
+
+                if (["multiple-choice", "checkboxes", "dropdown"].includes(newType)) {
+                  updates.options =
+                    selectedField.options || ["Option 1", "Option 2"];
+                } else {
+                  updates.options = undefined;
+                }
+
+                updateField(selectedField.id, updates);
+              }}
               className={`${inputClass} appearance-none pr-10`}
             >
               {fieldTypes.map((f) => (
@@ -102,7 +113,7 @@ export default function FieldSettings({
           }
         />
 
-    
+
         {selectedField.type === "rating" && (
           <>
             <SelectRow
@@ -150,11 +161,11 @@ export default function FieldSettings({
         {["multiple-choice", "checkboxes", "dropdown"].includes(
           selectedField.type
         ) && (
-          <OptionsEditor
-            field={selectedField}
-            updateField={updateField}
-          />
-        )}
+            <OptionsEditor
+              field={selectedField}
+              updateField={updateField}
+            />
+          )}
 
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-2">
@@ -195,14 +206,12 @@ function ToggleRow({ label, value, onChange }: any) {
 
       <button
         onClick={onChange}
-        className={`relative w-10 h-5 rounded-full transition ${
-          value ? "bg-blue-600" : "bg-gray-300"
-        }`}
+        className={`relative w-10 h-5 rounded-full transition ${value ? "bg-blue-600" : "bg-gray-300"
+          }`}
       >
         <span
-          className={`absolute top-0.5 h-4 w-4 bg-white rounded-full transition ${
-            value ? "left-5" : "left-0.5"
-          }`}
+          className={`absolute top-0.5 h-4 w-4 bg-white rounded-full transition ${value ? "left-5" : "left-0.5"
+            }`}
         />
       </button>
     </div>

@@ -3,7 +3,7 @@ import React from 'react'
 
 const FeedbackFooter = () => {
     return (
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-gray-500 text-sm">
+        <div className="flex items-center gap-2 text-gray-500 text-sm">
             <span>Powered by</span>
             <div className="flex items-center gap-2">
                 <div>

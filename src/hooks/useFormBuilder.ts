@@ -7,15 +7,19 @@ export function useFormBuilder() {
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null);
 
   const addField = (type: FieldType) => {
-    const newField: FormField = {
+    const base: FormField = {
       id: Date.now().toString(),
       type,
       question: "New Question",
       required: false,
     };
 
-    setFields((prev) => [...prev, newField]);
-    setSelectedFieldId(newField.id);
+    if (["multiple-choice", "checkboxes", "dropdown"].includes(type)) {
+      base.options = ["Option 1", "Option 2"];
+    }
+
+    setFields((prev) => [...prev, base]);
+    setSelectedFieldId(base.id);
   };
 
   const updateField = (id: string, updates: Partial<FormField>) => {

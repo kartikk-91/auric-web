@@ -2,6 +2,13 @@
 
 import React, { useState } from 'react'
 import Timeline from './timeline'
+import Select from "react-select";
+import { getNames } from "country-list";
+
+const countryOptions = getNames().map((country:any) => ({
+    label: country,
+    value: country,
+}));
 
 const PersonalInfo = ({
     onNext,
@@ -19,8 +26,16 @@ const PersonalInfo = ({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
 
-        if (!formData.fullName || !formData.age || !formData.country) {
-            return
+        const ageNumber = Number(formData.age);
+
+        if (
+            !formData.fullName ||
+            !formData.age ||
+            !formData.country ||
+            ageNumber < 0 ||
+            ageNumber > 100
+        ) {
+            return;
         }
 
         onNext(formData)
@@ -87,25 +102,17 @@ const PersonalInfo = ({
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                             </div>
-                            <select
+                            <input
+                                type="number"
+                                min={0}
+                                max={100}
+                                placeholder="Enter your age"
                                 value={formData.age}
                                 onChange={(e) =>
                                     setFormData({ ...formData, age: e.target.value })
                                 }
-                                className="w-full pl-12 pr-10 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white text-gray-500"
-                            >
-                                <option value="">Select your age</option>
-                                <option value="18-25">18-25</option>
-                                <option value="26-35">26-35</option>
-                                <option value="36-45">36-45</option>
-                                <option value="46-55">46-55</option>
-                                <option value="56+">56+</option>
-                            </select>
-                            <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </div>
+                                className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
                         </div>
                     </div>
                 </div>
@@ -144,21 +151,30 @@ const PersonalInfo = ({
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
-                            <select
-                                value={formData.country}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, country: e.target.value })
+                            <Select
+                                options={countryOptions}
+                                placeholder="Search or select your country"
+                                value={countryOptions.find(
+                                    (c) => c.value === formData.country
+                                )}
+                                onChange={(selected: any) =>
+                                    setFormData({
+                                        ...formData,
+                                        country: selected?.value || "",
+                                    })
                                 }
-                                className="w-full pl-12 pr-10 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white text-gray-500"
-                            >
-                                <option value="">Select your country</option>
-                                <option value="US">United States</option>
-                                <option value="UK">United Kingdom</option>
-                                <option value="CA">Canada</option>
-                                <option value="AU">Australia</option>
-                                <option value="IN">India</option>
-                                <option value="Other">Other</option>
-                            </select>
+                                className="text-sm"
+                                styles={{
+                                    control: (base) => ({
+                                        ...base,
+                                        padding: "6px",
+                                        borderRadius: "0.5rem",
+                                        borderColor: "#e5e7eb",
+                                        boxShadow: "none",
+                                        "&:hover": { borderColor: "#3b82f6" },
+                                    }),
+                                }}
+                            />
                             <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
                                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
