@@ -1,4 +1,3 @@
-// fields/RatingField.tsx
 
 export default function RatingField({ value, onChange }: any) {
   const ratings = [

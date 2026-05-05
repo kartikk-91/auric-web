@@ -16,13 +16,9 @@ export default function RatingDistribution() {
   ];
 
   const maxValue = Math.max(...data.map(d => d.value));
-
-  // ✅ Nice rounded ticks
   const step = Math.ceil(maxValue / 4 / 5) * 5;
   const ticks = [0, step, step * 2, step * 3, step * 4];
   const maxTick = ticks[ticks.length - 1];
-
-  // ✅ Chart layout
   const chartHeight = 90; // leave bottom space
   const chartWidth = 100;
   const spacing = chartWidth / data.length;
@@ -69,9 +65,7 @@ export default function RatingDistribution() {
                 />
               );
             })}
-
-            {/* Gradient */}
-            <defs>
+<defs>
               <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.9" />
                 <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.6" />

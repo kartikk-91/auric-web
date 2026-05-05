@@ -1,7 +1,6 @@
-import { Check, Eye, Send, MoreHorizontal } from "lucide-react";
+import { Eye, Send, MoreHorizontal } from "lucide-react";
 
 export default function DashboardHeader() {
-
     return (
         <header className="w-full px-8 pt-8 pb-4 bg-white space-y-6">
             <div className="flex items-center justify-between">

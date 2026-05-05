@@ -1,4 +1,3 @@
-// NavigationButtons.tsx
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 

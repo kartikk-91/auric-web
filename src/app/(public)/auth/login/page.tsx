@@ -9,8 +9,6 @@ import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import Image from "next/image";
 import { useState, useTransition } from "react";
-
-// simple schema for login
 const LoginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1, "Password is required"),

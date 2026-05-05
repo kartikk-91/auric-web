@@ -54,15 +54,12 @@ export default function RecentTestimonials() {
       <div className="space-y-6">
         {testimonials.map((testimonial, idx) => (
           <div key={idx} className="flex gap-4">
-            {/* Avatar */}
-            <div className="shrink-0">
+<div className="shrink-0">
               <div className="w-12 h-12 rounded-full bg-linear-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold">
                 {testimonial.author.split(' ').map(n => n[0]).join('')}
               </div>
             </div>
-
-            {/* Content */}
-            <div className="flex-1 min-w-0">
+<div className="flex-1 min-w-0">
               <p className="text-sm text-gray-700 mb-3 leading-relaxed">
                 "{testimonial.quote}"
               </p>

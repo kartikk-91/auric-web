@@ -10,8 +10,6 @@ export default function TopSources() {
   ];
 
   const total = sources.reduce((sum, s) => sum + s.value, 0);
-
-  // Calculate donut segments
   let currentAngle = -90; // Start from top
   const segments = sources.map((source) => {
     const angle = (source.value / total) * 360;
@@ -23,8 +21,6 @@ export default function TopSources() {
     currentAngle += angle;
     return segment;
   });
-
-  // Function to create donut path
   const createDonutPath = (startAngle: number, endAngle: number, outerRadius: number, innerRadius: number) => {
     const start = polarToCartesian(50, 50, outerRadius, endAngle);
     const end = polarToCartesian(50, 50, outerRadius, startAngle);
@@ -60,8 +56,7 @@ export default function TopSources() {
       </div>
 
       <div className="flex items-center gap-8">
-        {/* Donut Chart */}
-        <div className="relative shrink-0">
+<div className="relative shrink-0">
           <svg width="180" height="180" viewBox="0 0 100 100">
             {segments.map((segment, idx) => (
               <path
@@ -72,18 +67,14 @@ export default function TopSources() {
               />
             ))}
           </svg>
-          
-          {/* Center text */}
-          <div className="absolute inset-0 flex items-center justify-center">
+<div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <div className="text-2xl font-bold text-gray-900">{total}</div>
               <div className="text-xs text-gray-500">Total</div>
             </div>
           </div>
         </div>
-
-        {/* Legend */}
-        <div className="flex-1 space-y-3">
+<div className="flex-1 space-y-3">
           {sources.map((source, idx) => (
             <div key={idx} className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">

@@ -1,4 +1,3 @@
-// components/form/FieldRenderer.tsx
 
 import { FormField } from "@/types/form";
 import RatingField from "./fields/rating-field";

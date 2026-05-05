@@ -1,4 +1,3 @@
-// MultiStepForm.tsx
 
 import { useMultiStepForm } from "@/hooks/useMultiStepForm";
 import ProgressBar from "./progress-bar";

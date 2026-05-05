@@ -1,4 +1,3 @@
-// QuestionHeader.tsx
 
 export default function QuestionHeader({
   question,

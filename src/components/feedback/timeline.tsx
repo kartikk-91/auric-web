@@ -15,8 +15,7 @@ const Timeline = ({ currentStep = 1 }) => {
 
                 return (
                     <React.Fragment key={index}>
-                        {/* Step */}
-                        <div className="flex flex-col items-center">
+<div className="flex flex-col items-center">
                             <div className={`w-6 h-6 text-sm rounded-full flex items-center justify-center font-semibold mb-2
                                 ${isActive ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-400'}`}>
                                 {stepNumber}
@@ -26,9 +25,7 @@ const Timeline = ({ currentStep = 1 }) => {
                                 {label}
                             </span>
                         </div>
-
-                        {/* Connector */}
-                        {index < steps.length - 1 && (
+{index < steps.length - 1 && (
                             <div className={`w-16 border-t-2 border-dashed mt-[-24px]
                                 ${stepNumber < currentStep ? 'border-blue-600' : 'border-gray-300'}`}>
                             </div>

@@ -11,8 +11,6 @@ import { scaleLinear } from "d3-scale";
 
 const GEO_URL =
   "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
-
-// ISO numeric → data
 const COUNTRY_DATA: Record<
   string,
   { name: string; count: number; percent: number; flag: string; iso2: string }
@@ -148,9 +146,7 @@ export default function ResponsesByLocation() {
               See where your feedback is coming from.
             </p>
           </div>
-
-          {/* Dropdown */}
-          <div className="relative">
+<div className="relative">
             <button
               onClick={() => setDropdownOpen((o) => !o)}
               className="flex items-center gap-2 border border-gray-200 rounded-xl px-4 py-2 text-sm text-gray-600 font-medium hover:border-gray-300 hover:bg-gray-50 transition-all"
@@ -180,11 +176,8 @@ export default function ResponsesByLocation() {
             )}
           </div>
         </div>
-
-        {/* Map + Sidebar */}
-        <div className="flex flex-col lg:flex-row gap-6 mt-4 relative">
-          {/* Map */}
-          <div className="flex-1 relative rounded-2xl overflow-hidden bg-linear-to-br from-slate-50 to-blue-50/30 min-h-[360px]">
+<div className="flex flex-col lg:flex-row gap-6 mt-4 relative">
+<div className="flex-1 relative rounded-2xl overflow-hidden bg-linear-to-br from-slate-50 to-blue-50/30 min-h-[360px]">
             <ComposableMap
               projectionConfig={{ scale: 147, center: [10, 10] }}
               style={{ width: "100%", height: "100%" }}
@@ -242,9 +235,7 @@ export default function ResponsesByLocation() {
                 </Geographies>
               </ZoomableGroup>
             </ComposableMap>
-
-            {/* Tooltip */}
-            {tooltip && (
+{tooltip && (
               <div
                 className="absolute pointer-events-none bg-gray-900 text-white text-xs rounded-xl px-3 py-2 shadow-xl z-20 whitespace-nowrap"
                 style={{
@@ -259,9 +250,7 @@ export default function ResponsesByLocation() {
                 </p>
               </div>
             )}
-
-            {/* Legend */}
-            <div className="absolute bottom-4 left-4">
+<div className="absolute bottom-4 left-4">
               <div
                 className="h-2.5 w-44 rounded-full"
                 style={{
@@ -278,9 +267,7 @@ export default function ResponsesByLocation() {
               </div>
             </div>
           </div>
-
-          {/* Sidebar */}
-          <div className="lg:w-72 bg-gray-50/70 rounded-2xl p-4 border border-gray-100">
+<div className="lg:w-72 bg-gray-50/70 rounded-2xl p-4 border border-gray-100">
             <p className="text-sm font-semibold text-gray-700 mb-1 px-2">
               Top Countries
             </p>
@@ -298,9 +285,7 @@ export default function ResponsesByLocation() {
             </div>
           </div>
         </div>
-
-        {/* Footer insight */}
-        <div className="mt-5 flex items-center gap-3 bg-green-50 rounded-2xl px-4 py-3 border border-green-100">
+<div className="mt-5 flex items-center gap-3 bg-green-50 rounded-2xl px-4 py-3 border border-green-100">
           <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center shrink-0">
             <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />

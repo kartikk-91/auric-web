@@ -24,31 +24,22 @@ export default function FieldItem({
             ${snapshot.isDragging ? "shadow-lg" : ""}
           `}
         >
-          {/* DRAG HANDLE */}
-          <div
+<div
             {...provided.dragHandleProps}
             className="mt-1 cursor-grab active:cursor-grabbing text-gray-400"
           >
             <GripVertical className="w-5 h-5" />
           </div>
-
-          {/* CONTENT */}
-          <div className="flex-1">
-            
-            {/* HEADER */}
-            <div className="flex items-start justify-between mb-3">
-              
-              {/* QUESTION */}
-              <div className="text-sm text-gray-800">
+<div className="flex-1">
+<div className="flex items-start justify-between mb-3">
+<div className="text-sm text-gray-800">
                 <span className="font-medium mr-1">{index + 1}.</span>
                 {field.question}
                 {field.required && (
                   <span className="text-red-500 ml-1">*</span>
                 )}
               </div>
-
-              {/* ACTIONS */}
-              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+<div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -70,12 +61,8 @@ export default function FieldItem({
                 </button>
               </div>
             </div>
-
-            {/* FIELD UI */}
-            <FieldPreview field={field} />
-
-            {/* HELP TEXT */}
-            {field.helpText && (
+<FieldPreview field={field} />
+{field.helpText && (
               <p className="text-xs text-gray-500 mt-2">
                 {field.helpText}
               </p>

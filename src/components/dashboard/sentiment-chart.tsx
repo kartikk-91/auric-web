@@ -43,8 +43,6 @@ const DUMMY_DATA = {
         },
     ],
 };
-
-// SVG Donut Chart
 function DonutChart({
     data,
     hovered,
@@ -60,8 +58,6 @@ function DonutChart({
     const outerR = 90;
     const innerR = 58;
     const gap = 2.5; // degrees gap between slices
-
-    // Build arcs
     let cumulative = 0;
     const slices = data.map((d) => {
         const startAngle = cumulative * 3.6 - 90; // percent → degrees, start at top
@@ -132,9 +128,7 @@ function DonutChart({
                         />
                     );
                 })}
-
-                {/* Center content */}
-                <foreignObject x={cx - 44} y={cy - 44} width={88} height={88}>
+<foreignObject x={cx - 44} y={cy - 44} width={88} height={88}>
                     <div
                         style={{ width: 88, height: 88 }}
                         className="flex flex-col items-center justify-center"
@@ -159,8 +153,6 @@ function DonutChart({
         </div>
     );
 }
-
-// Animated count-up hook
 function useCountUp(target: number, duration = 900, trigger: boolean = true) {
     const [val, setVal] = useState(0);
     useEffect(() => {
@@ -198,15 +190,12 @@ function SentimentRow({
             onMouseEnter={() => onHover(sentiment.key)}
             onMouseLeave={() => onHover(null)}
         >
-            {/* Icon */}
-            <div
+<div
                 className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-200 ${sentiment.bgColor} ${isHovered ? "scale-110" : ""}`}
             >
                 <span className="text-xl">{sentiment.emoji}</span>
             </div>
-
-            {/* Label + desc */}
-            <div className="flex-1 min-w-0">
+<div className="flex-1 min-w-0">
                 <p className="font-semibold text-gray-800 text-sm leading-tight">
                     {sentiment.label}
                 </p>
@@ -214,9 +203,7 @@ function SentimentRow({
                     {sentiment.description}
                 </p>
             </div>
-
-            {/* Stats */}
-            <div className="text-right shrink-0">
+<div className="text-right shrink-0">
                 <p
                     className="text-xl font-bold tabular-nums leading-tight"
                     style={{ color: isHovered ? sentiment.color : "#1e293b" }}
@@ -233,8 +220,6 @@ export default function SentimentChart() {
     const [hovered, setHovered] = useState<string | null>(null);
     const [animate, setAnimate] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
-
-    // Trigger count-up on mount
     useEffect(() => {
         const timer = setTimeout(() => setAnimate(true), 200);
         return () => clearTimeout(timer);
@@ -249,8 +234,7 @@ export default function SentimentChart() {
             className="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-100 p-7 w-full max-w-2xl"
             style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif" }}
         >
-            {/* Header */}
-            <div className="flex items-center justify-between mb-6">
+<div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
                     <h2 className="text-lg font-bold text-gray-900 tracking-tight">
                         Sentiment Overview
@@ -266,20 +250,15 @@ export default function SentimentChart() {
                     View all
                 </button>
             </div>
-
-            {/* Body */}
-            <div className="flex flex-col sm:flex-row gap-6 items-center">
-                {/* Donut */}
-                <div className="shrink-0">
+<div className="flex flex-col sm:flex-row gap-6 items-center">
+<div className="shrink-0">
                     <DonutChart
                         data={DUMMY_DATA.sentiments}
                         hovered={hovered}
                         onHover={setHovered}
                     />
                 </div>
-
-                {/* Legend rows */}
-                <div className="flex-1 w-full divide-y divide-gray-100">
+<div className="flex-1 w-full divide-y divide-gray-100">
                     {DUMMY_DATA.sentiments.map((s) => (
                         <SentimentRow
                             key={s.key}
@@ -291,9 +270,7 @@ export default function SentimentChart() {
                     ))}
                 </div>
             </div>
-
-            {/* Footer */}
-            <div className="mt-5 pt-4 border-t border-gray-100">
+<div className="mt-5 pt-4 border-t border-gray-100">
                 <p className="text-sm text-gray-400">
                     Total feedback:{" "}
                     <span className="font-semibold text-gray-600 tabular-nums">
