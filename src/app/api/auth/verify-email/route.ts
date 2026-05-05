@@ -3,7 +3,6 @@ import { getVerificationTokenByToken } from "@/data/verification-token";
 import { prisma } from "@/lib/db";
 
 export async function POST(req: Request) {
-  console.log("🔥 VERIFY EMAIL API HIT");
 
   try {
     const { token } = await req.json();

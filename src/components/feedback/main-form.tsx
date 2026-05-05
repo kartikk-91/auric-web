@@ -49,7 +49,6 @@ const MainForm = ({ form }: { form: any }) => {
         throw new Error(result.error || "Failed to submit feedback");
       }
 
-      console.log("Submitted:", result);
 
     } catch (err) {
       console.error("Submit error:", err);

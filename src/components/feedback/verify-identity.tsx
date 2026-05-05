@@ -22,8 +22,7 @@ const VerifyIdentity = ({
             )
 
             const user = await res.json()
-            console.log(user.email)
-
+       
             if (user.email) {
                 onSuccess(user.email)
             }
