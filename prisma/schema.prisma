@@ -38,6 +38,8 @@ model Company {
   user        User           @relation(fields: [u_id], references: [u_id])
   forms       FeedbackForm[]
   feedbacks   Feedback[]
+
+  analyticsDailies AnalyticsDaily[]
 }
 
 model FeedbackForm {
@@ -78,18 +80,63 @@ model Feedback {
 model FeedbackResult {
   id        String   @id @default(cuid())
   f_id      String   @unique
-  sentiment Float
-  rating    Int
+  sentiment         String 
+  sentimentScore    Float
+
+  rating            Int?
+
+  praisedFeatures   Json
+  criticizedFeatures Json
+
+  testimonial       String
+  summary           String
+
+  metadata          Json
+
+  confidence        Float
+
+  createdAt         DateTime @default(now())
+
   feedback  Feedback @relation(fields: [f_id], references: [f_id])
+
+  @@index([f_id])
 }
 
 model Analytics {
-  c_id           String  @id
-  avgRating      Float
-  auricScore     Float
-  totalFeedbacks Int
-  sentiment      Json?
-  features       Json?
-  ratings        Json?
-  company        Company @relation(fields: [c_id], references: [c_id])
+  c_id              String   @id
+
+  avgRating         Float
+  avgSentiment      Float
+  auricScore        Float
+
+  totalFeedbacks    Int
+
+  sentimentDist     Json     
+  ratingDist        Json     
+  npsDist           Json     
+
+  topPraised        Json     
+  topCriticized     Json
+
+  featureStats      Json     
+
+  lastUpdated       DateTime @updatedAt
+
+  company           Company  @relation(fields: [c_id], references: [c_id])
+
+}
+
+model AnalyticsDaily {
+  id              String   @id @default(cuid())
+  c_id            String
+
+  date            DateTime
+
+  avgSentiment    Float
+  avgRating       Float
+  totalFeedbacks  Int
+
+  company         Company  @relation(fields: [c_id], references: [c_id])
+
+  @@index([c_id, date])
 }

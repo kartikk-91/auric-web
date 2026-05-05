@@ -5,7 +5,6 @@ import {
     LayoutDashboard,
     MessageSquareQuote,
     MessageSquare,
-    BarChart3,
     FileText,
     Settings,
     ChevronDown,
@@ -22,7 +21,6 @@ export default function Sidebar() {
         { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
         { icon: MessageSquareQuote, label: 'Testimonials', href: '/testimonials' },
         { icon: MessageSquare, label: 'Feedback', href: '/build/feedbackForm' },
-        { icon: BarChart3, label: 'Analytics', href: '/analytics' },
         { icon: FileText, label: 'Templates', href: '/templates' },
         { icon: Settings, label: 'Settings', href: '/settings' },
     ];

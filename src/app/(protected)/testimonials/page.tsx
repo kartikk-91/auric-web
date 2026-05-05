@@ -1,19 +1,18 @@
 "use client";
-import DashboardHeader from "@/components/dashboard/dashboard-header";
 import Sidebar from "@/components/shared/sidebar"
 
 
 
-const Dashboard = () => {
+const Testimonials = () => {
 
   return (
     <div className="w-full h-screen flex overflow-y-hidden">
       <div><Sidebar/></div>
       <div className="w-full">
-        <DashboardHeader/>
+
       </div>
     </div>
   )
 }
 
-export default Dashboard
+export default Testimonials
