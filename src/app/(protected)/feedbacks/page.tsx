@@ -3,7 +3,7 @@ import Sidebar from "@/components/shared/sidebar"
 
 
 
-const Templates = () => {
+const Feedbacks = () => {
 
   return (
     <div className="w-full h-screen flex overflow-y-hidden">
@@ -15,4 +15,4 @@ const Templates = () => {
   )
 }
 
-export default Templates
+export default Feedbacks

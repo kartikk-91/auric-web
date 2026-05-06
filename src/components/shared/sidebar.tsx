@@ -19,10 +19,11 @@ export default function Sidebar() {
 
     const menuItems = [
         { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
+        { icon: MessageSquare, label: 'Feedbacks', href: '/feedbacks' },
         { icon: MessageSquareQuote, label: 'Testimonials', href: '/testimonials' },
-        { icon: MessageSquare, label: 'Feedback', href: '/build/feedbackForm' },
+        { icon: FileText, label: 'Form Builder', href: '/build/feedbackForm' },
         { icon: Sparkles, label: 'Ask Auric', href: '/ask-auric' },
-        { icon: FileText, label: 'Templates', href: '/templates' },
+
         { icon: Settings, label: 'Settings', href: '/settings' },
     ];
 
@@ -48,8 +49,8 @@ export default function Sidebar() {
                                 <button
                                     onClick={() => router.push(item.href)}
                                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive
-                                            ? 'bg-blue-50 text-blue-600'
-                                            : 'text-gray-700 hover:bg-gray-50'
+                                        ? 'bg-blue-50 text-blue-600'
+                                        : 'text-gray-700 hover:bg-gray-50'
                                         }`}
                                 >
                                     <Icon className="w-5 h-5" strokeWidth={2} />
@@ -60,7 +61,7 @@ export default function Sidebar() {
                     })}
                 </ul>
             </nav>
-<div className="px-3 py-4 border-t border-gray-200">
+            <div className="px-3 py-4 border-t border-gray-200">
                 <div className="bg-white rounded-lg px-4 py-3">
                     <div className="flex items-center gap-2 mb-2">
                         <Sparkles className="w-4 h-4 text-blue-600" />
@@ -77,7 +78,7 @@ export default function Sidebar() {
                             ></div>
                         </div>
                     </div>
-<button
+                    <button
                         onClick={() => router.push('/pricing')}
                         className="w-full text-center text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
                     >
@@ -85,7 +86,7 @@ export default function Sidebar() {
                     </button>
                 </div>
             </div>
-<div className="px-3 py-4 border-t border-gray-200">
+            <div className="px-3 py-4 border-t border-gray-200">
                 <button
                     onClick={() => router.push('/settings')}
                     className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-50 transition-colors"
