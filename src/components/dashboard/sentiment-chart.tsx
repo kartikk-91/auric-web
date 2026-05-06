@@ -57,10 +57,10 @@ function DonutChart({
     const cy = size / 2;
     const outerR = 90;
     const innerR = 58;
-    const gap = 2.5; // degrees gap between slices
+    const gap = 2.5; 
     let cumulative = 0;
     const slices = data.map((d) => {
-        const startAngle = cumulative * 3.6 - 90; // percent → degrees, start at top
+        const startAngle = cumulative * 3.6 - 90; 
         const endAngle = (cumulative + d.percent) * 3.6 - 90 - gap;
         cumulative += d.percent;
         return { ...d, startAngle, endAngle };

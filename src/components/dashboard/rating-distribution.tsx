@@ -19,7 +19,7 @@ export default function RatingDistribution() {
   const step = Math.ceil(maxValue / 4 / 5) * 5;
   const ticks = [0, step, step * 2, step * 3, step * 4];
   const maxTick = ticks[ticks.length - 1];
-  const chartHeight = 90; // leave bottom space
+  const chartHeight = 90;
   const chartWidth = 100;
   const spacing = chartWidth / data.length;
 

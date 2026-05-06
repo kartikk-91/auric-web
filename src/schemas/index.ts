@@ -12,23 +12,21 @@ export const LoginSchema = z.object({
 
 export const RegisterSchema = z
   .object({
-    email: z.email({
-      message: "Valid email is required",
-    }),
-    password: z.string().min(6, {
-      message: "Minimum 6 characters required",
-    }),
-    name: z.string().min(1, {
-      message: "Name is required",
-    }),
-    confirmPassword: z.string().min(6, {
-      message: "Minimum 6 characters required",
-    }),
+    name: z
+      .string()
+      .min(2, "Name must be at least 2 characters")
+      .max(50, "Name is too long"),
+    email: z.email("Please enter a valid email address"),
+    password: z
+      .string()
+      .min(6, "Password must be at least 6 characters")
+      .max(100, "Password is too long"),
+    confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    path: ["confirmPassword"],
     message: "Passwords do not match",
-  });
+    path: ["confirmPassword"],
+});
 
 export const companySchema = z.object({
   cname: z.string().min(1, "Company name is required"),

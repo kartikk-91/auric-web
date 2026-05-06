@@ -10,7 +10,7 @@ export default function TopSources() {
   ];
 
   const total = sources.reduce((sum, s) => sum + s.value, 0);
-  let currentAngle = -90; // Start from top
+  let currentAngle = -90; 
   const segments = sources.map((source) => {
     const angle = (source.value / total) * 360;
     const segment = {

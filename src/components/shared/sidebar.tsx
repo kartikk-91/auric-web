@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
+import UserProfileDropdown from './profile-dropdown';
 
 export default function Sidebar() {
     const router = useRouter();
@@ -86,21 +87,7 @@ export default function Sidebar() {
                     </button>
                 </div>
             </div>
-            <div className="px-3 py-4 border-t border-gray-200">
-                <button
-                    onClick={() => router.push('/settings')}
-                    className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-blue-600 font-semibold text-sm">AC</span>
-                    </div>
-                    <div className="flex-1 text-left">
-                        <p className="text-sm font-medium text-gray-900">Alex Carter</p>
-                        <p className="text-xs text-gray-500">alex@auric.app</p>
-                    </div>
-                    <ChevronDown className="w-4 h-4 text-gray-400" />
-                </button>
-            </div>
+            <UserProfileDropdown/>
         </div>
     );
 }
