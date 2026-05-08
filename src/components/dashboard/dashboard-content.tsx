@@ -8,10 +8,10 @@ import ResponsesByLocation from './response-location';
 
 export default function DashboardContent() {
   return (
-    <div className="min-h-screen h-screen bg-gray-50 p-6 overflow-y-scroll">
-      <div className="max-w-7xl h-full mx-auto space-y-6 ">
+    <div className="min-h-screen h-fit md:h-screen bg-gray-50 p-6 md:overflow-y-scroll">
+      <div className="max-w-7xl h-fit mx-auto space-y-6 ">
      
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="h-fit grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="Testimonials"
             value="128"
@@ -43,7 +43,7 @@ export default function DashboardContent() {
         </div>
 
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-fit">
           <RatingDistribution />
           <FeedbackInsights />
         </div>

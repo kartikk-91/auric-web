@@ -8,9 +8,9 @@ import Sidebar from "@/components/shared/sidebar"
 const Dashboard = () => {
 
   return (
-    <div className="w-full h-screen flex overflow-y-hidden">
+    <div className="w-full h-screen flex md:overflow-y-hidden">
       <div><Sidebar/></div>
-      <div className="w-full">
+      <div className="w-full mt-16 md:mt-0">
         <DashboardHeader/>
         <DashboardContent/>
       </div>
