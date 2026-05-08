@@ -1,4 +1,4 @@
-// data/feedbackData.ts
+
 import { Feedback } from '@/types/feedback';
 
 export const feedbackData: Feedback[] = [

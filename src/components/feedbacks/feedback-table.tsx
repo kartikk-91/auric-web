@@ -1,4 +1,4 @@
-// components/FeedbackTable.tsx
+
 
 import { Feedback } from "@/types/feedback";
 import SentimentBadge from "./sentiment-badge";

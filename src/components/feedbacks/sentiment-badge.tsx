@@ -1,4 +1,4 @@
-// components/SentimentBadge.tsx
+
 interface SentimentBadgeProps {
   sentiment: 'Positive' | 'Neutral' | 'Negative';
 }

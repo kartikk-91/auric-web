@@ -1,4 +1,4 @@
-// components/FeedbackDetailPanel.tsx
+
 'use client';
 
 import { Feedback } from "@/types/feedback";

@@ -1,4 +1,3 @@
-// types/feedback.ts
 export interface Feedback {
   id: number;
   name: string;

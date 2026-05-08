@@ -1,4 +1,4 @@
-// components/FeedbackStats.tsx
+
 
 import { Feedback } from "@/types/feedback";
 
