@@ -38,7 +38,7 @@ export default function UserProfileDropdown() {
             setIsOpen(false);
 
             await signOut({
-                callbackUrl: '/login',
+                callbackUrl: '/auth/login',
                 redirect: true,
             });
         } catch (error) {
