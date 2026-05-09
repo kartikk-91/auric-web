@@ -1,88 +1,384 @@
 "use client";
 
-import { useState } from "react";
-import { CHAT_SESSIONS, ChatSession } from "@/lib/data";
-import { SquarePen, Search, Trash2 } from "lucide-react";
+import { useMemo, useState } from "react";
+
+import {
+  Search,
+  SquarePen,
+  Trash2,
+} from "lucide-react";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
+type Chat = {
+  chatId: string;
+  c_id: string;
+  title: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  _count?: {
+    messages: number;
+  };
+};
 
 interface SidebarProps {
+  chats?: Chat[];
   activeChatId: string;
-  onSelectChat: (id: string) => void;
+
+  onSelectChat: (
+    id: string
+  ) => void;
+
   onNewChat: () => void;
+
+  onDeleteChat: (
+    chatId: string
+  ) => Promise<void>;
+
+  onClearHistory: () => Promise<void>;
 }
 
-const GROUPS: ChatSession["group"][] = ["Today", "Yesterday", "May 3"];
+function groupChatsByDate(
+  chats: Chat[] = []
+) {
+  const today =
+    new Date();
 
-export default function Sidebar({ activeChatId, onSelectChat, onNewChat }: SidebarProps) {
-  const [search, setSearch] = useState("");
+  const yesterday =
+    new Date();
 
-  const filtered = CHAT_SESSIONS.filter((s) =>
-    s.title.toLowerCase().includes(search.toLowerCase())
+  yesterday.setDate(
+    yesterday.getDate() -
+    1
   );
 
+  const grouped: Record<
+    string,
+    Chat[]
+  > = {};
+
+  chats.forEach(
+    (chat) => {
+      const date =
+        new Date(
+          chat.updatedAt
+        );
+
+      let label =
+        date.toLocaleDateString(
+          "en-US",
+          {
+            month:
+              "short",
+            day: "numeric",
+          }
+        );
+
+      if (
+        date.toDateString() ===
+        today.toDateString()
+      ) {
+        label =
+          "Today";
+      } else if (
+        date.toDateString() ===
+        yesterday.toDateString()
+      ) {
+        label =
+          "Yesterday";
+      }
+
+      if (
+        !grouped[
+        label
+        ]
+      ) {
+        grouped[
+          label
+        ] = [];
+      }
+
+      grouped[
+        label
+      ].push(chat);
+    }
+  );
+
+  return grouped;
+}
+
+export default function Sidebar({
+  chats = [],
+  activeChatId,
+  onSelectChat,
+  onNewChat,
+  onDeleteChat,
+  onClearHistory,
+}: SidebarProps) {
+  const [search, setSearch] =
+    useState("");
+
+  const [
+    chatToDelete,
+    setChatToDelete,
+  ] = useState<string | null>(
+    null
+  );
+
+  const [
+    clearDialogOpen,
+    setClearDialogOpen,
+  ] = useState(false);
+
+  const filteredChats = useMemo(() => {
+    if (!Array.isArray(chats)) {
+      return [];
+    }
+
+    return chats.filter((chat) =>
+      chat.title
+        ?.toLowerCase()
+        .includes(search.toLowerCase())
+    );
+  }, [search, chats]);
+
+  const groupedChats =
+    groupChatsByDate(
+      filteredChats
+    );
+
   return (
-    <aside className="w-64 shrink-0 bg-white border-r border-gray-100 flex flex-col h-full">
-<div className="p-4 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-gray-700">Chat History</h2>
-        <button
-          onClick={onNewChat}
-          className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-          title="New chat"
-        >
-          <SquarePen className="w-4 h-4" />
-        </button>
-      </div>
-<div className="px-4 pb-3">
-        <div className="relative">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search chats..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 placeholder-gray-400 transition"
-          />
+    <>
+      <aside className="flex h-full w-full flex-col border-r border-gray-100 bg-white xl:w-72">
+
+        <div className="flex items-center justify-between border-b border-gray-100 px-4 py-4">
+          <h2 className="text-sm font-semibold text-gray-700">
+            Chat History
+          </h2>
+
+          <button
+            onClick={
+              onNewChat
+            }
+            className="rounded-lg p-2 text-gray-400 transition hover:bg-gray-100 hover:text-gray-600"
+          >
+            <SquarePen className="h-4 w-4" />
+          </button>
         </div>
-      </div>
-<div className="flex-1 overflow-y-auto px-2 pb-4">
-        {GROUPS.map((group) => {
-          const sessions = filtered.filter((s) => s.group === group);
-          if (!sessions.length) return null;
-          return (
-            <div key={group} className="mb-2">
-              <p className="px-2 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                {group}
-              </p>
-              {sessions.map((session) => (
-                <button
-                  key={session.id}
-                  onClick={() => onSelectChat(session.id)}
-                  className={`w-full text-left px-3 py-2.5 rounded-lg mb-0.5 transition-colors group relative ${
-                    activeChatId === session.id
-                      ? "bg-blue-50 text-blue-700"
-                      : "text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  <span className="text-sm font-medium line-clamp-1 pr-4">
-                    {session.title}
-                  </span>
-                  <span className="text-xs text-gray-400 mt-0.5 block">
-                    {session.time}
-                  </span>
-                  {activeChatId === session.id && (
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-blue-500" />
-                  )}
-                </button>
-              ))}
+
+
+        <div className="border-b border-gray-100 px-4 py-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+
+            <input
+              value={search}
+              onChange={(
+                e
+              ) =>
+                setSearch(
+                  e.target
+                    .value
+                )
+              }
+              placeholder="Search chats..."
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 py-2 pl-10 pr-3 text-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20"
+            />
+          </div>
+        </div>
+
+
+        <div className="min-h-0 flex-1 overflow-y-auto px-2 py-3">
+          {Object.entries(
+            groupedChats
+          ).length ===
+            0 ? (
+            <div className="flex h-full items-center justify-center px-4 text-center text-sm text-gray-400">
+              No chats yet
             </div>
-          );
-        })}
-      </div>
-<div className="p-3 border-t border-gray-100">
-        <button className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-sm text-red-400 hover:text-red-500 hover:bg-red-50 transition-colors">
-          <Trash2 className="w-4 h-4" />
-          Clear history
-        </button>
-      </div>
-    </aside>
+          ) : (
+            Object.entries(
+              groupedChats
+            ).map(
+              ([
+                group,
+                groupChats,
+              ]) => (
+                <div
+                  key={group}
+                  className="mb-5"
+                >
+                  <p className="px-2 py-2 text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                    {group}
+                  </p>
+
+                  <div className="space-y-1">
+                    {groupChats.map(
+                      (
+                        chat
+                      ) => (
+                        <div
+                          key={
+                            chat.chatId
+                          }
+                          className={`group relative rounded-xl ${activeChatId ===
+                            chat.chatId
+                            ? "bg-blue-50"
+                            : "hover:bg-gray-50"
+                            }`}
+                        >
+                          <button
+                            onClick={() =>
+                              onSelectChat(
+                                chat.chatId
+                              )
+                            }
+                            className="w-full px-3 py-3 text-left"
+                          >
+                            <p className="truncate text-sm font-medium">
+                              {chat.title ||
+                                "Untitled Chat"}
+                            </p>
+
+                            <p className="mt-1 text-xs text-gray-400">
+                              {chat
+                                ._count
+                                ?.messages ??
+                                0}{" "}
+                              messages
+                            </p>
+                          </button>
+
+                          <button
+                            onClick={() =>
+                              setChatToDelete(
+                                chat.chatId
+                              )
+                            }
+                            className="absolute right-2 top-1/2 hidden -translate-y-1/2 rounded-md p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-500 group-hover:block"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+              )
+            )
+          )}
+        </div>
+
+
+        {chats.length >
+          0 && (
+            <div className="border-t border-gray-100 p-3">
+              <button
+                onClick={() =>
+                  setClearDialogOpen(
+                    true
+                  )
+                }
+                className="flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-sm text-red-400 transition hover:bg-red-50 hover:text-red-500"
+              >
+                <Trash2 className="h-4 w-4" />
+                Clear history
+              </button>
+            </div>
+          )}
+      </aside>
+
+
+      <AlertDialog
+        open={
+          !!chatToDelete
+        }
+        onOpenChange={() =>
+          setChatToDelete(
+            null
+          )
+        }
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Delete chat?
+            </AlertDialogTitle>
+
+            <AlertDialogDescription>
+              This conversation
+              will be permanently
+              deleted.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel>
+              Cancel
+            </AlertDialogCancel>
+
+            <AlertDialogAction
+              onClick={() =>
+                chatToDelete &&
+                onDeleteChat(
+                  chatToDelete
+                )
+              }
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+
+      <AlertDialog
+        open={
+          clearDialogOpen
+        }
+        onOpenChange={
+          setClearDialogOpen
+        }
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Clear chat
+              history?
+            </AlertDialogTitle>
+
+            <AlertDialogDescription>
+              This will remove all
+              Ask Auric
+              conversations
+              permanently.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel>
+              Cancel
+            </AlertDialogCancel>
+
+            <AlertDialogAction
+              onClick={
+                onClearHistory
+              }
+            >
+              Clear
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }

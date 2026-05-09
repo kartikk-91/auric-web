@@ -16,7 +16,7 @@ export default function TestimonialWall({
     cardsPerView,
   } = config;
 
-  // Always fallback to dummy
+
   const safeTestimonials =
     testimonials?.length
       ? testimonials
@@ -51,16 +51,16 @@ export default function TestimonialWall({
       )
     );
 
-  // Responsive grid logic
+
   const colClass = useMemo(() => {
-    // Mobile preview always single
+
     if (
       previewMode === "mobile"
     ) {
       return "grid-cols-1";
     }
 
-    // Respect desktop setting
+
     if (perPage === 1)
       return "grid-cols-1";
 

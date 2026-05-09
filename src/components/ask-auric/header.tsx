@@ -1,38 +1,49 @@
 "use client";
 
-import { MessageSquare } from "lucide-react";
+import {
+  Menu,
+  MessageSquare,
+} from "lucide-react";
 
 interface HeaderProps {
-  onNewChat: () => void;
+  onOpenSidebar: () => void;
 }
 
-export default function Header({ onNewChat }: HeaderProps) {
-
-
+export default function Header({
+  onOpenSidebar,
+}: HeaderProps) {
   return (
-    <header className="w-full px-8 pt-4 pb-4 bg-white space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col">
-          <div className="flex gap-2">
-            <h1 className="text-2xl font-semibold text-gray-900">
-              Ask Auric
-            </h1>
-            <span className="text-[10px] h-fit font-semibold tracking-widest text-gray-400 uppercase border border-gray-200 px-1.5 py-0.5 rounded">
-              Beta
-            </span>
+    <header className="w-full border-b border-gray-100 bg-white shrink-0">
+      <div className="px-4 sm:px-6 lg:px-8 py-4">
+        <div className="flex items-start justify-between gap-3">
+
+          <div className="flex items-start gap-3 min-w-0">
+
+            <button
+              onClick={onOpenSidebar}
+              className="lg:hidden mt-0.5 shrink-0 rounded-lg border border-gray-200 p-2 text-gray-600 transition hover:bg-gray-50"
+              aria-label="Open chat history"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+
+
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="truncate text-xl sm:text-2xl font-semibold text-gray-900">
+                  Ask Auric
+                </h1>
+
+                <span className="h-fit rounded border border-gray-200 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-gray-400 shrink-0">
+                  Beta
+                </span>
+              </div>
+
+              <p className="mt-0.5 text-xs sm:text-sm text-gray-400 line-clamp-1">
+                Get AI-powered insights about your feedback.
+              </p>
+            </div>
           </div>
-          <p className="text-sm text-gray-400 mt-0.5">
-            Get AI-powered insights about your feedback.
-          </p>
-        </div>
-<div className="flex items-center gap-2">
-          <button
-            onClick={onNewChat}
-            className="flex items-center gap-1.5 px-3 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
-          >
-            <MessageSquare className="w-5 h-5" />
-            New Chat
-          </button>
         </div>
       </div>
     </header>
