@@ -1,11 +1,25 @@
 "use client";
 
-import { InputField, TextareaField, LinkField, SelectField } from "./form-fields";
+import {
+  InputField,
+  TextareaField,
+  LinkField,
+  SelectField,
+} from "./form-fields";
 
 const layoutOptions: any[] = [
-  { value: "Card Style", label: "Card Style" },
-  { value: "List Style", label: "List Style" },
-  { value: "Masonry", label: "Masonry" },
+  {
+    value: "Card Style",
+    label: "Card Style",
+  },
+  {
+    value: "List Style",
+    label: "List Style",
+  },
+  {
+    value: "Masonry",
+    label: "Masonry",
+  },
 ];
 
 const cardsPerViewOptions: any[] = [
@@ -15,22 +29,33 @@ const cardsPerViewOptions: any[] = [
   { value: "4", label: "4" },
 ];
 
-export default function CustomizerPanel({ config, onChange }: any) {
-  const set = (key: string) => (val: any) => onChange({ ...config, [key]: val });
+export default function CustomizerPanel({
+  config,
+  onChange,
+}: any) {
+  const set =
+    (key: string) => (val: any) =>
+      onChange({
+        ...config,
+        [key]: val,
+      });
 
   return (
-    <div className="w-full max-w-md shrink-0 overflow-y-auto pr-1">
-     
-      <div className="mb-5">
-        <h2 className="text-base font-bold text-gray-900">
+    <div className="w-full">
+
+      <div className="mb-5 sm:mb-6">
+        <h2 className="text-base font-bold text-gray-900 sm:text-lg">
           Customize Your Wall
         </h2>
-        <p className="text-xs text-gray-400 mt-0.5">
-          Personalize the content and appearance of your testimonial wall.
+
+        <p className="mt-1 text-xs leading-relaxed text-gray-400 sm:text-sm">
+          Personalize the content and appearance
+          of your testimonial wall.
         </p>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-5 mb-4">
+
+      <div className="mb-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5">
         <InputField
           label="Heading"
           value={config.heading}
@@ -38,6 +63,7 @@ export default function CustomizerPanel({ config, onChange }: any) {
           maxLength={60}
           placeholder="What our customers say"
         />
+
         <InputField
           label="Tagline"
           value={config.tagline}
@@ -45,6 +71,7 @@ export default function CustomizerPanel({ config, onChange }: any) {
           maxLength={100}
           placeholder="Real feedback from real people who love our product."
         />
+
         <InputField
           label="CTA Button Text"
           value={config.ctaText}
@@ -52,12 +79,14 @@ export default function CustomizerPanel({ config, onChange }: any) {
           maxLength={30}
           placeholder="See more success stories"
         />
+
         <LinkField
           label="CTA Button Link"
           value={config.ctaLink}
           onChange={set("ctaLink")}
           placeholder="https://yourwebsite.com/testimonials"
         />
+
         <TextareaField
           label="Testimonial Instructions"
           description="Describe the type of testimonials you want to display."
@@ -68,11 +97,12 @@ export default function CustomizerPanel({ config, onChange }: any) {
         />
       </div>
 
-   
-      <div className="bg-white border border-gray-200 rounded-xl p-5">
-        <h3 className="text-sm font-bold text-gray-800 mb-3">
+
+      <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5">
+        <h3 className="mb-4 text-sm font-bold text-gray-800">
           Display Settings
         </h3>
+
         <SelectField
           label="Layout Style"
           description="Choose how testimonials are displayed."
@@ -81,11 +111,18 @@ export default function CustomizerPanel({ config, onChange }: any) {
           options={layoutOptions}
           icon="grid"
         />
+
         <SelectField
           label="Cards Per View"
           description="Number of testimonial cards to show at once."
-          value={String(config.cardsPerView)}
-          onChange={(v: any) => set("cardsPerView")(Number(v))}
+          value={String(
+            config.cardsPerView
+          )}
+          onChange={(v: any) =>
+            set("cardsPerView")(
+              Number(v)
+            )
+          }
           options={cardsPerViewOptions}
           icon="cards"
         />
