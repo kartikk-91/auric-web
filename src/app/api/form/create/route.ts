@@ -6,36 +6,55 @@ export async function POST(req: Request) {
     const session = await auth();
 
     if (!session?.user?.c_id) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
+      return Response.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
     }
 
     const body = await req.json();
     const c_id = session.user.c_id;
 
-    await prisma.feedbackForm.updateMany({
-      where: {
-        c_id,
-        isActive: true,
-      },
-      data: {
-        isActive: false,
-      },
-    });
+    const existingForm =
+      await prisma.feedbackForm.findFirst({
+        where: {
+          c_id,
+          isActive: true,
+        },
+      });
 
+    let form;
 
-    const form = await prisma.feedbackForm.create({
-      data: {
-        c_id,
-        title: body.title,
-        tagLine: body.tagLine,
-        schema: body.schema,
-        isActive: true,
-      },
-    });
+    if (existingForm) {
+      form = await prisma.feedbackForm.update({
+        where: {
+          formId: existingForm.formId,
+        },
+        data: {
+          title: body.title,
+          tagLine: body.tagLine,
+          schema: body.schema,
+        },
+      });
+    } else {
+      form = await prisma.feedbackForm.create({
+        data: {
+          c_id,
+          title: body.title,
+          tagLine: body.tagLine,
+          schema: body.schema,
+          isActive: true,
+        },
+      });
+    }
 
     return Response.json(form);
   } catch (error) {
-    console.error("Create form error:", error);
-    return new Response("Something went wrong", { status: 500 });
+    console.error("Create/update form error:", error);
+
+    return new Response(
+      "Something went wrong",
+      { status: 500 }
+    );
   }
 }

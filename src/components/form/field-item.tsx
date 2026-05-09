@@ -1,5 +1,10 @@
 import { Draggable } from "@hello-pangea/dnd";
-import { GripVertical, Copy, Trash2 } from "lucide-react";
+import {
+  GripVertical,
+  Copy,
+  Trash2,
+} from "lucide-react";
+
 import FieldPreview from "./field-preview";
 
 export default function FieldItem({
@@ -11,62 +16,102 @@ export default function FieldItem({
   duplicateField,
 }: any) {
   return (
-    <Draggable draggableId={field.id} index={index}>
+    <Draggable
+      draggableId={field.id}
+      index={index}
+    >
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
           onClick={onSelect}
-          className={`group flex gap-3 p-5 rounded-xl border bg-white transition-all
-            ${selected
-              ? "border-blue-400 shadow-md"
-              : "border-gray-200 hover:border-gray-300"}
-            ${snapshot.isDragging ? "shadow-lg" : ""}
+          className={`
+            group rounded-2xl border bg-white p-4 transition-all sm:p-5
+            ${
+              selected
+                ? "border-blue-400 shadow-md ring-2 ring-blue-50"
+                : "border-gray-200 hover:border-gray-300"
+            }
+            ${
+              snapshot.isDragging
+                ? "shadow-xl"
+                : ""
+            }
           `}
         >
-<div
-            {...provided.dragHandleProps}
-            className="mt-1 cursor-grab active:cursor-grabbing text-gray-400"
-          >
-            <GripVertical className="w-5 h-5" />
-          </div>
-<div className="flex-1">
-<div className="flex items-start justify-between mb-3">
-<div className="text-sm text-gray-800">
-                <span className="font-medium mr-1">{index + 1}.</span>
-                {field.question}
-                {field.required && (
-                  <span className="text-red-500 ml-1">*</span>
-                )}
-              </div>
-<div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    duplicateField(field.id);
-                  }}
-                  className="p-1.5 rounded hover:bg-gray-100"
-                >
-                  <Copy className="w-4 h-4 text-gray-500" />
-                </button>
+          <div className="flex gap-3">
 
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    deleteField(field.id);
-                  }}
-                  className="p-1.5 rounded hover:bg-gray-100"
-                >
-                  <Trash2 className="w-4 h-4 text-gray-500" />
-                </button>
-              </div>
+
+            <div
+              {...provided.dragHandleProps}
+              className="mt-1 shrink-0 cursor-grab text-gray-400 active:cursor-grabbing"
+            >
+              <GripVertical className="h-5 w-5" />
             </div>
-<FieldPreview field={field} />
-{field.helpText && (
-              <p className="text-xs text-gray-500 mt-2">
-                {field.helpText}
-              </p>
-            )}
+
+            <div className="min-w-0 flex-1">
+
+
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+
+                <div className="min-w-0 text-sm text-gray-800 sm:text-[15px]">
+                  <span className="mr-1 font-semibold">
+                    {index + 1}.
+                  </span>
+
+                  <span className="break-words">
+                    {field.question}
+                  </span>
+
+                  {field.required && (
+                    <span className="ml-1 text-red-500">
+                      *
+                    </span>
+                  )}
+                </div>
+
+
+                <div className="flex items-center gap-2 self-end sm:self-auto sm:opacity-0 sm:transition sm:group-hover:opacity-100">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      duplicateField(
+                        field.id
+                      );
+                    }}
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white transition hover:bg-gray-50"
+                  >
+                    <Copy className="h-4 w-4 text-gray-500" />
+                  </button>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteField(
+                        field.id
+                      );
+                    }}
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white transition hover:bg-red-50"
+                  >
+                    <Trash2 className="h-4 w-4 text-gray-500" />
+                  </button>
+                </div>
+              </div>
+
+
+              <div className="mt-3">
+                <FieldPreview
+                  field={field}
+                />
+              </div>
+
+
+              {field.helpText && (
+                <p className="mt-3 text-xs leading-relaxed text-gray-500">
+                  {field.helpText}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       )}

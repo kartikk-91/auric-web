@@ -1,10 +1,12 @@
 'use client';
+
 import { useState } from "react";
 import { FormField, FieldType } from "@/types/form";
 
 export function useFormBuilder() {
   const [fields, setFields] = useState<FormField[]>([]);
-  const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null);
+  const [selectedFieldId, setSelectedFieldId] =
+    useState<string | null>(null);
 
   const addField = (type: FieldType) => {
     const base: FormField = {
@@ -14,34 +16,78 @@ export function useFormBuilder() {
       required: false,
     };
 
-    if (["multiple-choice", "checkboxes", "dropdown"].includes(type)) {
-      base.options = ["Option 1", "Option 2"];
+    if (
+      ["multiple-choice", "checkboxes", "dropdown"]
+        .includes(type)
+    ) {
+      base.options = [
+        "Option 1",
+        "Option 2",
+      ];
     }
 
     setFields((prev) => [...prev, base]);
     setSelectedFieldId(base.id);
   };
 
-  const updateField = (id: string, updates: Partial<FormField>) => {
+  const updateField = (
+    id: string,
+    updates: Partial<FormField>
+  ) => {
     setFields((prev) =>
-      prev.map((f) => (f.id === id ? { ...f, ...updates } : f))
+      prev.map((f) =>
+        f.id === id
+          ? { ...f, ...updates }
+          : f
+      )
     );
   };
 
   const deleteField = (id: string) => {
-    setFields((prev) => prev.filter((f) => f.id !== id));
+    setFields((prev) =>
+      prev.filter((f) => f.id !== id)
+    );
+
+    setSelectedFieldId((prev) =>
+      prev === id ? null : prev
+    );
   };
 
   const duplicateField = (id: string) => {
-    const field = fields.find((f) => f.id === id);
+    const field = fields.find(
+      (f) => f.id === id
+    );
+
     if (!field) return;
 
-    const newField = { ...field, id: Date.now().toString() };
-    const index = fields.findIndex((f) => f.id === id);
+    const newField = {
+      ...field,
+      id: Date.now().toString(),
+    };
+
+    const index = fields.findIndex(
+      (f) => f.id === id
+    );
 
     const newFields = [...fields];
-    newFields.splice(index + 1, 0, newField);
+
+    newFields.splice(
+      index + 1,
+      0,
+      newField
+    );
+
     setFields(newFields);
+  };
+
+  const loadForm = (
+    loadedFields: FormField[]
+  ) => {
+    setFields(loadedFields);
+
+    setSelectedFieldId(
+      loadedFields[0]?.id || null
+    );
   };
 
   return {
@@ -53,5 +99,6 @@ export function useFormBuilder() {
     deleteField,
     duplicateField,
     setFields,
+    loadForm,
   };
 }
