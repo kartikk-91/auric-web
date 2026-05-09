@@ -2,11 +2,11 @@
 
 export default function TopSources() {
   const sources = [
-    { name: 'Website Form', value: 42, percentage: 33, color: '#3b82f6' }, // blue
-    { name: 'Google Review', value: 28, percentage: 22, color: '#22c55e' }, // green
-    { name: 'Intercom', value: 20, percentage: 16, color: '#a855f7' }, // purple
-    { name: 'Email', value: 18, percentage: 14, color: '#eab308' }, // yellow
-    { name: 'Others', value: 20, percentage: 15, color: '#ec4899' }, // pink
+    { name: 'Website Form', value: 42, percentage: 33, color: '#3b82f6' },
+    { name: 'Google Review', value: 28, percentage: 22, color: '#22c55e' },
+    { name: 'Intercom', value: 20, percentage: 16, color: '#a855f7' },
+    { name: 'Email', value: 18, percentage: 14, color: '#eab308' },
+    { name: 'Others', value: 20, percentage: 15, color: '#ec4899' },
   ];
 
   const total = sources.reduce((sum, s) => sum + s.value, 0);

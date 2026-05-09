@@ -130,18 +130,18 @@
 }
 
 
-/* Global Scrollbar */
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
-/* Track (background) */
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 
-/* Thumb (the draggable part) */
+
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(
     180deg,
@@ -152,7 +152,7 @@
   transition: all 0.2s ease;
 }
 
-/* Hover effect */
+
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(
     180deg,
@@ -161,7 +161,7 @@
   );
 }
 
-/* Optional: active/dragging */
+
 ::-webkit-scrollbar-thumb:active {
   background: rgba(59, 130, 246, 0.6); 
 }
