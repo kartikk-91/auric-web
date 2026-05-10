@@ -101,19 +101,7 @@ const FeedbackForm = () => {
     fetchForm();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-white">
-        <div className="text-center">
-          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-gray-200 border-t-blue-600" />
-
-          <p className="text-sm text-gray-500">
-            Loading form builder...
-          </p>
-        </div>
-      </div>
-    );
-  }
+ 
 
   return (
   <div className="flex h-dvh w-full overflow-hidden bg-[#fafafa]">
