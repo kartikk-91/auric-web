@@ -13,25 +13,31 @@ export default function NavigationButtons({
   isSubmitting = false,
 }: any) {
   return (
-    <div className="flex gap-3">
+    <div className="flex flex-col gap-3 sm:flex-row">
+
+      
       <button
         onClick={onPrev}
         disabled={
           disablePrev ||
           isSubmitting
         }
-        className="flex-1 py-3.5 px-6 rounded-xl border-2 border-gray-200 text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition"
+        className="flex w-full flex-1 items-center justify-center gap-2 rounded-xl border-2 border-gray-200 px-5 py-3.5 text-gray-700 transition disabled:cursor-not-allowed disabled:opacity-40 sm:px-6"
       >
-        <ChevronLeft className="w-5 h-5" />
-        Previous
+        <ChevronLeft className="h-5 w-5 shrink-0" />
+
+        <span className="truncate">
+          Previous
+        </span>
       </button>
 
+      
       <button
         onClick={onNext}
         disabled={
           isSubmitting
         }
-        className="flex-1 py-3.5 px-6 rounded-xl text-white disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition"
+        className="flex w-full flex-1 items-center justify-center gap-2 rounded-xl px-5 py-3.5 text-white transition disabled:cursor-not-allowed disabled:opacity-60 sm:px-6"
         style={{
           backgroundColor:
             brandColor,
@@ -39,21 +45,27 @@ export default function NavigationButtons({
       >
         {isSubmitting ? (
           <>
-            <Loader2 className="w-5 h-5 animate-spin" />
-            Submitting...
+            <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
+
+            <span className="truncate">
+              Submitting...
+            </span>
           </>
         ) : (
           <>
-            {isLast
-              ? "Submit"
-              : "Next"}
+            <span className="truncate">
+              {isLast
+                ? "Submit"
+                : "Next"}
+            </span>
 
             {!isLast && (
-              <ChevronRight />
+              <ChevronRight className="h-5 w-5 shrink-0" />
             )}
           </>
         )}
       </button>
+
     </div>
   );
 }

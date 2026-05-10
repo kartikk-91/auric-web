@@ -194,15 +194,15 @@ const MainForm = ({
     'success'
   ) {
     return (
-      <div className="relative z-10 md:w-3/4 lg:w-1/2 bg-white border border-neutral-200 rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.06)] p-10">
+      <div className="relative z-10 w-full max-w-2xl rounded-[2rem] border border-neutral-200 bg-white p-6 shadow-[0_10px_40px_rgba(0,0,0,0.06)] sm:p-8 md:w-3/4 md:p-10 lg:w-1/2">
 
         <div className="flex flex-col items-center text-center">
 
-          <div className="h-14 w-14 rounded-2xl border border-neutral-200 bg-neutral-50 flex items-center justify-center mb-6">
+          <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-neutral-200 bg-neutral-50">
             <CheckCircle2 className="h-7 w-7 text-neutral-800" />
           </div>
 
-          <h2 className="text-[28px] leading-tight font-semibold tracking-tight text-neutral-900">
+          <h2 className="text-2xl font-semibold leading-tight tracking-tight text-neutral-900 sm:text-[28px]">
             Response submitted
           </h2>
 
@@ -226,7 +226,7 @@ const MainForm = ({
   }
 
   return (
-    <div className="relative z-10 md:w-3/4 lg:w-1/2 min-h-fit bg-white rounded-[2rem] border border-neutral-200 shadow-[0_10px_40px_rgba(0,0,0,0.06)] p-8">
+    <div className="relative z-10 w-full max-w-2xl rounded-[2rem] border border-neutral-200 bg-white p-5 shadow-[0_10px_40px_rgba(0,0,0,0.06)] sm:p-6 md:w-3/4 md:p-8 lg:w-1/2">
 
       {step === 1 && (
         <VerifyIdentity

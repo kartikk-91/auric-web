@@ -10,18 +10,24 @@ const FeedbackQuestions = ({
   isSubmitting,
 }: {
   schema: any
-  onSubmit: (data: any) => void
+  onSubmit: (
+    data: any
+  ) => void
   isSubmitting?: boolean
 }) => {
-  const fields = schema?.fields || []
+  const fields =
+    schema?.fields || []
 
   return (
-    <div className="w-full h-full min-h-fit flex flex-col">
+    <div className="flex h-full min-h-fit w-full flex-col">
+
       <Timeline currentStep={3} />
 
-      <div className="flex-1 flex flex-col items-center px-6">
-        <div className="flex justify-center mb-2">
-          <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-white border border-gray-200 shadow-sm">
+      <div className="flex flex-1 flex-col items-center px-1 sm:px-2 md:px-6">
+
+        
+        <div className="mb-2 flex justify-center">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-gray-200 bg-white shadow-sm sm:h-16 sm:w-16">
             <Image
               src="/emblem-transparent.png"
               width={32}
@@ -32,15 +38,17 @@ const FeedbackQuestions = ({
           </div>
         </div>
 
-        <h1 className="text-2xl font-bold text-gray-900 text-center mb-4">
+        
+        <h1 className="mb-4 text-center text-xl font-bold text-gray-900 sm:text-2xl">
           Auric Technologies
         </h1>
 
+        
         <div
           className={
             isSubmitting
-              ? "w-full pointer-events-none opacity-70 transition"
-              : "w-full transition"
+              ? 'w-full transition pointer-events-none opacity-70'
+              : 'w-full transition'
           }
         >
           <MultiStepForm
@@ -48,18 +56,33 @@ const FeedbackQuestions = ({
             brandName="Auric Technologies"
             brandColor="#7c3aed"
             isSubmitting={isSubmitting}
-            onSubmit={(responses: any) => {
-              const formatted = fields.map((field: any) => ({
-                id: field.id,
-                question: field.question,
-                type: field.type,
-                answer: responses[field.id],
-              }))
+            onSubmit={(
+              responses: any
+            ) => {
+              const formatted =
+                fields.map(
+                  (
+                    field: any
+                  ) => ({
+                    id: field.id,
+                    question:
+                      field.question,
+                    type:
+                      field.type,
+                    answer:
+                      responses[
+                        field.id
+                      ],
+                  })
+                )
 
-              onSubmit(formatted)
+              onSubmit(
+                formatted
+              )
             }}
           />
         </div>
+
       </div>
     </div>
   )

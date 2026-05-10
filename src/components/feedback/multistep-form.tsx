@@ -21,10 +21,14 @@ export default function MultiStepForm({
     next,
     prev,
     update,
-  } = useMultiStepForm(fields, onSubmit);
+  } = useMultiStepForm(
+    fields,
+    onSubmit
+  );
 
   return (
     <FormLayout>
+
       <ProgressBar
         current={currentStep}
         total={fields.length}
@@ -32,26 +36,47 @@ export default function MultiStepForm({
       />
 
       <QuestionHeader
-        question={currentField.question}
-        subtext={currentField.helpText}
-        brandName={brandName}
-        brandColor={brandColor}
+        question={
+          currentField.question
+        }
+        subtext={
+          currentField.helpText
+        }
+        brandName={
+          brandName
+        }
+        brandColor={
+          brandColor
+        }
       />
 
-      <div className="mb-10 max-h-36 overflow-x-scroll">
+      
+      <div className="mb-8 min-h-[140px] w-full">
+
         <FieldRenderer
           field={currentField}
-          value={responses[currentField.id]}
+          value={
+            responses[
+              currentField.id
+            ]
+          }
           onChange={update}
         />
 
-        {errors[currentField.id] && (
-          <p className="text-red-500 text-sm mt-2">
-            {errors[currentField.id]}
+        {errors[
+          currentField.id
+        ] && (
+          <p className="mt-2 text-sm text-red-500">
+            {
+              errors[
+                currentField.id
+              ]
+            }
           </p>
         )}
       </div>
 
+      
       <div
         className={
           isSubmitting
@@ -63,11 +88,19 @@ export default function MultiStepForm({
           onPrev={prev}
           onNext={next}
           isLast={isLastStep}
-          disablePrev={currentStep === 0 || isSubmitting}
-          isSubmitting={isSubmitting}
-          brandColor={brandColor}
+          disablePrev={
+            currentStep === 0 ||
+            isSubmitting
+          }
+          isSubmitting={
+            isSubmitting
+          }
+          brandColor={
+            brandColor
+          }
         />
       </div>
+
     </FormLayout>
   );
 }

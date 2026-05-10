@@ -5,108 +5,133 @@ import Timeline from './timeline'
 import { useGoogleLogin } from '@react-oauth/google'
 
 const VerifyIdentity = ({
-    onSuccess,
+  onSuccess,
 }: {
-    onSuccess: (email: string) => void
+  onSuccess: (
+    email: string
+  ) => void
 }) => {
-
-    const login = useGoogleLogin({
-        onSuccess: async (tokenResponse) => {
-            const res = await fetch(
-                `https://www.googleapis.com/oauth2/v3/userinfo`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${tokenResponse.access_token}`,
-                    },
-                }
+  const login =
+    useGoogleLogin({
+      onSuccess:
+        async (
+          tokenResponse
+        ) => {
+          const res =
+            await fetch(
+              `https://www.googleapis.com/oauth2/v3/userinfo`,
+              {
+                headers:
+                  {
+                    Authorization: `Bearer ${tokenResponse.access_token}`,
+                  },
+              }
             )
 
-            const user = await res.json()
-       
-            if (user.email) {
-                onSuccess(user.email)
-            }
+          const user =
+            await res.json()
+
+          if (
+            user.email
+          ) {
+            onSuccess(
+              user.email
+            )
+          }
         },
-        onError: () => {
-            console.log("Login Failed")
-        },
+
+      onError: () => {
+        console.log(
+          'Login Failed'
+        )
+      },
     })
 
-    const handleVerify = () => {
-        login()
+  const handleVerify =
+    () => {
+      login()
     }
 
-    return (
-        <div className="bg-white flex flex-col items-center justify-center px-4">
-            <Timeline currentStep={1} />
+  return (
+    <div className="flex min-h-[540px] w-full flex-col">
 
-            <div className="w-full max-w-md flex flex-col items-center">
-                <div className="flex justify-center mb-6">
-                    <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-white border border-gray-200 shadow-sm">
-                        <Image
-                            src="/emblem-transparent.png"
-                            width={32}
-                            height={32}
-                            alt="Auric"
-                            className="object-contain"
-                        />
-                    </div>
-                </div>
+      <Timeline currentStep={1} />
 
-                <h1 className="text-2xl font-bold text-gray-900 text-center mb-4">
-                    Auric Technologies
-                </h1>
+      <div className="flex flex-1 flex-col items-center justify-center">
 
-                <div className="bg-purple-100 rounded-full px-4 py-1 inline-flex items-center gap-2 mb-6">
-                    <h2 className="w-full text-purple-600 font-medium text-xs text-center">
-                        Building better experiences together ✦
-                    </h2>
-                </div>
+        <div className="w-full max-w-md text-center">
 
-                <h2 className="text-4xl font-bold text-gray-900 text-center mb-2">
-                    Let's get started!
-                </h2>
-
-                <p className="text-center mb-6">
-                    <span className="text-purple-600 font-semibold">Verify</span>
-                    <span className="text-gray-900"> your email to continue</span>
-                </p>
-
-                <button
-                    onClick={handleVerify}
-                    className="w-full bg-white border border-gray-300 rounded-lg py-3.5 px-4 flex items-center justify-center gap-3 hover:bg-gray-50 transition-colors shadow-sm mb-4"
-                >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24">
-                        <path
-                            fill="#4285F4"
-                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                        />
-                        <path
-                            fill="#34A853"
-                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                        />
-                        <path
-                            fill="#FBBC05"
-                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                        />
-                        <path
-                            fill="#EA4335"
-                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                        />
-                    </svg>
-                    <span className="text-gray-700 font-medium">
-                        Verify with Google
-                    </span>
-                </button>
-
-                <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
-                    <span>
-                        We'll never share your data without your permission
-                    </span>
-                </div>
+          
+          <div className="mb-6 flex justify-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-[20px] border border-gray-200 bg-white shadow-sm">
+              <Image
+                src="/emblem-transparent.png"
+                width={34}
+                height={34}
+                alt="Auric"
+                className="object-contain"
+              />
             </div>
+          </div>
+
+          
+          <p className="mb-3 text-sm font-medium tracking-wide text-purple-600">
+            AURIC TECHNOLOGIES
+          </p>
+
+          
+          <h1 className="mx-auto mb-3 max-w-sm text-3xl font-semibold tracking-tight text-gray-900 sm:text-[38px] sm:leading-[44px]">
+            Verify your identity
+          </h1>
+
+          
+          <p className="mx-auto mb-8 max-w-sm text-sm leading-6 text-gray-500 sm:text-[15px]">
+            Continue securely with Google to submit your feedback and help us improve your experience.
+          </p>
+
+          
+          <button
+            onClick={
+              handleVerify
+            }
+            className="group flex w-full items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white px-5 py-4 text-gray-800 shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-md"
+          >
+            <svg
+              className="h-5 w-5 shrink-0"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+              />
+            </svg>
+
+            <span className="font-medium">
+              Continue with Google
+            </span>
+          </button>
+
+          
+          <p className="mt-5 text-xs leading-5 text-gray-400">
+            Your information stays private and is only used for verification.
+          </p>
+
         </div>
-    )
+      </div>
+    </div>
+  )
 }
 
 export default VerifyIdentity
