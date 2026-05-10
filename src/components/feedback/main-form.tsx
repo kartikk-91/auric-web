@@ -1,67 +1,242 @@
 'use client'
 
 import { useState } from 'react'
+import { toast } from 'sonner'
+import {
+  CheckCircle2,
+  RotateCcw,
+} from 'lucide-react'
+
 import FeedbackQuestions from './feedback-questions'
 import PersonalInfo from './personal-info'
 import VerifyIdentity from './verify-identity'
 
-const MainForm = ({ form }: { form: any }) => {
-  const [step, setStep] = useState(1)
+type SubmitStatus =
+  | 'idle'
+  | 'submitting'
+  | 'success'
 
-  const [email, setEmail] = useState<string | null>(null)
-  const [personalInfo, setPersonalInfo] = useState<any>(null)
+const MainForm = ({
+  form,
+}: {
+  form: any
+}) => {
+  const [step, setStep] =
+    useState(1)
 
-  const onSubmit = async (feedbackData:any) => {
+  const [email, setEmail] =
+    useState<string | null>(
+      null
+    )
+
+  const [
+    personalInfo,
+    setPersonalInfo,
+  ] = useState<any>(null)
+
+  const [
+    submitStatus,
+    setSubmitStatus,
+  ] =
+    useState<SubmitStatus>(
+      'idle'
+    )
+
+  const resetForm = () => {
+    setStep(1)
+    setEmail(null)
+    setPersonalInfo(null)
+    setSubmitStatus('idle')
+  }
+
+  const onSubmit = async (
+    feedbackData: any
+  ) => {
     try {
-      const formattedData = feedbackData.reduce((acc: any, item: any) => {
-        acc[item.id] = {
-          question: item.question,
-          type: item.type,
-          answer: item.answer,
-        };
-        return acc;
-      }, {});
+      setSubmitStatus(
+        'submitting'
+      )
+
+      const formattedData =
+        feedbackData.reduce(
+          (
+            acc: any,
+            item: any
+          ) => {
+            acc[item.id] = {
+              question:
+                item.question,
+              type: item.type,
+              answer:
+                item.answer,
+            }
+
+            return acc
+          },
+          {}
+        )
 
       const payload = {
-        formId: form.formId,
-        c_id: form.c_id,
+        formId:
+          form.formId,
 
-        email: email,
-        name: personalInfo?.fullName,
-        state: personalInfo?.state,
-        country: personalInfo?.country,
-        age: Number(personalInfo?.age),
+        c_id:
+          form.c_id,
 
-        data: formattedData,
-      };
+        email,
 
-      const res = await fetch("/api/feedback", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+        name:
+          personalInfo?.fullName,
 
-      const result = await res.json();
+        state:
+          personalInfo?.state,
 
-      if (!res.ok) {
-        throw new Error(result.error || "Failed to submit feedback");
+        country:
+          personalInfo?.country,
+
+        age: Number(
+          personalInfo?.age
+        ),
+
+        data:
+          formattedData,
       }
 
+      const res =
+        await fetch(
+          '/api/feedback',
+          {
+            method:
+              'POST',
 
+            headers: {
+              'Content-Type':
+                'application/json',
+            },
+
+            body:
+              JSON.stringify(
+                payload
+              ),
+          }
+        )
+
+      const result =
+        await res.json()
+
+      if (!res.ok) {
+        switch (
+          res.status
+        ) {
+          case 400:
+            toast.error(
+              'Invalid form submission.'
+            )
+            break
+
+          case 403:
+            toast.error(
+              'Access denied. Please try again later.'
+            )
+            break
+
+          case 409:
+            toast.error(
+              'You have already submitted feedback.'
+            )
+            break
+
+          case 429:
+            toast.error(
+              'Too many submissions. Please wait before trying again.'
+            )
+            break
+
+          default:
+            toast.error(
+              result.error ||
+                'Failed to submit feedback.'
+            )
+        }
+
+        setSubmitStatus(
+          'idle'
+        )
+
+        return
+      }
+
+      toast.success(
+        'Feedback submitted successfully'
+      )
+
+      setSubmitStatus(
+        'success'
+      )
     } catch (err) {
-      console.error("Submit error:", err);
+      console.error(
+        'Submit error:',
+        err
+      )
+
+      toast.error(
+        'Unable to submit feedback.'
+      )
+
+      setSubmitStatus(
+        'idle'
+      )
     }
   }
 
+  if (
+    submitStatus ===
+    'success'
+  ) {
+    return (
+      <div className="relative z-10 md:w-3/4 lg:w-1/2 bg-white border border-neutral-200 rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.06)] p-10">
+
+        <div className="flex flex-col items-center text-center">
+
+          <div className="h-14 w-14 rounded-2xl border border-neutral-200 bg-neutral-50 flex items-center justify-center mb-6">
+            <CheckCircle2 className="h-7 w-7 text-neutral-800" />
+          </div>
+
+          <h2 className="text-[28px] leading-tight font-semibold tracking-tight text-neutral-900">
+            Response submitted
+          </h2>
+
+          <p className="mt-3 max-w-md text-sm leading-6 text-neutral-500">
+            Thank you for taking the time to share your feedback.
+            Your response has been recorded successfully.
+          </p>
+
+          <button
+            onClick={
+              resetForm
+            }
+            className="mt-8 inline-flex items-center gap-2 rounded-2xl border border-neutral-200 px-5 py-3 text-sm font-medium text-neutral-700 transition hover:bg-neutral-50"
+          >
+            <RotateCcw className="h-4 w-4" />
+            Submit another response
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className='relative z-10 md:w-3/4 lg:w-1/2 min-h-fit bg-[#ffffff] rounded-3xl shadow-2xl p-8'>
+    <div className="relative z-10 md:w-3/4 lg:w-1/2 min-h-fit bg-white rounded-[2rem] border border-neutral-200 shadow-[0_10px_40px_rgba(0,0,0,0.06)] p-8">
 
       {step === 1 && (
         <VerifyIdentity
-          onSuccess={(email: string) => {
-            setEmail(email)
+          onSuccess={(
+            email: string
+          ) => {
+            setEmail(
+              email
+            )
+
             setStep(2)
           }}
         />
@@ -69,8 +244,13 @@ const MainForm = ({ form }: { form: any }) => {
 
       {step === 2 && (
         <PersonalInfo
-          onNext={(data: any) => {
-            setPersonalInfo(data)
+          onNext={(
+            data: any
+          ) => {
+            setPersonalInfo(
+              data
+            )
+
             setStep(3)
           }}
         />
@@ -78,11 +258,18 @@ const MainForm = ({ form }: { form: any }) => {
 
       {step === 3 && (
         <FeedbackQuestions
-          schema={form.schema}
-          onSubmit={onSubmit}
+          schema={
+            form.schema
+          }
+          onSubmit={
+            onSubmit
+          }
+          isSubmitting={
+            submitStatus ===
+            'submitting'
+          }
         />
       )}
-
     </div>
   )
 }

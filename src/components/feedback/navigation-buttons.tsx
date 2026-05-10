@@ -1,5 +1,8 @@
-
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Loader2,
+} from "lucide-react";
 
 export default function NavigationButtons({
   onPrev,
@@ -7,13 +10,17 @@ export default function NavigationButtons({
   isLast,
   disablePrev,
   brandColor,
+  isSubmitting = false,
 }: any) {
   return (
     <div className="flex gap-3">
       <button
         onClick={onPrev}
-        disabled={disablePrev}
-        className="flex-1 py-3.5 px-6 rounded-xl border-2 border-gray-200 text-gray-700 disabled:opacity-40 flex items-center justify-center gap-2"
+        disabled={
+          disablePrev ||
+          isSubmitting
+        }
+        className="flex-1 py-3.5 px-6 rounded-xl border-2 border-gray-200 text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition"
       >
         <ChevronLeft className="w-5 h-5" />
         Previous
@@ -21,11 +28,31 @@ export default function NavigationButtons({
 
       <button
         onClick={onNext}
-        className="flex-1 py-3.5 px-6 rounded-xl text-white flex items-center justify-center gap-2"
-        style={{ backgroundColor: brandColor }}
+        disabled={
+          isSubmitting
+        }
+        className="flex-1 py-3.5 px-6 rounded-xl text-white disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition"
+        style={{
+          backgroundColor:
+            brandColor,
+        }}
       >
-        {isLast ? "Submit" : "Next"}
-        {!isLast && <ChevronRight />}
+        {isSubmitting ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            Submitting...
+          </>
+        ) : (
+          <>
+            {isLast
+              ? "Submit"
+              : "Next"}
+
+            {!isLast && (
+              <ChevronRight />
+            )}
+          </>
+        )}
       </button>
     </div>
   );

@@ -89,6 +89,7 @@ model Feedback {
   company Company         @relation(fields: [c_id], references: [c_id])
   result  FeedbackResult?
 
+  @@unique([email, formId])
   @@index([email, formId])
   @@index([processingStatus])
 }

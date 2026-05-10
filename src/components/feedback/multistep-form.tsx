@@ -1,4 +1,3 @@
-
 import { useMultiStepForm } from "@/hooks/useMultiStepForm";
 import ProgressBar from "./progress-bar";
 import QuestionHeader from "./question-header";
@@ -6,12 +5,12 @@ import NavigationButtons from "./navigation-buttons";
 import { FieldRenderer } from "./field-renderer";
 import FormLayout from "./form-layout";
 
-
 export default function MultiStepForm({
   fields,
   onSubmit,
   brandName = "Auric",
   brandColor = "#7c3aed",
+  isSubmitting = false,
 }: any) {
   const {
     currentStep,
@@ -53,13 +52,22 @@ export default function MultiStepForm({
         )}
       </div>
 
-      <NavigationButtons
-        onPrev={prev}
-        onNext={next}
-        isLast={isLastStep}
-        disablePrev={currentStep === 0}
-        brandColor={brandColor}
-      />
+      <div
+        className={
+          isSubmitting
+            ? "pointer-events-none opacity-70 transition"
+            : "transition"
+        }
+      >
+        <NavigationButtons
+          onPrev={prev}
+          onNext={next}
+          isLast={isLastStep}
+          disablePrev={currentStep === 0 || isSubmitting}
+          isSubmitting={isSubmitting}
+          brandColor={brandColor}
+        />
+      </div>
     </FormLayout>
   );
 }
