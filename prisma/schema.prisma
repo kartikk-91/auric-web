@@ -46,7 +46,6 @@ model Company {
   user             User             @relation(fields: [u_id], references: [u_id])
   forms            FeedbackForm[]
   feedbacks        Feedback[]
-  analyticsDailies AnalyticsDaily[]
 
   askAuricChats AskAuricChat[]
 }
@@ -95,22 +94,28 @@ model Feedback {
 }
 
 model FeedbackResult {
-  id             String @id @default(cuid())
-  f_id           String @unique
-  sentiment      String
+  id String @id @default(cuid())
+
+  f_id String @unique
+
+  sentiment String
   sentimentScore Float
 
-  rating Int?
+  rating Float?
 
-  praisedFeatures    Json
+  praisedFeatures Json
   criticizedFeatures Json
 
   testimonial String
-  summary     String
-
-  metadata Json
+  summary String
 
   confidence Float
+
+  country String?
+  countryIso2 String?
+  countryFlag String?
+  state String?
+  formattedLocation String?
 
   createdAt DateTime @default(now())
 
@@ -122,40 +127,27 @@ model FeedbackResult {
 model Analytics {
   c_id String @id
 
-  avgRating    Float
+  avgRating Float
   avgSentiment Float
-  auricScore   Float
+  auricScore Float
 
   totalFeedbacks Int
 
   sentimentDist Json
-  ratingDist    Json
-  npsDist       Json
+  ratingDist Json
 
-  topPraised    Json
+  responseByLocation Json?
+
+  topPraised Json
   topCriticized Json
 
-  featureStats Json
+  feedbackInsights Json?
 
-  lastUpdated DateTime @updatedAt
+  lastUpdated DateTime @default(now()) @updatedAt
 
-  company Company @relation(fields: [c_id], references: [c_id])
+  company Company @relation(fields: [c_id],references: [c_id])
 }
 
-model AnalyticsDaily {
-  id   String @id @default(cuid())
-  c_id String
-
-  date DateTime
-
-  avgSentiment   Float
-  avgRating      Float
-  totalFeedbacks Int
-
-  company Company @relation(fields: [c_id], references: [c_id])
-
-  @@index([c_id, date])
-}
 
 model AskAuricChat {
   chatId String @id @default(cuid())
