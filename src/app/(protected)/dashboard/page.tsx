@@ -4,6 +4,7 @@ import DashboardContent from "@/components/dashboard/dashboard-content";
 import DashboardHeader from "@/components/dashboard/dashboard-header";
 import Sidebar from "@/components/shared/sidebar";
 
+export const dynamic = "force-dynamic";
 
 const Dashboard =
   async () => {
