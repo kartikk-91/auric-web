@@ -83,6 +83,7 @@ model Feedback {
   lastError String? @db.Text
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   form    FeedbackForm    @relation(fields: [formId], references: [formId])
   company Company         @relation(fields: [c_id], references: [c_id])

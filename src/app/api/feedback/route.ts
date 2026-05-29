@@ -85,39 +85,52 @@ export async function POST(req: Request) {
         }
 
         const feedback =
-            await prisma.feedback.create(
-                {
-                    data: {
-                        company: {
-                            connect: {
-                                c_id,
-                            },
+            await prisma.feedback.create({
+                data: {
+                    company: {
+                        connect: {
+                            c_id,
                         },
-
-                        form: {
-                            connect: {
-                                formId,
-                            },
-                        },
-
-                        email,
-                        name,
-                        state:
-                            state ??
-                            "unknown",
-                        country,
-                        age,
-                        data,
-                        ipAddress,
                     },
-                }
+
+                    form: {
+                        connect: {
+                            formId,
+                        },
+                    },
+
+                    email,
+                    name,
+                    state: state ?? "unknown",
+                    country: country ?? "unknown",
+                    age,
+                    data,
+                    ipAddress,
+                },
+            });
+
+
+        const queued =
+            await queueFeedback(
+                feedback.f_id,
+                c_id
             );
 
+        if (!queued) {
+            console.error(
+                `Queue failed for ${feedback.f_id}`
+            );
 
-        try {
-            await queueFeedback(feedback.f_id, c_id);
-        } catch (queueError) {
-            console.error("Queue Error:", queueError);
+            await prisma.feedback.update({
+                where: {
+                    f_id:
+                        feedback.f_id
+                },
+                data: {
+                    lastError:
+                        "Initial queue failed"
+                }
+            });
         }
 
         return NextResponse.json(
