@@ -1,84 +1,35 @@
 "use server";
 
 import { auth } from "@/auth";
+import type { DashboardData } from "@/app/api/dashboard/types"
 
-async function getCompanyId() {
-  const session = await auth();
+type Result<T> =
+  | { success: true; data: T }
+  | { success: false; error: string };
 
-  if (!session?.user?.c_id) {
-    throw new Error(
-      "Unauthorized: Company ID not found"
-    );
-  }
-
-  return session.user.c_id;
-}
-
-export async function getDashboardData() {
+export async function getDashboardData(): Promise<Result<DashboardData>> {
   try {
-    const c_id =
-      await getCompanyId();
+    const session = await auth();
 
-    const baseUrl =
-      process.env
-        .FEEDBACK_PIPELINE_URL;
-
-    if (!baseUrl) {
-      throw new Error(
-        "Missing FEEDBACK_PIPELINE_URL in environment variables"
-      );
+    if (!session?.user?.c_id) {
+      return { success: false, error: "Unauthorized: Company ID not found" };
     }
 
-    const response =
-      await fetch(
-        `${baseUrl}/dashboard/${c_id}`,
-        {
-          method: "GET",
-          cache: "no-store",
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-        }
-      );
-
-    if (!response.ok) {
-      let errorMessage =
-        `Dashboard API request failed (${response.status})`;
-
-      try {
-        const errorBody =
-          await response.json();
-
-        errorMessage =
-          errorBody?.detail ||
-          errorMessage;
-      } catch {}
-
-      throw new Error(
-        errorMessage
-      );
-    }
-
-    const data =
-      await response.json();
-
-    return {
-      success: true,
-      data,
-    };
-  } catch (error) {
-    console.error(
-      "Get dashboard error:",
-      error
+    // Import directly — no HTTP round-trip, same process
+    const { getDashboardService } = await import(
+      "@/app/api/dashboard/dashboard-service"
     );
+
+    const data = await getDashboardService(session.user.c_id);
+
+    return { success: true, data };
+  } catch (error) {
+    console.error("[getDashboardData] error:", error);
 
     return {
       success: false,
       error:
-        error instanceof Error
-          ? error.message
-          : "Unknown dashboard error",
+        error instanceof Error ? error.message : "Unknown dashboard error",
     };
   }
 }

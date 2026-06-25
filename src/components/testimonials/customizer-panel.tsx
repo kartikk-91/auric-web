@@ -4,58 +4,67 @@ import {
   InputField,
   TextareaField,
   LinkField,
-  SelectField,
+  LayoutPickerField,
+  CardsPerViewField,
 } from "./form-fields";
 
-const layoutOptions: any[] = [
-  {
-    value: "Card Style",
-    label: "Card Style",
-  },
-  {
-    value: "List Style",
-    label: "List Style",
-  },
-  {
-    value: "Masonry",
-    label: "Masonry",
-  },
+const layoutOptions = [
+  { value: "Card Style", label: "Cards" },
+  { value: "List Style", label: "List" },
+  { value: "Masonry", label: "Masonry" },
 ];
 
-const cardsPerViewOptions: any[] = [
-  { value: "1", label: "1" },
-  { value: "2", label: "2" },
-  { value: "3", label: "3" },
-  { value: "4", label: "4" },
-];
+type WallConfig = {
+  heading: string;
+  tagline: string;
+  ctaText: string;
+  ctaLink: string;
+  instructions: string;
+  layoutStyle: string;
+  cardsPerView: number;
+};
 
 export default function CustomizerPanel({
   config,
   onChange,
-}: any) {
-  const set =
-    (key: string) => (val: any) =>
-      onChange({
-        ...config,
-        [key]: val,
-      });
+}: {
+  config: WallConfig;
+  onChange: (config: WallConfig) => void;
+}) {
+  const set = (key: keyof WallConfig) => (val: any) =>
+    onChange({ ...config, [key]: val });
 
   return (
     <div className="w-full">
-
-      <div className="mb-5 sm:mb-6">
+      {/* Section header */}
+      <div className="mb-6">
         <h2 className="text-base font-bold text-gray-900 sm:text-lg">
           Customize Your Wall
         </h2>
-
         <p className="mt-1 text-xs leading-relaxed text-gray-400 sm:text-sm">
-          Personalize the content and appearance
-          of your testimonial wall.
+          Personalize the content and appearance of your testimonial wall.
         </p>
       </div>
 
-
+      {/* Content section */}
       <div className="mb-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5">
+        <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-gray-800">
+          <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-indigo-50 text-indigo-500">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-3.5 w-3.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+          </span>
+          Content
+        </h3>
+
         <InputField
           label="Heading"
           value={config.heading}
@@ -72,12 +81,15 @@ export default function CustomizerPanel({
           placeholder="Real feedback from real people who love our product."
         />
 
+        <div className="my-4 border-t border-dashed border-gray-100" />
+
         <InputField
           label="CTA Button Text"
           value={config.ctaText}
           onChange={set("ctaText")}
           maxLength={30}
           placeholder="See more success stories"
+          hint="Leave blank to hide the button."
         />
 
         <LinkField
@@ -86,6 +98,8 @@ export default function CustomizerPanel({
           onChange={set("ctaLink")}
           placeholder="https://yourwebsite.com/testimonials"
         />
+
+        <div className="my-4 border-t border-dashed border-gray-100" />
 
         <TextareaField
           label="Testimonial Instructions"
@@ -97,34 +111,36 @@ export default function CustomizerPanel({
         />
       </div>
 
-
+      {/* Display settings section */}
       <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-5">
-        <h3 className="mb-4 text-sm font-bold text-gray-800">
+        <h3 className="mb-1 flex items-center gap-2 text-sm font-bold text-gray-800">
+          <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-indigo-50 text-indigo-500">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-3.5 w-3.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+          </span>
           Display Settings
         </h3>
 
-        <SelectField
-          label="Layout Style"
-          description="Choose how testimonials are displayed."
+        <LayoutPickerField
           value={config.layoutStyle}
           onChange={set("layoutStyle")}
           options={layoutOptions}
-          icon="grid"
         />
 
-        <SelectField
-          label="Cards Per View"
-          description="Number of testimonial cards to show at once."
-          value={String(
-            config.cardsPerView
-          )}
-          onChange={(v: any) =>
-            set("cardsPerView")(
-              Number(v)
-            )
-          }
-          options={cardsPerViewOptions}
-          icon="cards"
+        <CardsPerViewField
+          value={Number(config.cardsPerView)}
+          onChange={set("cardsPerView")}
         />
       </div>
     </div>

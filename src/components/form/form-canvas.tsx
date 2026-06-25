@@ -1,10 +1,8 @@
-import {
-  DragDropContext,
-  Droppable,
-} from "@hello-pangea/dnd";
+import { DragDropContext, Droppable } from "@hello-pangea/dnd";
+import { LayoutTemplate, Plus } from "lucide-react";
 
 import FieldItem from "./field-item";
-import EditableHeader from "./editable-hearder";
+import EditableHeader from "./editable-header";
 
 export default function FormCanvas({
   fields,
@@ -17,116 +15,84 @@ export default function FormCanvas({
   setTitle,
   tagline,
   setTagline,
+  disabled,
 }: any) {
-  const onDragEnd = (
-    result: any
-  ) => {
-    if (
-      !result.destination
-    )
-      return;
+  const onDragEnd = (result: any) => {
+    if (!result.destination) return;
 
-    const items =
-      Array.from(fields);
-
-    const [moved] =
-      items.splice(
-        result.source.index,
-        1
-      );
-
-    items.splice(
-      result.destination
-        .index,
-      0,
-      moved
-    );
-
+    const items = Array.from(fields);
+    const [moved] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, moved);
     setFields(items);
   };
 
   return (
     <div className="flex justify-center">
-      <div className="w-full rounded-2xl border border-gray-200 bg-white shadow-sm transition-all">
-
-        <div className="px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
-
+      <div
+        className={`w-full rounded-2xl border border-gray-200 bg-white shadow-sm transition-all ${
+          disabled ? "pointer-events-none opacity-60" : ""
+        }`}
+      >
+        <div className="px-5 py-6 sm:px-7 sm:py-8 lg:px-9 lg:py-10">
           <EditableHeader
             title={title}
             setTitle={setTitle}
             tagline={tagline}
-            setTagline={
-              setTagline
-            }
+            setTagline={setTagline}
+            disabled={disabled}
           />
 
-          <DragDropContext
-            onDragEnd={
-              onDragEnd
-            }
-          >
+          <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="fields">
               {(provided) => (
                 <div
-                  ref={
-                    provided.innerRef
-                  }
-                  {
-                    ...provided.droppableProps
-                  }
-                  className="space-y-4 sm:space-y-5"
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="space-y-3 sm:space-y-4"
                 >
-                  {fields.map(
-                    (
-                      field: any,
-                      index: number
-                    ) => (
+                  {fields.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-gray-200 py-16 text-center">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gray-100">
+                        <LayoutTemplate className="h-6 w-6 text-gray-400" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-700">
+                          No fields yet
+                        </p>
+                        <p className="mt-1 text-xs text-gray-400">
+                          Add fields from the left panel to get started.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    fields.map((field: any, index: number) => (
                       <FieldItem
-                        key={
-                          field.id
-                        }
-                        field={
-                          field
-                        }
-                        index={
-                          index
-                        }
-                        selected={
-                          selectedFieldId ===
-                          field.id
-                        }
-                        onSelect={() =>
-                          setSelectedFieldId(
-                            field.id
-                          )
-                        }
-                        deleteField={
-                          deleteField
-                        }
-                        duplicateField={
-                          duplicateField
-                        }
+                        key={field.id}
+                        field={field}
+                        index={index}
+                        selected={selectedFieldId === field.id}
+                        onSelect={() => setSelectedFieldId(field.id)}
+                        deleteField={deleteField}
+                        duplicateField={duplicateField}
+                        disabled={disabled}
                       />
-                    )
+                    ))
                   )}
 
-                  {
-                    provided.placeholder
-                  }
+                  {provided.placeholder}
                 </div>
               )}
             </Droppable>
           </DragDropContext>
 
+          {/* Add field button */}
           <button
-            onClick={() =>
-              setSelectedFieldId(
-                null
-              )
-            }
-            className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-gray-300 bg-gray-50 text-sm font-medium text-blue-600 transition hover:border-blue-400 hover:bg-blue-50"
+            onClick={() => setSelectedFieldId(null)}
+            disabled={disabled}
+            className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-gray-300 bg-transparent text-sm font-medium text-gray-400 transition hover:border-blue-400 hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            + Add New Field
+            <Plus className="h-4 w-4" />
+            Add Field
           </button>
         </div>
       </div>
