@@ -10,35 +10,40 @@ export default function FeedbackStats({
   const totalFeedback = data.length;
 
   const positive = data.filter(
-    (f) => f.sentiment === "Positive"
+    (f) => f.analysis.sentiment === "Positive"
   ).length;
 
   const neutral = data.filter(
-    (f) => f.sentiment === "Neutral"
+    (f) => f.analysis.sentiment === "Neutral"
   ).length;
 
   const negative = data.filter(
-    (f) => f.sentiment === "Negative"
+    (f) => f.analysis.sentiment === "Negative"
   ).length;
 
   const positivePercent = totalFeedback
-    ? Math.round((positive / totalFeedback) * 100)
+    ? Math.round(
+        (positive / totalFeedback) * 100
+      )
     : 0;
 
   const neutralPercent = totalFeedback
-    ? Math.round((neutral / totalFeedback) * 100)
+    ? Math.round(
+        (neutral / totalFeedback) * 100
+      )
     : 0;
 
   const negativePercent = totalFeedback
-    ? Math.round((negative / totalFeedback) * 100)
+    ? Math.round(
+        (negative / totalFeedback) * 100
+      )
     : 0;
 
   const stats = [
     {
       label: "Total Feedback",
       value: totalFeedback,
-      change: "+18%",
-      changePositive: true,
+      subtitle: "Customer responses",
       icon: (
         <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 rounded-xl flex items-center justify-center shrink-0">
           <svg
@@ -60,8 +65,7 @@ export default function FeedbackStats({
     {
       label: "Positive",
       value: `${positivePercent}%`,
-      change: "+8%",
-      changePositive: true,
+      subtitle: `${positive} positive responses`,
       icon: (
         <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-50 rounded-xl flex items-center justify-center shrink-0">
           <svg
@@ -83,8 +87,7 @@ export default function FeedbackStats({
     {
       label: "Neutral",
       value: `${neutralPercent}%`,
-      change: "-3%",
-      changePositive: false,
+      subtitle: `${neutral} neutral responses`,
       icon: (
         <div className="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-50 rounded-xl flex items-center justify-center shrink-0">
           <svg
@@ -97,7 +100,7 @@ export default function FeedbackStats({
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M9 12h6m-6 0a9 9 0 1118 0 9 9 0 01-18 0z"
+              d="M12 15a3 3 0 100-6 3 3 0 000 6zm0 0v5m0-18V4m8 8h-2M6 12H4"
             />
           </svg>
         </div>
@@ -106,8 +109,7 @@ export default function FeedbackStats({
     {
       label: "Negative",
       value: `${negativePercent}%`,
-      change: "-5%",
-      changePositive: false,
+      subtitle: `${negative} negative responses`,
       icon: (
         <div className="w-10 h-10 sm:w-12 sm:h-12 bg-red-50 rounded-xl flex items-center justify-center shrink-0">
           <svg
@@ -130,9 +132,9 @@ export default function FeedbackStats({
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-      {stats.map((stat, index) => (
+      {stats.map((stat) => (
         <div
-          key={index}
+          key={stat.label}
           className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200"
         >
           <div className="flex items-start justify-between gap-3 mb-4">
@@ -149,14 +151,8 @@ export default function FeedbackStats({
             {stat.icon}
           </div>
 
-          <p
-            className={`text-xs sm:text-sm ${
-              stat.changePositive
-                ? "text-green-600"
-                : "text-red-600"
-            }`}
-          >
-            {stat.change} vs Apr 12 - May 11
+          <p className="text-xs sm:text-sm text-gray-500">
+            {stat.subtitle}
           </p>
         </div>
       ))}

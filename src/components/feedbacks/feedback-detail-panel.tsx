@@ -12,237 +12,373 @@ export default function FeedbackDetailPanel({
   feedback,
   onClose,
 }: FeedbackDetailPanelProps) {
-  const getInitials = (name: string) => {
-    return name
+
+  const getInitials = (name: string) =>
+    name
       .split(" ")
-      .map((n) => n[0])
+      .map((part) => part[0])
       .join("");
+
+  const renderResponse = (
+    answer: string | number | string[]
+  ) => {
+    if (Array.isArray(answer)) {
+      return (
+        <div className="flex flex-wrap gap-2 mt-2">
+          {answer.map((item) => (
+            <span
+              key={item}
+              className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <p className="mt-2 text-gray-900">
+        {answer}
+      </p>
+    );
   };
+
+  const MetricCard = ({
+    title,
+    value,
+    icon,
+  }: {
+    title: string;
+    value: string;
+    icon: string;
+  }) => (
+    <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+      <p className="text-xs text-gray-500 mb-2">
+        {icon} {title}
+      </p>
+
+      <p className="text-lg font-semibold text-gray-900">
+        {value}
+      </p>
+    </div>
+  );
+
+  const FeatureChip = ({
+    value,
+    positive = true,
+  }: {
+    value: string;
+    positive?: boolean;
+  }) => (
+    <span
+      className={`px-3 py-1 rounded-full text-sm font-medium ${positive
+          ? "bg-green-50 text-green-700"
+          : "bg-red-50 text-red-700"
+        }`}
+    >
+      {value}
+    </span>
+  );
 
   return (
     <div
       className="
-        w-full
-        xl:w-96
-        bg-white
-        border
-        xl:border-l
-        xl:border-t-0
-        border-gray-200
-        shadow-xl
-        rounded-xl
-        xl:rounded-r-xl
-        xl:rounded-l-none
-        shrink-0
-        overflow-hidden
-      "
+      w-full
+      xl:w-[430px]
+      bg-white
+      border
+      border-gray-200
+      rounded-2xl
+      shadow-lg
+      overflow-y-auto
+      max-h-[85vh]
+    "
     >
-      <div className="p-4 sm:p-6">
+      <div className="p-6">
 
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-6">
+        {/* Header */}
 
-          <div className="flex items-start gap-3 min-w-0">
-            <div className="w-12 h-12 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-lg font-medium shrink-0">
+        <div className="flex justify-between items-start">
+
+          <div className="flex gap-4">
+
+            <div className="w-14 h-14 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-lg font-semibold">
               {getInitials(feedback.name)}
             </div>
 
-            <div className="min-w-0">
-              <h3 className="font-semibold text-gray-900 truncate">
+            <div>
+
+              <h2 className="text-xl font-semibold text-gray-900">
                 {feedback.name}
-              </h3>
+              </h2>
 
-              <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600 mt-1">
-                <svg
-                  className="w-4 h-4 shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
+              <p className="text-sm text-gray-500 mt-1">
+                {feedback.location.flag}{" "}
+                {feedback.location.formatted}
+              </p>
 
-                <span>{feedback.location}</span>
-                <span>•</span>
-                <span>
-                  {feedback.age} years old
-                </span>
-              </div>
+              <p className="text-sm text-gray-500">
+                {feedback.age} years old
+              </p>
+
             </div>
+
           </div>
 
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-700"
+          >
+            ✕
+          </button>
 
-          <div className="flex items-center justify-between sm:justify-end gap-3">
-            <SentimentBadge
-              sentiment={feedback.sentiment}
-            />
+        </div>
 
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 shrink-0"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+        <div className="mt-6">
+          <SentimentBadge
+            sentiment={
+              feedback.analysis.sentiment
+            }
+          />
+        </div>
+
+        {/* Metrics */}
+
+        <div className="grid grid-cols-3 gap-3 mt-6">
+
+          <MetricCard
+            icon="⭐"
+            title="Rating"
+            value={
+              feedback.analysis.rating
+                ? `${feedback.analysis.rating}/5`
+                : "-"
+            }
+          />
+
+          <MetricCard
+            icon="🎯"
+            title="Confidence"
+            value={`${Math.round(
+              feedback.analysis.confidence *
+              100
+            )}%`}
+          />
+
+          <MetricCard
+            icon="😊"
+            title="Sentiment"
+            value={`${Math.round(
+              feedback.analysis
+                .sentimentScore *
+              100
+            )}%`}
+          />
+
+        </div>
+
+        {/* Original Feedback */}
+
+        <section className="mt-8">
+
+          <h3 className="font-semibold text-gray-900 mb-3">
+            Original Customer Feedback
+          </h3>
+
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+
+            <p className="leading-7 text-gray-700">
+              {feedback.feedback}
+            </p>
+
           </div>
-        </div>
 
+        </section>
 
-        <div className="mb-6">
-          <h4 className="text-sm font-semibold text-gray-900 mb-3">
-            Feedback
-          </h4>
+        {/* AI Summary */}
 
-          <p className="text-gray-700 leading-relaxed wrap-break-word">
-            {feedback.feedback}
-          </p>
-        </div>
+        <section className="mt-8">
 
+          <h3 className="font-semibold text-gray-900 mb-3">
+            AI Summary
+          </h3>
 
-        <div className="mb-6">
-          <h4 className="text-sm font-semibold text-gray-900 mb-3">
-            Received
-          </h4>
+          <div className="rounded-xl border-l-4 border-blue-500 bg-blue-50 p-4">
 
-          <div className="flex items-start gap-2 text-sm text-gray-600">
-            <svg
-              className="w-4 h-4 mt-0.5 shrink-0"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
+            <p className="leading-7 text-blue-900">
+              {feedback.analysis.summary}
+            </p>
 
-            <span className="wrap-break-word">
-              {feedback.receivedFull}
+          </div>
+
+        </section>
+
+        {/* Testimonial */}
+
+        <section className="mt-8">
+
+          <div className="flex items-center gap-2 mb-3">
+
+            <span className="text-sm font-medium text-green-700">
+              ✨ Generated by Auric AI
             </span>
+
           </div>
-        </div>
 
+          <div className="rounded-xl border-l-4 border-green-500 bg-green-50 p-4">
 
-        <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-3">
-            Additional Info
-          </h4>
+            <p className="italic leading-7 text-green-900">
+              "{feedback.analysis.testimonial}"
+            </p>
 
-          <div className="space-y-3">
-            <div className="flex items-start justify-between gap-4 text-sm">
-              <span className="text-gray-600 shrink-0">
-                Source
-              </span>
-
-              <span className="text-gray-900 text-right wrap-break-word">
-                {feedback.additionalInfo.source}
-              </span>
-            </div>
-
-            <div className="flex items-start justify-between gap-4 text-sm">
-              <span className="text-gray-600 shrink-0">
-                Form Name
-              </span>
-
-              <span className="text-gray-900 text-right wrap-break-word">
-                {feedback.additionalInfo.formName}
-              </span>
-            </div>
-
-            <div className="flex items-start justify-between gap-4 text-sm">
-              <span className="text-gray-600 shrink-0">
-                Device
-              </span>
-
-              <span className="text-gray-900 text-right wrap-break-word">
-                {feedback.additionalInfo.device}
-              </span>
-            </div>
-
-            <div className="flex items-start justify-between gap-4 text-sm">
-              <span className="text-gray-600 shrink-0">
-                Browser
-              </span>
-
-              <span className="text-gray-900 text-right wrap-break-word">
-                {feedback.additionalInfo.browser}
-              </span>
-            </div>
-
-            <div className="flex items-start justify-between gap-4 text-sm">
-              <span className="text-gray-600 shrink-0">
-                IP Address
-              </span>
-
-              <span className="text-gray-900 text-right break-all">
-                {feedback.additionalInfo.ipAddress}
-              </span>
-            </div>
           </div>
-        </div>
 
+        </section>
 
-        <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
-          <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
+        {/* Praised */}
 
-            Previous
-          </button>
+        <section className="mt-8">
 
-          <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
-            Next
+          <h3 className="font-semibold text-gray-900 mb-3">
+            Praised Features
+          </h3>
 
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
-        </div>
+          <div className="flex flex-wrap gap-2">
+
+            {feedback.analysis.praisedFeatures
+              .length ? (
+              feedback.analysis.praisedFeatures.map(
+                (feature) => (
+                  <FeatureChip
+                    key={feature}
+                    value={feature}
+                  />
+                )
+              )
+            ) : (
+              <p className="text-gray-500 text-sm">
+                No highlighted strengths.
+              </p>
+            )}
+
+          </div>
+
+        </section>
+
+        {/* Improvement */}
+
+        <section className="mt-8">
+
+          <h3 className="font-semibold text-gray-900 mb-3">
+            Improvement Areas
+          </h3>
+
+          <div className="flex flex-wrap gap-2">
+
+            {feedback.analysis
+              .criticizedFeatures
+              .length ? (
+              feedback.analysis.criticizedFeatures.map(
+                (feature) => (
+                  <FeatureChip
+                    key={feature}
+                    value={feature}
+                    positive={false}
+                  />
+                )
+              )
+            ) : (
+              <div className="rounded-lg bg-green-50 text-green-700 px-4 py-2 text-sm">
+                🎉 No major concerns identified.
+              </div>
+            )}
+
+          </div>
+
+        </section>
+
+        {/* Customer Responses */}
+
+        <section className="mt-8">
+
+          <h3 className="font-semibold text-gray-900 mb-4">
+            Customer Responses
+          </h3>
+
+          <div className="space-y-5">
+
+            {feedback.responses.map(
+              (response, index) => (
+                <div
+                  key={index}
+                  className="border-b border-gray-100 pb-4"
+                >
+                  <p className="text-sm font-medium text-gray-600">
+                    {response.question}
+                  </p>
+
+                  {renderResponse(
+                    response.answer
+                  )}
+                </div>
+              )
+            )}
+
+          </div>
+
+        </section>
+
+        {/* Submission */}
+
+        <section className="mt-8">
+
+          <h3 className="font-semibold text-gray-900 mb-4">
+            Submission Details
+          </h3>
+
+          <div className="space-y-4 text-sm">
+
+            <div className="flex justify-between">
+
+              <span className="text-gray-500">
+                Email
+              </span>
+
+              <span className="font-medium text-gray-900">
+                {feedback.email}
+              </span>
+
+            </div>
+
+            <div className="flex justify-between">
+
+              <span className="text-gray-500">
+                Submitted
+              </span>
+
+              <span className="font-medium text-gray-900">
+                {feedback.receivedFull}
+              </span>
+
+            </div>
+
+            <div className="flex justify-between">
+
+              <span className="text-gray-500">
+                Status
+              </span>
+
+              <span className="font-medium text-gray-900">
+                {feedback.processingStatus}
+              </span>
+
+            </div>
+
+          </div>
+
+        </section>
+
       </div>
     </div>
   );
