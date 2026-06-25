@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Sidebar from "@/components/shared/sidebar";
 import FormBuilderHeader from "@/components/form/feedback-header";
 import FormBuilder from "@/components/form/form-builder";
+import { FormBuilderSkeleton } from "@/components/form/form-builder-skeleton";
 import { useFormBuilder } from "@/hooks/useFormBuilder";
 
 const boilerplateFields = [
@@ -33,66 +34,37 @@ const boilerplateFields = [
     type: "short-answer",
     question: "Tell us about your experience",
     required: false,
-    helpText:
-      "Your feedback helps us improve.",
+    helpText: "Your feedback helps us improve.",
   },
 ];
 
 const FeedbackForm = () => {
   const form = useFormBuilder();
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
+  const [publishing, setPublishing] = useState(false);
 
-  const [title, setTitle] =
-    useState("Customer Feedback");
-
-  const [tagline, setTagline] =
-    useState(
-      "We'd love to hear your thoughts! Your feedback helps us improve and serve you better."
-    );
+  const [title, setTitle] = useState("Customer Feedback");
+  const [tagline, setTagline] = useState(
+    "We'd love to hear your thoughts! Your feedback helps us improve and serve you better."
+  );
 
   useEffect(() => {
     const fetchForm = async () => {
       try {
-        const res = await fetch(
-          "/api/form/get"
-        );
-
-        const data =
-          await res.json();
+        const res = await fetch("/api/form/get");
+        const data = await res.json();
 
         if (data?.form) {
-          setTitle(
-            data.form.title ||
-              "Customer Feedback"
-          );
-
-          setTagline(
-            data.form.tagLine || ""
-          );
-
-          const loadedFields =
-            data.form.schema
-              ?.fields || [];
-
-          form.loadForm(
-            loadedFields
-          );
+          setTitle(data.form.title || "Customer Feedback");
+          setTagline(data.form.tagLine || "");
+          form.loadForm(data.form.schema?.fields || []);
         } else {
-          form.loadForm(
-            boilerplateFields as any
-          );
+          form.loadForm(boilerplateFields as any);
         }
       } catch (error) {
-        console.error(
-          "Error loading form:",
-          error
-        );
-
-        form.loadForm(
-          boilerplateFields as any
-        );
+        console.error("Error loading form:", error);
+        form.loadForm(boilerplateFields as any);
       } finally {
         setLoading(false);
       }
@@ -101,31 +73,36 @@ const FeedbackForm = () => {
     fetchForm();
   }, []);
 
- 
-
   return (
-  <div className="flex h-dvh w-full overflow-hidden bg-[#fafafa]">
-    <Sidebar />
+    <div className="flex h-dvh w-full overflow-hidden bg-[#fafafa]">
+      <Sidebar />
 
-    <div className="flex min-w-0 flex-1 flex-col overflow-hidden mt-14 md:mt-0">
-      <FormBuilderHeader
-        form={form}
-        title={title}
-        tagline={tagline}
-      />
-
-      <div className="min-h-0 flex-1 overflow-hidden">
-        <FormBuilder
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden mt-14 md:mt-0">
+        <FormBuilderHeader
           form={form}
           title={title}
-          setTitle={setTitle}
           tagline={tagline}
-          setTagline={setTagline}
+          onPublishStart={() => setPublishing(true)}
+          onPublishEnd={() => setPublishing(false)}
         />
+
+        <div className="min-h-0 flex-1 overflow-hidden">
+          {loading ? (
+            <FormBuilderSkeleton />
+          ) : (
+            <FormBuilder
+              form={form}
+              title={title}
+              setTitle={setTitle}
+              tagline={tagline}
+              setTagline={setTagline}
+              disabled={publishing}
+            />
+          )}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default FeedbackForm;
