@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 import StatCard from "./stat-card";
-import FeedbackInsights from "./feedback-insights";
+import CustomerSignal from "./customer-signal";
 import RecentTestimonials from "./recent-testimonials";
 import RatingDistribution from "./rating-distribution";
 import SentimentChart from "./sentiment-chart";
@@ -95,7 +95,7 @@ export default function DashboardContent() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-fit">
           <RatingDistribution />
-          <FeedbackInsights />
+          <CustomerSignal />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

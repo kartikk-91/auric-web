@@ -24,7 +24,9 @@ export interface DashboardData {
     Negative: number;
   };
   ResponseByLocation: Record<string, number>;
-  feedbackInsights: unknown[];
+  topPraised: Record<string, number>;
+  topCriticized: Record<string, number>;
+  totalFeedbacks: number;
   recentTestimonials: Testimonial[];
   formLink: string;
   wallLink: string;
