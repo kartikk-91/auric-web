@@ -83,7 +83,8 @@ export default function Sidebar() {
 
       <aside
         className={`
-          fixed left-0 top-0 z-50 flex h-screen flex-col
+          fixed left-0 top-0 z-50 flex h-screen h-dvh flex-col
+          overflow-hidden
           border-r border-gray-200 bg-white
           transition-[transform,width] duration-300 ease-in-out
           w-[280px] sm:w-[300px]
@@ -93,7 +94,7 @@ export default function Sidebar() {
         `}
       >
         {/* Header */}
-        <div className="relative border-b border-gray-100 px-6 py-6">
+        <div className="relative shrink-0 border-b border-gray-100 px-6 py-6">
           <div className="flex items-start justify-between">
             {!collapsed && (
               <div>
@@ -125,7 +126,7 @@ export default function Sidebar() {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 overflow-y-auto overflow-x-hidden px-3 py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <nav className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-3 py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <ul className="space-y-1">
             {menuItems.map((item) => {
               const Icon = item.icon;
@@ -157,7 +158,7 @@ export default function Sidebar() {
         </nav>
 
         {/* Usage card */}
-        <div className="border-t border-gray-200 px-3 py-4">
+        <div className="shrink-0 border-t border-gray-200 px-3 py-4">
           {collapsed ? (
             <button
               onClick={() => router.push('/pricing')}
@@ -195,7 +196,7 @@ export default function Sidebar() {
           )}
         </div>
 
-        <div className="border-t border-gray-200">
+        <div className="shrink-0 border-t border-gray-200">
           <UserProfileDropdown collapsed={collapsed} />
         </div>
       </aside>

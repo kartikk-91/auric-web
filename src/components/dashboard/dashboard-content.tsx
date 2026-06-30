@@ -107,7 +107,7 @@ export default function DashboardContent() {
           <ResponsesByLocation />
         </div>
 
-        <div className="h-24 w-full" />
+        <div className="hidden sm:block h-24 w-full" />
       </div>
     </div>
   );
