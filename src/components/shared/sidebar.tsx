@@ -83,15 +83,16 @@ export default function Sidebar() {
 
       <aside
         className={`
-          fixed left-0 top-0 z-50 flex h-screen h-dvh flex-col
-          overflow-hidden
-          border-r border-gray-200 bg-white
-          transition-[transform,width] duration-300 ease-in-out
-          w-[280px] sm:w-[300px]
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-          md:static md:translate-x-0
-          ${collapsed ? 'md:w-[84px]' : 'md:w-[228px] lg:w-[250px]'}
-        `}
+    fixed left-0 top-0 z-50 flex h-[100dvh] flex-col
+    overflow-hidden
+    border-r border-gray-200 bg-white
+    transition-[transform,width] duration-300 ease-in-out
+    w-[280px] sm:w-[300px]
+    ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+    md:static md:translate-x-0
+    ${collapsed ? 'md:w-[84px]' : 'md:w-[228px] lg:w-[250px]'}
+  `}
+        style={{ height: '100dvh' }}
       >
         {/* Header */}
         <div className="relative shrink-0 border-b border-gray-100 px-6 py-6">
