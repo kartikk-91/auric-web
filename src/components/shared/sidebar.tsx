@@ -16,12 +16,11 @@ import {
 
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
-import UserProfileDropdown from './profile-dropdown';
+import UserProfileFooter from './profile';
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
   { icon: MessageSquare, label: 'Feedbacks', href: '/feedbacks' },
-  { icon: MessageSquareQuote, label: 'Testimonials', href: '/testimonials' },
   { icon: FileText, label: 'Form Builder', href: '/build/feedbackForm' },
   { icon: Sparkles, label: 'Ask Auric', href: '/ask-auric' },
   { icon: Settings, label: 'Settings', href: '/settings' },
@@ -31,6 +30,8 @@ interface UsageData {
   used: number;
   limit: number;
 }
+
+const DAILY_TOKEN_LIMIT = 100_000;
 
 export default function Sidebar() {
   const router = useRouter();
@@ -59,7 +60,9 @@ export default function Sidebar() {
     };
   }, []);
 
-  const pct = usage && usage.limit > 0 ? Math.min(100, (usage.used / usage.limit) * 100) : 0;
+  const limit = usage?.limit ?? DAILY_TOKEN_LIMIT;
+  const used = usage?.used ?? 0;
+  const pct = limit > 0 ? Math.min(100, (used / limit) * 100) : 0;
 
   return (
     <>
@@ -158,48 +161,40 @@ export default function Sidebar() {
           </ul>
         </nav>
 
-        {/* Usage card */}
+        {/* Daily usage card */}
         <div className="shrink-0 border-t border-gray-200 px-3 py-4">
           {collapsed ? (
-            <button
-              onClick={() => router.push('/pricing')}
-              title="Upgrade plan"
-              className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition-colors hover:bg-blue-100"
+            <div
+              title={`${used.toLocaleString()} / ${limit.toLocaleString()} tokens today`}
+              className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
             >
               <Sparkles className="h-4 w-4" />
-            </button>
+            </div>
           ) : (
             <div className="rounded-2xl bg-gray-50 p-3.5">
               <div className="mb-2 flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   <Sparkles className="h-3.5 w-3.5 text-blue-600" />
-                  <span className="text-xs font-semibold text-gray-900">Pro Plan</span>
+                  <span className="text-xs font-semibold text-gray-900">Daily Usage</span>
                 </div>
                 <span className="text-[11px] text-gray-500">
-                  {usage ? `${usage.used.toLocaleString()} / ${usage.limit.toLocaleString()}` : '—'}
+                  {usage ? `${used.toLocaleString()} / ${limit.toLocaleString()}` : '—'}
                 </span>
               </div>
 
-              <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-gray-200">
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200">
                 <div
                   className="h-full rounded-full bg-blue-600 transition-all"
                   style={{ width: `${pct}%` }}
                 />
               </div>
 
-              <button
-                onClick={() => router.push('/pricing')}
-                className="h-9 w-full rounded-xl bg-blue-600 text-xs font-medium text-white transition-colors hover:bg-blue-700"
-              >
-                Upgrade Plan
-              </button>
+              <p className="mt-2 text-[11px] text-gray-400">Resets daily at midnight</p>
             </div>
           )}
         </div>
 
-        <div className="shrink-0 border-t border-gray-200">
-          <UserProfileDropdown collapsed={collapsed} />
-        </div>
+        <UserProfileFooter collapsed={collapsed} />
       </aside>
     </>
   );
