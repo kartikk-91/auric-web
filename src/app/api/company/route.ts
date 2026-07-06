@@ -1,4 +1,3 @@
-// app/api/company/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getCurrentCompany } from "@/lib/auth-session";
@@ -28,9 +27,6 @@ export async function PATCH(req: NextRequest) {
 
   const body = await req.json();
   const { cname, phoneNumber, address, description, website } = body ?? {};
-
-  // Mirror the VarChar limits from schema.prisma so bad input fails fast
-  // with a clear message instead of a DB error.
   const errors: string[] = [];
   if (cname !== undefined && (!cname.trim() || cname.length > 255)) {
     errors.push("Company name must be 1-255 characters.");

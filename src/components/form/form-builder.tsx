@@ -21,16 +21,12 @@ export default function FormBuilder({
   const selectedField = form.fields.find(
     (f: any) => f.id === form.selectedFieldId
   );
-
-  // Close mobile drawers when disabled (e.g. during publish)
   useEffect(() => {
     if (disabled) {
       setShowSidebar(false);
       setShowSettings(false);
     }
   }, [disabled]);
-
-  // Lock body scroll when a drawer is open
   useEffect(() => {
     if (showSidebar || showSettings) {
       document.body.style.overflow = "hidden";
@@ -45,7 +41,7 @@ export default function FormBuilder({
   return (
     <div className="relative flex h-[calc(100vh-130px)] flex-col overflow-hidden bg-gradient-to-b from-gray-50/80 to-white lg:flex-row">
 
-      {/* Mobile toolbar */}
+      
       <div className="flex items-center justify-between border-b border-gray-200 bg-white px-4 py-2.5 lg:hidden">
         <button
           onClick={() => setShowSidebar(true)}
@@ -69,12 +65,12 @@ export default function FormBuilder({
         </button>
       </div>
 
-      {/* Desktop: Left sidebar */}
+      
       <div className="ml-4 mt-3 hidden h-full w-[220px] shrink-0 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm lg:block">
         <Sidebar addField={form.addField} disabled={disabled} />
       </div>
 
-      {/* Center canvas */}
+      
       <div className="min-w-0 flex-1 overflow-y-auto px-3 py-3 sm:px-5 lg:px-5">
         <div className="mx-auto max-w-3xl">
           <FormCanvas
@@ -93,7 +89,7 @@ export default function FormBuilder({
         </div>
       </div>
 
-      {/* Desktop: Right settings panel */}
+      
       <div className="mr-4 mt-3 hidden h-full w-[300px] shrink-0 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm xl:block">
         <FieldSettings
           selectedField={selectedField}
@@ -103,7 +99,7 @@ export default function FormBuilder({
         />
       </div>
 
-      {/* Mobile: Sidebar drawer */}
+      
       {showSidebar && (
         <>
           <div
@@ -130,7 +126,7 @@ export default function FormBuilder({
         </>
       )}
 
-      {/* Mobile: Settings drawer */}
+      
       {showSettings && (
         <>
           <div

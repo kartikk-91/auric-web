@@ -52,7 +52,7 @@ export default function FieldSettings({
 
   return (
     <div className={`flex h-full flex-col ${disabled ? "pointer-events-none opacity-60" : ""}`}>
-      {/* Panel header */}
+      
       <div className="border-b border-gray-100 px-5 py-4">
         <h2 className="text-sm font-semibold text-gray-800">Field Settings</h2>
         <p className="mt-0.5 text-xs text-gray-400">
@@ -60,10 +60,10 @@ export default function FieldSettings({
         </p>
       </div>
 
-      {/* Scrollable settings body */}
+      
       <div className="flex-1 space-y-5 overflow-y-auto px-5 py-5">
 
-        {/* Field type */}
+        
         <div>
           <label className={labelClass}>Field Type</label>
           <div className="relative">
@@ -92,7 +92,7 @@ export default function FieldSettings({
           </div>
         </div>
 
-        {/* Question */}
+        
         <div>
           <label className={labelClass}>Question</label>
           <input
@@ -107,10 +107,10 @@ export default function FieldSettings({
           />
         </div>
 
-        {/* Divider */}
+        
         <div className="h-px w-full bg-gray-100" />
 
-        {/* Required toggle */}
+        
         <ToggleRow
           label="Required"
           description="Respondents must answer this field."
@@ -120,7 +120,7 @@ export default function FieldSettings({
           }
         />
 
-        {/* Rating-specific settings */}
+        
         {selectedField.type === "rating" && (
           <>
             <div className="h-px w-full bg-gray-100" />
@@ -164,7 +164,7 @@ export default function FieldSettings({
           </>
         )}
 
-        {/* Options editor */}
+        
         {["multiple-choice", "checkboxes", "dropdown"].includes(selectedField.type) && (
           <>
             <div className="h-px w-full bg-gray-100" />
@@ -174,7 +174,7 @@ export default function FieldSettings({
 
         <div className="h-px w-full bg-gray-100" />
 
-        {/* Help text */}
+        
         <div>
           <label className={labelClass}>Help Text</label>
           <input
@@ -190,7 +190,7 @@ export default function FieldSettings({
         </div>
       </div>
 
-      {/* Delete footer */}
+      
       <div className="border-t border-gray-100 px-5 py-4">
         <button
           onClick={() => deleteField(selectedField.id)}

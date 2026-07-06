@@ -14,8 +14,6 @@ export async function getDashboardData(): Promise<Result<DashboardData>> {
     if (!session?.user?.c_id) {
       return { success: false, error: "Unauthorized: Company ID not found" };
     }
-
-    // Import directly — no HTTP round-trip, same process
     const { getDashboardService } = await import(
       "@/app/api/dashboard/dashboard-service"
     );

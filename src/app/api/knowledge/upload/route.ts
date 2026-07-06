@@ -1,11 +1,6 @@
-// app/api/knowledge/upload/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getCurrentCompany } from "@/lib/auth-session";
-
-// If you deploy this on Vercel, the default function timeout (10s on
-// Hobby, 15s on Pro unless raised) can kill the request before embedding
-// finishes on larger files. This raises the ceiling for this route only.
 export const maxDuration = 120;
 
 const MAX_FILE_BYTES = 20 * 1024 * 1024; // 20MB — match your FastAPI validate_file_size
@@ -45,11 +40,6 @@ export async function POST(req: NextRequest) {
   });
 
   try {
-    // Read the upload into a plain in-memory Blob before re-sending it.
-    // Passing the original `file` object straight into a new FormData can
-    // hang indefinitely — its underlying stream may already be partially
-    // read by the time req.formData() handed it to us, so a fresh Blob
-    // with a known byte length is the reliable way to forward it.
     const bytes = Buffer.from(await file.arrayBuffer());
     const blob = new Blob([bytes], { type: file.type || "application/octet-stream" });
 

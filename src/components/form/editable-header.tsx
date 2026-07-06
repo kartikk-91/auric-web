@@ -15,7 +15,7 @@ export default function EditableHeader({
 
   return (
     <div className="mb-7 space-y-2">
-      {/* Title */}
+      
       <div className="group relative">
         {editingTitle ? (
           <input
@@ -50,7 +50,7 @@ export default function EditableHeader({
         )}
       </div>
 
-      {/* Tagline */}
+      
       <div className="group/tagline relative">
         {editingTagline ? (
           <textarea
@@ -84,7 +84,7 @@ export default function EditableHeader({
         )}
       </div>
 
-      {/* Divider */}
+      
       <div className="pt-1">
         <div className="h-px w-full bg-gray-100" />
       </div>

@@ -16,8 +16,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   callbacks: {
     async signIn({ user, account }) {
       if (!user.email) return false;
-
-      // OAuth providers
       if (
         account?.provider === "google" ||
         account?.provider === "github"
@@ -36,8 +34,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
         return true;
       }
-
-      // Credentials provider
       if (account?.provider === "credentials") {
         if (!user.id) return false;
 
@@ -61,8 +57,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       const user = await getUserByEmail(token.email);
 
       if (!user) return token;
-
-      // IMPORTANT
       token.sub = user.u_id;
 
       const company = await prisma.company.findFirst({

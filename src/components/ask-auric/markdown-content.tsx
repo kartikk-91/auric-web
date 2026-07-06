@@ -27,8 +27,6 @@ function tokenize(md: string): Token[] {
 
   while (i < lines.length) {
     const line = lines[i];
-
-    // ── Fenced code block ────────────────────────────────────────────────
     if (/^```/.test(line)) {
       const lang = line.slice(3).trim();
       const codeLines: string[] = [];
@@ -41,8 +39,6 @@ function tokenize(md: string): Token[] {
       i++;
       continue;
     }
-
-    // ── Heading ──────────────────────────────────────────────────────────
     const headingMatch = line.match(/^(#{1,4})\s+(.+)/);
     if (headingMatch) {
       tokens.push({
@@ -53,15 +49,11 @@ function tokenize(md: string): Token[] {
       i++;
       continue;
     }
-
-    // ── Horizontal rule ──────────────────────────────────────────────────
     if (/^[-*_]{3,}\s*$/.test(line)) {
       tokens.push({ type: "hr" });
       i++;
       continue;
     }
-
-    // ── Blockquote ───────────────────────────────────────────────────────
     if (line.startsWith(">")) {
       const quoteLines: string[] = [];
       while (i < lines.length && lines[i].startsWith(">")) {
@@ -71,8 +63,6 @@ function tokenize(md: string): Token[] {
       tokens.push({ type: "blockquote", text: quoteLines.join("\n") });
       continue;
     }
-
-    // ── Unordered list ───────────────────────────────────────────────────
     if (/^[-*+]\s/.test(line)) {
       const items: string[] = [];
       while (i < lines.length && /^[-*+]\s/.test(lines[i])) {
@@ -82,8 +72,6 @@ function tokenize(md: string): Token[] {
       tokens.push({ type: "ul", items });
       continue;
     }
-
-    // ── Ordered list ─────────────────────────────────────────────────────
     if (/^\d+\.\s/.test(line)) {
       const items: string[] = [];
       while (i < lines.length && /^\d+\.\s/.test(lines[i])) {
@@ -93,8 +81,6 @@ function tokenize(md: string): Token[] {
       tokens.push({ type: "ol", items });
       continue;
     }
-
-    // ── Table ────────────────────────────────────────────────────────────
     if (line.includes("|") && i + 1 < lines.length && /^\|?[-| :]+\|?$/.test(lines[i + 1])) {
       const parseRow = (r: string) =>
         r
@@ -113,15 +99,11 @@ function tokenize(md: string): Token[] {
       tokens.push({ type: "table", headers, rows });
       continue;
     }
-
-    // ── Blank line ───────────────────────────────────────────────────────
     if (line.trim() === "") {
       tokens.push({ type: "blank" });
       i++;
       continue;
     }
-
-    // ── Paragraph (merge consecutive non-blank lines) ─────────────────
     const paraLines: string[] = [];
     while (
       i < lines.length &&
@@ -144,11 +126,9 @@ function tokenize(md: string): Token[] {
   return tokens;
 }
 
-/** Render inline markdown: **bold**, *italic*, `code`, and plain text */
+
 function renderInline(text: string): React.ReactNode[] {
-  // Tokenise inline patterns
   const parts: React.ReactNode[] = [];
-  // Combined regex for bold, italic, inline code
   const re = /(\*\*(.+?)\*\*)|(\*(.+?)\*)|(`(.+?)`)/g;
   let last = 0;
   let match: RegExpExecArray | null;

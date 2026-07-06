@@ -73,7 +73,7 @@ const MainForm = ({
 
             return acc
           },
-          {}
+          
         )
 
       const payload = {

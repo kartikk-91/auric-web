@@ -16,6 +16,7 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export default function LoginPage() {
   const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
   const [isPending, startTransition] = useTransition();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -23,6 +24,7 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -32,25 +34,54 @@ export default function LoginPage() {
     },
   });
 
+  const DEMO_EMAIL = "project.demo106@gmail.com";
+  const DEMO_PASSWORD = "demo1234";
+
+  const handleDemoLogin = () => {
+    setValue("email", DEMO_EMAIL, { shouldValidate: true });
+    setValue("password", DEMO_PASSWORD, { shouldValidate: true });
+    handleSubmit(onSubmit)();
+  };
+
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError("");
+    setInfo("");
 
     startTransition(async () => {
       try {
-        const result = await signIn("credentials", {
-          email: values.email,
-          password: values.password,
-          redirect: false,
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(values),
         });
 
-        if (result?.error) {
-          setError("Invalid email or password");
+        let data: {
+          error?: string;
+          success?: string;
+          code?: string;
+          redirect?: string;
+        } = {};
+        try {
+          data = await res.json();
+        } catch {
+        }
+
+        if (!res.ok) {
+          setError(data.error || "Something went wrong. Please try again.");
           return;
         }
 
-        window.location.href = DEFAULT_LOGIN_REDIRECT;
+        if (data.code === "EMAIL_NOT_VERIFIED") {
+          setInfo(
+            data.success ||
+              "Your email isn't verified yet. We've sent you a new verification link."
+          );
+          return;
+        }
+
+        window.location.href = data.redirect || DEFAULT_LOGIN_REDIRECT;
       } catch {
-        setError("Something went wrong");
+        setError("Network error. Please check your connection and try again.");
       }
     });
   };
@@ -91,7 +122,7 @@ export default function LoginPage() {
         <div className="pointer-events-none">
           <Widgets />
         </div>
-        
+
 
         <div className="relative z-10 w-full max-w-md">
           <div className="bg-white rounded-3xl shadow-[0_20px_60px_rgba(99,102,241,0.15)] border border-indigo-50 px-8 pt-4 pb-6">
@@ -223,6 +254,14 @@ export default function LoginPage() {
                   "Login"
                 )}
               </button>
+              <button
+                type="button"
+                onClick={handleDemoLogin}
+                disabled={isPending}
+                className="w-full py-3 text-xs font-medium text-[#3B5BDB] bg-indigo-50/60 hover:bg-indigo-50 border border-dashed border-indigo-200 rounded-xl transition-all duration-200 disabled:opacity-60"
+              >
+                Try it out - Login with demo account
+              </button>
               {error && (
                 <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-2.5">
                   <svg
@@ -238,6 +277,22 @@ export default function LoginPage() {
                   </svg>
 
                   {error}
+                </div>
+              )}
+              {info && (
+                <div className="flex items-center gap-2 text-sm text-blue-700 bg-blue-50 border border-blue-100 rounded-xl px-4 py-2.5">
+                  <svg
+                    className="w-4 h-4 shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  {info}
                 </div>
               )}
             </form>

@@ -15,9 +15,7 @@ export function Toast({ message, type, onClose }: ToastProps) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Animate in
     const show = setTimeout(() => setVisible(true), 10);
-    // Auto-dismiss after 4s
     const hide = setTimeout(() => {
       setVisible(false);
       setTimeout(onClose, 300);
@@ -67,7 +65,7 @@ export function Toast({ message, type, onClose }: ToastProps) {
         <X className="h-4 w-4" />
       </button>
 
-      {/* Progress bar */}
+      
       <div
         className={`absolute bottom-0 left-0 h-0.5 rounded-b-2xl ${
           type === "success" ? "bg-green-400" : "bg-red-400"

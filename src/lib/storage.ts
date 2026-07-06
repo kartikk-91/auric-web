@@ -1,16 +1,3 @@
-// lib/storage.ts
-//
-// Free image storage for the company logo, via Cloudinary's free tier
-// (25GB storage + 25GB bandwidth/month, no card required):
-//   1. Sign up at https://cloudinary.com
-//   2. Grab Cloud name / API key / API secret from the dashboard
-//   3. npm i cloudinary
-//   4. Set env vars: CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
-//
-// Note: this is only used for the logo. Knowledge documents are never
-// stored here — they're forwarded straight to your FastAPI ingestion
-// service (see app/api/knowledge/upload/route.ts), nothing is persisted
-// on the Next.js side for those.
 
 import { v2 as cloudinary } from "cloudinary";
 

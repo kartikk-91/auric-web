@@ -51,7 +51,6 @@ export default function Sidebar() {
         const data = await res.json();
         if (!cancelled) setUsage(data);
       } catch {
-        // card just stays blank if this fails
       }
     })();
 
@@ -66,7 +65,7 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile top bar */}
+      
       <div className="fixed top-0 left-0 right-0 z-40 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 md:hidden">
         <Image src="/logo.png" width={90} height={90} alt="Auric" className="h-8 w-auto" />
         <button
@@ -97,7 +96,7 @@ export default function Sidebar() {
   `}
         style={{ height: '100dvh' }}
       >
-        {/* Header */}
+        
         <div className="relative shrink-0 border-b border-gray-100 px-6 py-6">
           <div className="flex items-start justify-between">
             {!collapsed && (
@@ -119,7 +118,7 @@ export default function Sidebar() {
             </button>
           </div>
 
-          {/* Collapse toggle, desktop only */}
+          
           <button
             onClick={() => setCollapsed((v) => !v)}
             className="absolute -right-3 top-7 hidden h-6 w-6 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-sm transition hover:bg-gray-50 hover:text-blue-600 md:flex"
@@ -129,7 +128,7 @@ export default function Sidebar() {
           </button>
         </div>
 
-        {/* Nav */}
+        
         <nav className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-3 py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <ul className="space-y-1">
             {menuItems.map((item) => {
@@ -161,7 +160,7 @@ export default function Sidebar() {
           </ul>
         </nav>
 
-        {/* Daily usage card */}
+        
         <div className="shrink-0 border-t border-gray-200 px-3 py-4">
           {collapsed ? (
             <div

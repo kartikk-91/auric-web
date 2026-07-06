@@ -7,36 +7,78 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { sendVerificationAction } from "@/app/actions/send-verification";
 
 export async function POST(req: Request) {
-  
   try {
-    const body = await req.json();
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return Response.json(
+        { error: "Invalid request body.", code: "INVALID_BODY" },
+        { status: 400 }
+      );
+    }
 
     const validatedFields = LoginSchema.safeParse(body);
     if (!validatedFields.success) {
-      return Response.json({ error: "Invalid fields!" }, { status: 400 });
+      const firstIssue = validatedFields.error.issues[0];
+      return Response.json(
+        {
+          error: firstIssue?.message || "Please check the form and try again.",
+          code: "VALIDATION_ERROR",
+        },
+        { status: 400 }
+      );
     }
 
     const { email, password } = validatedFields.data;
 
     const existingUser = await getUserByEmail(email);
-
-    if (!existingUser || !existingUser.hashedPassword) {
+    if (!existingUser) {
       return Response.json(
-        { error: "Email doesn't exist!" },
+        { error: "No account found with this email.", code: "USER_NOT_FOUND" },
+        { status: 404 }
+      );
+    }
+
+    if (!existingUser.hashedPassword) {
+      return Response.json(
+        {
+          error:
+            "This account was created with Google or GitHub. Please continue with that instead.",
+          code: "OAUTH_ACCOUNT",
+        },
         { status: 400 }
       );
     }
 
     if (!existingUser.isVerified) {
-      const verificationToken = await generateVerificationToken(existingUser.email);
+      try {
+        const verificationToken = await generateVerificationToken(existingUser.email);
+        await sendVerificationAction(
+          existingUser.email,
+          existingUser.name,
+          verificationToken.token
+        );
+      } catch (emailError) {
+        console.error("RESEND VERIFICATION EMAIL ERROR:", emailError);
+        return Response.json(
+          {
+            error:
+              "Your email isn't verified yet, and we couldn't resend the verification link. Please try again shortly.",
+            code: "EMAIL_NOT_VERIFIED_RESEND_FAILED",
+          },
+          { status: 500 }
+        );
+      }
 
-      await sendVerificationAction(
-        existingUser.email,
-        existingUser.name,
-        verificationToken.token
+      return Response.json(
+        {
+          success:
+            "Email not verified. Please check your inbox.",
+          code: "EMAIL_NOT_VERIFIED",
+        },
+        { status: 200 }
       );
-
-      return Response.json({ success: "Confirmation email sent!" });
     }
 
     try {
@@ -47,7 +89,8 @@ export async function POST(req: Request) {
       });
 
       return Response.json({
-        success: "Login successful",
+        success: "Login successful.",
+        code: "LOGIN_SUCCESS",
         redirect: DEFAULT_LOGIN_REDIRECT,
       });
     } catch (error) {
@@ -55,23 +98,25 @@ export async function POST(req: Request) {
         switch (error.type) {
           case "CredentialsSignin":
             return Response.json(
-              { error: "Invalid credentials!" },
+              { error: "Incorrect email or password.", code: "INVALID_CREDENTIALS" },
               { status: 401 }
             );
           default:
             return Response.json(
-              { error: "Something went wrong!" },
+              { error: "Something went wrong while signing you in.", code: "AUTH_ERROR" },
               { status: 500 }
             );
         }
       }
-
       throw error;
     }
   } catch (error) {
     console.error("LOGIN ERROR:", error);
     return Response.json(
-      { error: "Internal server error" },
+      {
+        error: "Something went wrong on our end. Please try again in a moment.",
+        code: "SERVER_ERROR",
+      },
       { status: 500 }
     );
   }

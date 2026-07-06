@@ -4,10 +4,13 @@ import { prisma } from "./db";
 
 
 export const generateVerificationToken = async (email: string) => {
-    const token = uuidv4();
-    const expires = new Date(new Date().getTime() + 3600 * 1000);
-
     const existingToken = await getVerificationTokenByEmail(email);
+
+
+    if (existingToken && new Date(existingToken.expires) > new Date()) {
+        return existingToken;
+    }
+
     if (existingToken) {
         await prisma.verificationToken.delete({
             where: {
@@ -15,6 +18,10 @@ export const generateVerificationToken = async (email: string) => {
             }
         })
     }
+
+    const token = uuidv4();
+    const expires = new Date(new Date().getTime() + 3600 * 1000);
+
     const verificationToken = await prisma.verificationToken.create({
         data: {
             email,

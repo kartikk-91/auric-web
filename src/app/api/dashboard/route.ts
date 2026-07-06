@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { getDashboardService } from "./dashboard-service";
 import type { DashboardApiError, DashboardApiResponse } from "./types";
-
-// Never cache — dashboard data must always be fresh
 export const dynamic = "force-dynamic";
 
 function errorResponse(
@@ -20,7 +18,6 @@ function errorResponse(
 export async function GET(): Promise<
   NextResponse<DashboardApiResponse | DashboardApiError>
 > {
-  // ── auth ────────────────────────────────────────────────────────────────────
   const session = await auth();
 
   if (!session?.user) {
@@ -36,22 +33,17 @@ export async function GET(): Promise<
       "MISSING_COMPANY_ID"
     );
   }
-
-  // ── fetch ───────────────────────────────────────────────────────────────────
   try {
     const data = await getDashboardService(c_id);
 
     return NextResponse.json({ success: true, data }, { status: 200 });
   } catch (error) {
-    // Distinguish known error shapes for easier debugging
     if (error instanceof Error) {
       console.error("[dashboard] service error:", {
         message: error.message,
         stack: error.stack,
         c_id,
       });
-
-      // Prisma errors expose a `code` property
       const prismaCode = (error as { code?: string }).code;
       if (prismaCode) {
         return errorResponse(

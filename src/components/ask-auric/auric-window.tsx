@@ -69,7 +69,7 @@ export default function AskAuricWindow({ companyId }: AskAuricWindowProps) {
       <Header onOpenSidebar={() => setSidebarOpen(true)} />
 
       <div className="relative flex min-h-0 flex-1 overflow-hidden">
-        {/* Desktop sidebar */}
+        
         <div className="hidden xl:flex h-full shrink-0">
           <Sidebar
             chats={chats}
@@ -84,7 +84,7 @@ export default function AskAuricWindow({ companyId }: AskAuricWindowProps) {
           />
         </div>
 
-        {/* Mobile overlay */}
+        
         {sidebarOpen && (
           <div
             className="fixed inset-0 z-40 bg-black/30 xl:hidden backdrop-blur-[1px] animate-in fade-in duration-200"
@@ -92,7 +92,7 @@ export default function AskAuricWindow({ companyId }: AskAuricWindowProps) {
           />
         )}
 
-        {/* Mobile sidebar panel */}
+        
         <div
           className={`fixed right-0 top-0 z-50 h-dvh w-[85vw] max-w-[320px] transform bg-white shadow-2xl transition-transform duration-300 ease-in-out xl:hidden ${
             sidebarOpen ? "translate-x-0" : "translate-x-full"
@@ -111,7 +111,7 @@ export default function AskAuricWindow({ companyId }: AskAuricWindowProps) {
           />
         </div>
 
-        {/* Main chat */}
+        
         <main className="flex min-w-0 flex-1 overflow-hidden">
           <ChatWindow
             chatId={activeChatId}

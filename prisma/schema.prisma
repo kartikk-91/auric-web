@@ -1,6 +1,3 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// Prisma Schema — Project Auric
-// ─────────────────────────────────────────────────────────────────────────────
 
 generator client {
   provider = "prisma-client"
@@ -10,8 +7,6 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
-
-// ── Enums ─────────────────────────────────────────────────────────────────────
 
 enum ProcessingStatus {
   PENDING
@@ -30,8 +25,6 @@ enum MemoryImportance {
   MEDIUM
   HIGH
 }
-
-// ── Auth ──────────────────────────────────────────────────────────────────────
 
 model User {
   u_id           String    @id @default(cuid())
@@ -82,8 +75,6 @@ model VerificationToken {
   expires DateTime
 }
 
-// ── Company ───────────────────────────────────────────────────────────────────
-
 model Company {
   c_id        String   @id @default(cuid())
   u_id        String
@@ -99,16 +90,12 @@ model Company {
   analytics Analytics?
   forms     FeedbackForm[]
   feedbacks Feedback[]
-
-  // AuricBot
   chats      AuricChat[]
   documents  AuricDocument[]
   memories   AuricMemory[]
   settings   AuricSettings?
   tokenUsage AuricTokenUsage[]
 }
-
-// ── Feedback ──────────────────────────────────────────────────────────────────
 
 model FeedbackForm {
   formId    String     @id @default(cuid())
@@ -188,10 +175,6 @@ model Analytics {
 
   company Company @relation(fields: [c_id], references: [c_id])
 }
-
-// ── AuricBot — Chat ───────────────────────────────────────────────────────────
-
-/// One conversation thread between a company and AuricBot.
 model AuricChat {
   chat_id   String   @id @default(cuid())
   c_id      String
@@ -206,20 +189,13 @@ model AuricChat {
   @@index([updatedAt])
   @@map("auric_chats")
 }
-
-/// One message in a chat thread (user turn or assistant turn).
 model AuricMessage {
   message_id String      @id @default(cuid())
   chat_id    String
   role       MessageRole
   content    String      @db.Text
-
-  // Routing plan + retriever metadata stored with each assistant message
   metadata   Json?
-  // Source documents / snippets returned by retrievers
   sources    Json?
-
-  // Token counts for this assistant message (null on user messages)
   promptTokens     Int?
   completionTokens Int?
 
@@ -231,10 +207,6 @@ model AuricMessage {
   @@index([createdAt])
   @@map("auric_messages")
 }
-
-// ── AuricBot — Knowledge & Memory ─────────────────────────────────────────────
-
-/// Company documents ingested into the knowledge retriever.
 model AuricDocument {
   document_id String   @id @default(cuid())
   c_id        String
@@ -248,8 +220,6 @@ model AuricDocument {
   @@index([c_id])
   @@map("auric_documents")
 }
-
-/// Extracted facts that AuricBot remembers across sessions.
 model AuricMemory {
   memory_id  String           @id @default(cuid())
   c_id       String
@@ -264,10 +234,6 @@ model AuricMemory {
   @@index([c_id])
   @@map("auric_memories")
 }
-
-// ── AuricBot — Usage & Settings ───────────────────────────────────────────────
-
-/// Monthly token consumption per company (upserted after every assistant turn).
 model AuricTokenUsage {
   usage_id         String   @id @default(cuid())
   c_id             String
@@ -283,8 +249,6 @@ model AuricTokenUsage {
   @@unique([c_id, month, year])
   @@map("auric_token_usage")
 }
-
-/// Per-company bot configuration.
 model AuricSettings {
   c_id              String   @id
   monthlyTokenLimit Int      @default(1000000)

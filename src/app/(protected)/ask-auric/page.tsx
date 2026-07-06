@@ -21,10 +21,6 @@ const AskAuricPage = () => {
   if (status === "loading") {
     return <FullPageLoader />;
   }
-
-  // companyId may legitimately be missing for a moment while session hydrates,
-  // or if the account isn't linked to a company yet — AskAuricWindow handles
-  // that case gracefully instead of crashing.
   const companyId = session?.user?.c_id ?? null;
 
   return (

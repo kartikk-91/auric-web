@@ -85,7 +85,7 @@ export default function FormCanvas({
             </Droppable>
           </DragDropContext>
 
-          {/* Add field button */}
+          
           <button
             onClick={() => setSelectedFieldId(null)}
             disabled={disabled}

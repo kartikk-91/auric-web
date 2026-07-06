@@ -97,7 +97,7 @@ export default function FeedbackDetailPanel({
     >
       <div className="p-6">
 
-        {/* Header */}
+        
 
         <div className="flex justify-between items-start">
 
@@ -143,7 +143,7 @@ export default function FeedbackDetailPanel({
           />
         </div>
 
-        {/* Metrics */}
+        
 
         <div className="grid grid-cols-3 gap-3 mt-6">
 
@@ -178,7 +178,7 @@ export default function FeedbackDetailPanel({
 
         </div>
 
-        {/* Original Feedback */}
+        
 
         <section className="mt-8">
 
@@ -196,7 +196,7 @@ export default function FeedbackDetailPanel({
 
         </section>
 
-        {/* AI Summary */}
+        
 
         <section className="mt-8">
 
@@ -214,7 +214,7 @@ export default function FeedbackDetailPanel({
 
         </section>
 
-        {/* Testimonial */}
+        
 
         <section className="mt-8">
 
@@ -236,7 +236,7 @@ export default function FeedbackDetailPanel({
 
         </section>
 
-        {/* Praised */}
+        
 
         <section className="mt-8">
 
@@ -266,7 +266,7 @@ export default function FeedbackDetailPanel({
 
         </section>
 
-        {/* Improvement */}
+        
 
         <section className="mt-8">
 
@@ -298,7 +298,7 @@ export default function FeedbackDetailPanel({
 
         </section>
 
-        {/* Customer Responses */}
+        
 
         <section className="mt-8">
 
@@ -329,7 +329,7 @@ export default function FeedbackDetailPanel({
 
         </section>
 
-        {/* Submission */}
+        
 
         <section className="mt-8">
 

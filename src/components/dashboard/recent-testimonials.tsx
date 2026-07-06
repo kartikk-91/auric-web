@@ -24,7 +24,6 @@ function getInitials(name: string): string {
 }
 
 function StarRating({ rating }: { rating: number }) {
-  // Clamp + round so bad data (negative, >5, decimals, NaN) never breaks the row.
   const safeRating = Number.isFinite(rating) ? rating : 0;
   const filled = Math.min(MAX_STARS, Math.max(0, Math.round(safeRating)));
 

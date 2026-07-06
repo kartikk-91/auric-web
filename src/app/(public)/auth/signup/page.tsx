@@ -3,7 +3,6 @@
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { FormInput } from "@/components/auth/form-inputs";
@@ -12,13 +11,9 @@ import { getPasswordStrength } from "@/lib/password-strength";
 import { EyeIcon } from "@/components/auth/eye-icon";
 import Widgets from "@/components/auth/widgets";
 
-
-
-
-
-
 export default function SignupPage() {
   const [error, setError] = useState("");
+  const [errorCode, setErrorCode] = useState("");
   const [success, setSuccess] = useState("");
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
@@ -39,6 +34,7 @@ export default function SignupPage() {
 
   const onSubmit = async (values: any) => {
     setError("");
+    setErrorCode("");
     setSuccess("");
     startTransition(async () => {
       try {
@@ -47,13 +43,24 @@ export default function SignupPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(values),
         });
-        const text = await res.text();
-        let data = {};
-        try { data = JSON.parse(text); } catch { }
-        if (!res.ok) { setError("Something went wrong"); return; }
-        setSuccess("Registered successfully! Redirecting…");
+
+        let data: { error?: string; success?: string; code?: string } = {};
+        try {
+          data = await res.json();
+        } catch {
+        }
+
+        if (!res.ok) {
+          setError(data.error || "Something went wrong. Please try again.");
+          setErrorCode(data.code || "");
+          return;
+        }
+
+        setSuccess(
+          data.success || "Almost there! We've sent a verification link to your email."
+        );
       } catch {
-        setError("Network error. Please try again.");
+        setError("Network error. Please check your connection and try again.");
       }
     });
   };
@@ -79,7 +86,7 @@ export default function SignupPage() {
         </div>
         <div className="text-sm text-slate-500 relative z-999 pointer-events-auto">
           Already have an account?{" "}
-          <a href="/login" className="text-[#3B5BDB] font-semibold hover:underline">
+          <a href="/auth/login" className="text-[#3B5BDB] font-semibold hover:underline">
             Log in
           </a>
         </div>
@@ -204,7 +211,17 @@ export default function SignupPage() {
                   <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                   </svg>
-                  {error}
+                  <span>
+                    {error}
+                    {errorCode === "EMAIL_IN_USE" && (
+                      <>
+                        {" "}
+                        <a href="/auth/login" className="underline font-semibold">
+                          Log in instead
+                        </a>
+                      </>
+                    )}
+                  </span>
                 </div>
               )}
               {success && (

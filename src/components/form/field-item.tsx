@@ -43,7 +43,7 @@ export default function FieldItem({
             .join(" ")}
         >
           <div className="flex gap-3 p-4 sm:p-5">
-            {/* Drag handle */}
+            
             <div
               {...provided.dragHandleProps}
               className="mt-1 shrink-0 cursor-grab text-gray-300 transition hover:text-gray-500 active:cursor-grabbing"
@@ -52,7 +52,7 @@ export default function FieldItem({
             </div>
 
             <div className="min-w-0 flex-1">
-              {/* Top row: index + question + type badge + actions */}
+              
               <div className="mb-3 flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
@@ -74,7 +74,7 @@ export default function FieldItem({
                   </div>
                 </div>
 
-                {/* Actions — visible on hover or when selected */}
+                
                 <div
                   className={`flex shrink-0 items-center gap-1.5 transition-opacity ${
                     selected ? "opacity-100" : "opacity-0 group-hover:opacity-100"
@@ -104,12 +104,12 @@ export default function FieldItem({
                 </div>
               </div>
 
-              {/* Field preview */}
+              
               <div className="pointer-events-none select-none">
                 <FieldPreview field={field} />
               </div>
 
-              {/* Help text */}
+              
               {field.helpText && (
                 <p className="mt-2.5 flex items-start gap-1.5 text-xs leading-relaxed text-gray-400">
                   <span className="mt-px select-none text-gray-300">—</span>

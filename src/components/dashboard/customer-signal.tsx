@@ -160,7 +160,7 @@ export default function CustomerSignal() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {/* Loved */}
+          
           <div>
             <div className="mb-3 flex items-center gap-1.5">
               <div className="rounded-md bg-blue-50 p-1">
@@ -190,7 +190,7 @@ export default function CustomerSignal() {
             )}
           </div>
 
-          {/* Needs Attention */}
+          
           <div>
             <div className="mb-3 flex items-center gap-1.5">
               <div className="rounded-md bg-amber-50 p-1">

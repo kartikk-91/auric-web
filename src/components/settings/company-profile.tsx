@@ -116,12 +116,11 @@ export default function CompanyProfile() {
         This information helps AuricBot describe your company accurately.
       </p>
 
-      {/* Logo */}
+      
       <div className="flex items-center gap-4 mb-6">
         <div className="relative w-16 h-16 shrink-0">
           <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-gray-100 flex items-center justify-center overflow-hidden">
             {company.logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
               <img src={company.logoUrl} alt="Company logo" className="w-full h-full object-cover" />
             ) : (
               <Building2 className="w-6 h-6 text-blue-600" />
@@ -152,7 +151,7 @@ export default function CompanyProfile() {
         </div>
       </div>
 
-      {/* Fields */}
+      
       <div className="grid sm:grid-cols-2 gap-4 mb-4">
         <Field label="Company name">
           <input

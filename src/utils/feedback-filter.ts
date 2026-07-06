@@ -17,8 +17,6 @@ export function filterFeedbacks(
   }: FilterOptions
 ) {
   let filtered = [...feedbacks];
-
-  // Date Filter
   if (dateRange !== "All Time") {
     const now = new Date();
 
@@ -44,16 +42,12 @@ export function filterFeedbacks(
       return diff <= days;
     });
   }
-
-  // Sentiment
   if (sentiment) {
     filtered = filtered.filter(
       (feedback) =>
         feedback.analysis.sentiment === sentiment
     );
   }
-
-  // Location
   if (location.trim()) {
     const search = location.toLowerCase();
 
@@ -71,8 +65,6 @@ export function filterFeedbacks(
       );
     });
   }
-
-  // Age
   if (ageRange) {
     filtered = filtered.filter((feedback) => {
       switch (ageRange) {

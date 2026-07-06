@@ -1,4 +1,3 @@
-// app/api/knowledge/documents/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getCurrentCompany } from "@/lib/auth-session";

@@ -63,7 +63,7 @@ export default function FormBuilderHeader({
         <div className="px-4 py-3.5 sm:px-6 lg:px-8 lg:py-5">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
 
-            {/* Left: Branding */}
+            
             <div className="min-w-0">
               <div className="flex items-center gap-2.5">
                 <div className="min-w-0">
@@ -80,7 +80,7 @@ export default function FormBuilderHeader({
               </div>
             </div>
 
-            {/* Right: Actions */}
+            
             <div className="flex items-center gap-2 sm:gap-3">
               <button
                 onClick={handlePublish}
@@ -110,7 +110,7 @@ export default function FormBuilderHeader({
           </div>
         </div>
 
-        {/* Publish progress bar */}
+        
         {publishing && (
           <div className="h-0.5 w-full overflow-hidden bg-blue-50">
             <div className="h-full animate-[progress_2s_ease-in-out_infinite] bg-blue-400" />

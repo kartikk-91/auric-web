@@ -2,8 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 export type Chat = {
   chatId: string;
   title: string | null;
@@ -34,13 +32,9 @@ export type Message = {
   usage?: Usage | null;
   createdAt: string;
   isStreaming?: boolean;
-  /** Transient status while waiting for the first token, e.g. "Searching feedback…" */
+  
   statusLabel?: string | null;
 };
-
-// ─── Config ───────────────────────────────────────────────────────────────────
-// IMPORTANT: must be NEXT_PUBLIC_-prefixed or it will be `undefined` in the
-// browser bundle (this was the root cause of chats silently failing to load).
 const API_BASE =
   process.env.NEXT_PUBLIC_AURIC_API_ENDPOINT ?? "http://127.0.0.1:8000";
 
@@ -50,8 +44,6 @@ const RETRIEVER_LABELS: Record<string, string> = {
   sql: "Querying data…",
   internet: "Searching the web…",
 };
-
-// ─── SSE streaming helper ─────────────────────────────────────────────────────
 
 async function streamChat(opts: {
   query: string;
@@ -136,7 +128,6 @@ async function streamChat(opts: {
           break;
         }
         case "retrieved":
-          // keep current status until next stage; no-op for now
           break;
         case "generating":
           opts.onStatus((payload.message as string) ?? "Generating answer…");
@@ -163,8 +154,6 @@ async function streamChat(opts: {
   opts.onDone();
 }
 
-// ─── REST helpers ─────────────────────────────────────────────────────────────
-
 async function apiFetchChats(company_id: string): Promise<Chat[]> {
   const url = `${API_BASE}/auricbot/chats?company_id=${encodeURIComponent(company_id)}&limit=100`;
   const res = await fetch(url);
@@ -172,7 +161,6 @@ async function apiFetchChats(company_id: string): Promise<Chat[]> {
     throw new Error(`Failed to fetch chats: ${res.status}`);
   }
   const data = await res.json();
-  // backend keys may be snake_case in some responses; normalize defensively
   return (data as Record<string, unknown>[]).map((c) => ({
     chatId: (c.chatId ?? c.chat_id) as string,
     title: (c.title ?? null) as string | null,
@@ -219,8 +207,6 @@ async function apiClearHistory(company_id: string): Promise<void> {
   if (!res.ok) throw new Error(`Failed to clear history: ${res.status}`);
 }
 
-// ─── Hook ────────────────────────────────────────────────────────────────────
-
 export function useAskAuric({ companyId }: { companyId: string | undefined | null }) {
   const [chats, setChats] = useState<Chat[]>([]);
   const [activeChatId, setActiveChatIdRaw] = useState<string>("");
@@ -234,15 +220,7 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
 
   const abortRef = useRef<AbortController | null>(null);
   const didAutoSelect = useRef(false);
-  // When a stream assigns a brand-new chat_id mid-flight, we update
-  // activeChatId for routing/sidebar purposes but must NOT let the
-  // activeChatId-effect refetch messages — that would overwrite the live
-  // streaming bubble with whatever's been committed to the DB so far
-  // (which, with short-lived per-phase sessions, may not include the
-  // in-progress assistant message yet).
   const skipNextMessageLoadRef = useRef(false);
-
-  // ── Load sidebar list ──────────────────────────────────────────────────────
 
   const loadChats = useCallback(
     async (opts?: { autoSelectFirst?: boolean }) => {
@@ -266,8 +244,6 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
     [companyId],
   );
 
-  // ── Load messages for active chat ─────────────────────────────────────────
-
   const loadMessages = useCallback(
     async (chatId: string) => {
       if (!companyId || !chatId) return;
@@ -285,15 +261,11 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
     [companyId],
   );
 
-  // ── Select / switch chat (aborts any in-flight stream) ─────────────────────
-
   const setActiveChatId = useCallback((id: string) => {
     abortRef.current?.abort();
     setSendingMessage(false);
     setActiveChatIdRaw(id);
   }, []);
-
-  // ── New chat ───────────────────────────────────────────────────────────────
 
   const createChat = useCallback(() => {
     abortRef.current?.abort();
@@ -301,8 +273,6 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
     setActiveChatIdRaw("");
     setMessages([]);
   }, []);
-
-  // ── Send message (SSE streaming) ───────────────────────────────────────────
 
   const sendMessage = useCallback(
     async (text: string) => {
@@ -466,8 +436,6 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
     );
   }, []);
 
-  // ── Delete single chat ─────────────────────────────────────────────────────
-
   const deleteChat = useCallback(
     async (chatId: string) => {
       if (!companyId) return;
@@ -491,8 +459,6 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
     [activeChatId, companyId],
   );
 
-  // ── Clear all history ──────────────────────────────────────────────────────
-
   const clearHistory = useCallback(async () => {
     if (!companyId) return;
     setClearingHistory(true);
@@ -510,8 +476,6 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
       setClearingHistory(false);
     }
   }, [companyId]);
-
-  // ── Effects ────────────────────────────────────────────────────────────────
 
   useEffect(() => {
     if (companyId) loadChats({ autoSelectFirst: true });

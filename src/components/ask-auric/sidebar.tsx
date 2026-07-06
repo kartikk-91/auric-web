@@ -95,7 +95,7 @@ export default function Sidebar({
   return (
     <>
       <aside className="flex h-full w-full flex-col border-r border-gray-100 bg-white xl:w-72">
-        {/* Header */}
+        
         <div className="flex items-center justify-between border-b border-gray-100 px-4 py-4">
           <h2 className="text-sm font-semibold text-gray-700">Chat History</h2>
           <button
@@ -107,7 +107,7 @@ export default function Sidebar({
           </button>
         </div>
 
-        {/* Search */}
+        
         <div className="border-b border-gray-100 px-4 py-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
@@ -120,7 +120,7 @@ export default function Sidebar({
           </div>
         </div>
 
-        {/* List */}
+        
         <div className="min-h-0 flex-1 overflow-y-auto px-2 py-3">
           {loadingChats ? (
             <div>
@@ -201,7 +201,7 @@ export default function Sidebar({
           )}
         </div>
 
-        {/* Footer */}
+        
         {!loadingChats && chats.length > 0 && (
           <div className="border-t border-gray-100 p-3">
             <button
@@ -220,7 +220,7 @@ export default function Sidebar({
         )}
       </aside>
 
-      {/* Delete single chat dialog */}
+      
       <AlertDialog open={!!chatToDelete} onOpenChange={(open) => !open && setChatToDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -236,7 +236,7 @@ export default function Sidebar({
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Clear all dialog */}
+      
       <AlertDialog open={clearDialogOpen} onOpenChange={setClearDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>

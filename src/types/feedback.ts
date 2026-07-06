@@ -16,7 +16,6 @@ export interface FeedbackResponse {
 }
 
 export interface Feedback {
-  // Feedback
   id: string;
   formId: string;
 

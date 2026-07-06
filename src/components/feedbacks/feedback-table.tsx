@@ -240,7 +240,7 @@ export default function FeedbackTable({
                   : ""
               }`}
             >
-              {/* Customer */}
+              
               <td className="py-4 px-4 lg:px-6">
                 <div className="flex items-center gap-3">
                   <div
@@ -269,7 +269,7 @@ export default function FeedbackTable({
                 </div>
               </td>
 
-              {/* Rating */}
+              
               {showRating && (
                 <td className="py-4 px-4 lg:px-6">
                   {renderRating(
@@ -279,7 +279,7 @@ export default function FeedbackTable({
                 </td>
               )}
 
-              {/* Sentiment */}
+              
               <td className="py-4 px-4 lg:px-6">
                 <SentimentBadge
                   sentiment={
@@ -290,7 +290,7 @@ export default function FeedbackTable({
                 />
               </td>
 
-              {/* Summary */}
+              
               {showSummary && (
                 <td className="py-4 px-4 lg:px-6 max-w-sm">
                   <p className="text-sm text-gray-600 line-clamp-2">
@@ -301,7 +301,7 @@ export default function FeedbackTable({
                 </td>
               )}
 
-              {/* Submitted */}
+              
               {showReceived && (
                 <td className="py-4 px-4 lg:px-6 text-sm text-gray-600 whitespace-nowrap">
                   {
@@ -310,7 +310,7 @@ export default function FeedbackTable({
                 </td>
               )}
 
-              {/* Action */}
+              
               {showActions && (
                 <td className="py-4 px-4 lg:px-6 text-right">
                   <button
@@ -331,7 +331,7 @@ export default function FeedbackTable({
         </tbody>
       </table>
 
-      {/* Pagination */}
+      
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 py-4 px-5 border-t border-gray-200">
 

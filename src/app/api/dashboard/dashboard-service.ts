@@ -1,8 +1,6 @@
 import { prisma } from "@/lib/db";
 import type { DashboardData, StatCard, Testimonial, ChangeType } from "./types"
 
-// ─── helpers ──────────────────────────────────────────────────────────────────
-
 function calcPercentageChange(
     current: number,
     previous: number
@@ -22,19 +20,15 @@ function calcPercentageChange(
     };
 }
 
-// ─── queries (run in parallel) ─────────────────────────────────────────────────
-
 async function fetchAnalytics(c_id: string) {
     return prisma.analytics.findUnique({ where: { c_id } });
 }
 
-/** Returns comparison rows for last-30-days vs previous-30-days. */
+
 async function fetchComparisonMetrics(c_id: string) {
     const now = new Date();
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
     const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
-
-    // Run both period aggregations in parallel via a single $transaction
     const [current, previous] = await Promise.all([
         prisma.feedbackResult.aggregate({
             _avg: {
@@ -126,8 +120,6 @@ async function fetchActiveFormId(c_id: string): Promise<string | null> {
     return form?.formId ?? null;
 }
 
-// ─── main service ──────────────────────────────────────────────────────────────
-
 const EMPTY_DASHBOARD: DashboardData = {
     stats: [],
     ratingDistribution: {},
@@ -142,7 +134,6 @@ const EMPTY_DASHBOARD: DashboardData = {
 };
 
 export async function getDashboardService(c_id: string): Promise<DashboardData> {
-    // Fan out all independent DB calls at once
     const [analytics, comparison, recentTestimonials, formId] =
         await Promise.all([
             fetchAnalytics(c_id),
@@ -152,14 +143,10 @@ export async function getDashboardService(c_id: string): Promise<DashboardData> 
         ]);
 
     if (!analytics) return EMPTY_DASHBOARD;
-
-    // ── auric score comparison ───────────────────────────────────────────────
     const prevRating = comparison.previous.avgRating;
     const prevSentiment = comparison.previous.avgSentiment;
     const prevAuricScore =
         ((prevRating / 5) * 100 * 0.6) + (prevSentiment * 100 * 0.4);
-
-    // ── stat cards ───────────────────────────────────────────────────────────
     const stats: StatCard[] = [
         {
             title: "Testimonials",
@@ -185,8 +172,6 @@ export async function getDashboardService(c_id: string): Promise<DashboardData> 
             ...calcPercentageChange(analytics.auricScore ?? 0, prevAuricScore),
         },
     ];
-
-    // ── sentiment distribution ────────────────────────────────────────────────
     const sentDist = (analytics.sentimentDist ?? {}) as Record<string, number>;
     const sentimentDistribution = {
         Positive: sentDist.positive ?? 0,

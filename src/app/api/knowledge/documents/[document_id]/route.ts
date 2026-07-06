@@ -1,4 +1,3 @@
-// app/api/knowledge/documents/[document_id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getCurrentCompany } from "@/lib/auth-session";
@@ -21,12 +20,6 @@ export async function DELETE(
   if (!document || document.c_id !== company.c_id) {
     return NextResponse.json({ error: "Document not found." }, { status: 404 });
   }
-
-  // Remove the chunks from Qdrant first. A 404 here just means there was
-  // nothing left to delete (e.g. a retry) — that's fine, keep going and
-  // clean up the catalog row either way. Any other failure aborts, so the
-  // row stays in the list and the user can retry instead of silently
-  // losing track of a document that's still indexed.
   const engineRes = await fetch(
     `${process.env.NEXT_PUBLIC_AURIC_API_ENDPOINT}/knowledge/${document_id}?c_id=${company.c_id}`,
     { method: "DELETE" }

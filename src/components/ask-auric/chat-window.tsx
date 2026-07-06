@@ -70,7 +70,7 @@ export default function ChatWindow({
         </div>
       )}
 
-      {/* Messages */}
+      
       <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-4 pt-5 sm:px-5">
         <div className="mx-auto w-full max-w-3xl">
           {loadingMessages ? (
@@ -82,7 +82,7 @@ export default function ChatWindow({
             </>
           ) : (
             <>
-              {/* Welcome bubble — shown for a brand new / empty chat */}
+              
               {messages.length === 0 && (
                 <div className="mb-6 flex items-start gap-3 animate-in fade-in duration-300">
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-gray-100 bg-white shadow-sm">
@@ -121,7 +121,7 @@ export default function ChatWindow({
         </div>
       </div>
 
-      {/* Suggested questions — only before the first user message in this chat */}
+      
       {!loadingMessages && !hasUserMessages && (
         <div className="shrink-0 border-t border-gray-100 bg-white/80 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="mx-auto w-full max-w-3xl">
@@ -130,7 +130,7 @@ export default function ChatWindow({
         </div>
       )}
 
-      {/* Input */}
+      
       <div className="shrink-0 bg-white">
         <div className="mx-auto w-full max-w-3xl">
           <ChatInput

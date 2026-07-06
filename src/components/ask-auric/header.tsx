@@ -12,7 +12,7 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
     <header className="w-full shrink-0 border-b border-gray-100 bg-white">
       <div className="px-4 sm:px-6 lg:px-8 py-3.5">
         <div className="flex items-center gap-3">
-          {/* Mobile menu button */}
+          
           <button
             onClick={onOpenSidebar}
             className="xl:hidden shrink-0 rounded-lg border border-gray-200 p-2 text-gray-600 transition hover:bg-gray-50 active:scale-95"
@@ -21,7 +21,7 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
             <Menu className="h-4 w-4" />
           </button>
 
-          {/* Logo + title */}
+          
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-gray-100 bg-white shadow-sm">
               <Image

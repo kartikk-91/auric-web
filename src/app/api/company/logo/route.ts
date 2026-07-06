@@ -1,4 +1,3 @@
-// app/api/company/logo/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getCurrentCompany } from "@/lib/auth-session";
@@ -29,9 +28,6 @@ export async function POST(req: NextRequest) {
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
-  // Fixed key + overwrite:true means re-uploading just replaces the old
-  // logo — Cloudinary handles cache-busting via the version number baked
-  // into the returned URL, so no timestamp/extension needed in the key.
   const key = `companies/${company.c_id}/logo`;
 
   let logoUrl: string;

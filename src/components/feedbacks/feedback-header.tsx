@@ -96,7 +96,7 @@ export default function FeedbackHeader({
 
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
 
-        {/* Left */}
+        
 
         <div className="min-w-0">
 
@@ -118,7 +118,7 @@ export default function FeedbackHeader({
 
         </div>
 
-        {/* Right */}
+        
 
         <div
           ref={dropdownRef}
@@ -146,7 +146,7 @@ export default function FeedbackHeader({
             )}
           </select>
 
-                  {/* Filters */}
+                  
 
           <div className="relative">
             <button
@@ -182,7 +182,7 @@ export default function FeedbackHeader({
 
                 <div className="space-y-5">
 
-                  {/* Sentiment */}
+                  
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -216,7 +216,7 @@ export default function FeedbackHeader({
                     </select>
                   </div>
 
-                  {/* Location */}
+                  
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -237,7 +237,7 @@ export default function FeedbackHeader({
                     />
                   </div>
 
-                  {/* Age */}
+                  
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -292,7 +292,7 @@ export default function FeedbackHeader({
             )}
           </div>
 
-          {/* Export */}
+          
 
           <div className="relative">
 

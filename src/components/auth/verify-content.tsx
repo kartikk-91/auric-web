@@ -49,52 +49,52 @@ export default function VerifyContent() {
   }, [token]);
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#F4F5FF] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-<div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 space-y-6">
-<div className="flex justify-center">
+        <div className="bg-white rounded-3xl shadow-[0_20px_60px_rgba(99,102,241,0.15)] border border-indigo-50 p-8 space-y-6">
+          <div className="flex justify-center">
             {loading && (
-              <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center animate-pulse">
-                <Loader2 className="w-10 h-10 text-blue-500 animate-spin" />
+              <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center">
+                <Loader2 className="w-10 h-10 text-indigo-500 animate-spin" />
               </div>
             )}
-            
+
             {success && (
-              <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center animate-bounce-in">
+              <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center">
                 <CheckCircle2 className="w-10 h-10 text-green-500" />
               </div>
             )}
-            
+
             {error && (
-              <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center animate-shake">
+              <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center">
                 <XCircle className="w-10 h-10 text-red-500" />
               </div>
             )}
           </div>
-<div className="text-center space-y-2">
-            <h1 className="text-2xl font-bold text-gray-900">
+          <div className="text-center space-y-2">
+            <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
               {loading && "Verifying Your Email"}
               {success && "Email Verified!"}
               {error && "Verification Failed"}
             </h1>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-slate-500">
               {loading && "Please wait while we verify your email address..."}
               {success && "Your email has been successfully verified."}
               {error && "We couldn't verify your email address."}
             </p>
           </div>
-{loading && (
+          {loading && (
             <div className="flex items-center justify-center gap-2 py-4">
               <div className="flex gap-1">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                <div className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                <div className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce"></div>
               </div>
             </div>
           )}
 
           {success && (
-            <div className="bg-green-50 border border-green-200 rounded-xl p-4 animate-slide-up">
+            <div className="bg-green-50 border border-green-100 rounded-xl p-4">
               <div className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
                 <div className="flex-1">
@@ -110,7 +110,7 @@ export default function VerifyContent() {
           )}
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-xl p-4 animate-slide-up">
+            <div className="bg-red-50 border border-red-100 rounded-xl p-4">
               <div className="flex items-start gap-3">
                 <XCircle className="w-5 h-5 text-red-600 mt-0.5 shrink-0" />
                 <div className="flex-1">
@@ -124,38 +124,20 @@ export default function VerifyContent() {
               </div>
             </div>
           )}
-{!loading && (
-            <div className="space-y-3 pt-2 animate-fade-in">
+          {!loading && (
+            <div className="space-y-3 pt-2">
               <button
                 onClick={() => router.push("/auth/login")}
-                className="w-full bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-3 px-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:-translate-y-0.5"
+                className="w-full bg-[#3B5BDB] hover:bg-[#2F4AC4] active:scale-[0.98] text-white font-semibold text-sm py-3 px-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(59,91,219,0.35)]"
               >
                 {success ? "Go to Login" : "Back to Login"}
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              {error && (
-                <button
-                  onClick={() => router.push("/auth/register")}
-                  className="w-full bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-xl transition-all duration-200 border border-gray-200 hover:border-gray-300"
-                >
-                  Request New Verification Email
-                </button>
-              )}
             </div>
           )}
         </div>
-<div className="text-center mt-6">
-          <p className="text-xs text-gray-500">
-            Need help?{" "}
-            <a
-              href="/support"
-              className="text-blue-600 hover:text-blue-700 font-medium hover:underline"
-            >
-              Contact Support
-            </a>
-          </p>
-        </div>
+        
       </div>
     </div>
   );
