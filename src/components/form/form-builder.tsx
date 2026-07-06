@@ -39,9 +39,9 @@ export default function FormBuilder({
   }, [showSidebar, showSettings]);
 
   return (
-    <div className="relative flex h-[calc(100vh-100px)] pb-4 flex-col overflow-hidden bg-gradient-to-b from-gray-50/80 to-white lg:flex-row">
+    <div className="relative flex flex-col pb-4 bg-gradient-to-b from-gray-50/80 to-white lg:h-[calc(100vh-100px)] lg:flex-row lg:overflow-hidden">
 
-      <div className="flex items-center justify-between border-b border-gray-200 bg-white px-4 py-2.5 lg:hidden">
+      <div className="sticky top-0 z-20 flex items-center justify-between border-b border-gray-200 bg-white/95 px-4 py-2.5 backdrop-blur-sm lg:hidden">
         <button
           onClick={() => setShowSidebar(true)}
           disabled={disabled}
@@ -68,8 +68,8 @@ export default function FormBuilder({
         <Sidebar addField={form.addField} disabled={disabled} />
       </div>
 
-      <div className="min-w-0 flex-1 overflow-hidden px-3 pt-3 sm:px-5 lg:px-5">
-        <div className="mx-auto h-full max-w-3xl">
+      <div className="min-w-0 px-3 pt-3 sm:px-5 lg:flex-1 lg:overflow-hidden lg:px-5">
+        <div className="mx-auto max-w-3xl lg:h-full">
           <FormCanvas
             fields={form.fields}
             setFields={form.setFields}
@@ -102,8 +102,8 @@ export default function FormBuilder({
             className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
             onClick={() => setShowSidebar(false)}
           />
-          <div className="fixed left-0 top-0 z-50 h-screen w-[300px] max-w-[90vw] overflow-hidden bg-white shadow-2xl animate-in slide-in-from-left duration-200">
-            <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+          <div className="fixed left-0 top-0 z-50 flex h-dvh w-[300px] max-w-[90vw] flex-col overflow-hidden bg-white shadow-2xl animate-in slide-in-from-left duration-200">
+            <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-5 py-4">
               <h3 className="text-sm font-semibold text-gray-900">Add Field</h3>
               <button
                 onClick={() => setShowSidebar(false)}
@@ -112,12 +112,14 @@ export default function FormBuilder({
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <Sidebar
-              addField={(type: any) => {
-                form.addField(type);
-                setShowSidebar(false);
-              }}
-            />
+            <div className="min-h-0 flex-1">
+              <Sidebar
+                addField={(type: any) => {
+                  form.addField(type);
+                  setShowSidebar(false);
+                }}
+              />
+            </div>
           </div>
         </>
       )}
@@ -128,8 +130,8 @@ export default function FormBuilder({
             className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
             onClick={() => setShowSettings(false)}
           />
-          <div className="fixed right-0 top-0 z-50 h-screen w-[340px] max-w-[95vw] overflow-hidden bg-white shadow-2xl animate-in slide-in-from-right duration-200">
-            <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+          <div className="fixed right-0 top-0 z-50 flex h-dvh w-[340px] max-w-[95vw] flex-col overflow-hidden bg-white shadow-2xl animate-in slide-in-from-right duration-200">
+            <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-5 py-4">
               <h3 className="text-sm font-semibold text-gray-900">Field Settings</h3>
               <button
                 onClick={() => setShowSettings(false)}
@@ -138,11 +140,13 @@ export default function FormBuilder({
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <FieldSettings
-              selectedField={selectedField}
-              updateField={form.updateField}
-              deleteField={form.deleteField}
-            />
+            <div className="min-h-0 flex-1">
+              <FieldSettings
+                selectedField={selectedField}
+                updateField={form.updateField}
+                deleteField={form.deleteField}
+              />
+            </div>
           </div>
         </>
       )}

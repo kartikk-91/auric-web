@@ -34,9 +34,9 @@ export default function FormCanvas({
   };
 
   return (
-    <div className="flex h-full justify-center">
+    <div className="flex justify-center lg:h-full">
       <div
-        className={`custom-scroll h-full w-full overflow-y-auto rounded-2xl border border-gray-200 bg-white shadow-sm transition-all ${
+        className={`custom-scroll w-full rounded-2xl border border-gray-200 bg-white shadow-sm transition-all lg:h-full lg:overflow-y-auto ${
           disabled ? "pointer-events-none opacity-60" : ""
         }`}
       >

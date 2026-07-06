@@ -74,10 +74,10 @@ const FeedbackForm = () => {
   }, []);
 
   return (
-    <div className="flex h-dvh w-full overflow-hidden bg-[#fafafa]">
+    <div className="flex min-h-dvh w-full bg-[#fafafa] lg:h-dvh lg:overflow-hidden">
       <Sidebar />
 
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden mt-14 md:mt-0">
+      <div className="flex min-w-0 flex-1 flex-col mt-14 md:mt-0 lg:overflow-hidden">
         <FormBuilderHeader
           form={form}
           title={title}
@@ -86,7 +86,7 @@ const FeedbackForm = () => {
           onPublishEnd={() => setPublishing(false)}
         />
 
-        <div className="min-h-0 flex-1 overflow-hidden">
+        <div className="flex-1 lg:min-h-0 lg:overflow-hidden">
           {loading ? (
             <FormBuilderSkeleton />
           ) : (

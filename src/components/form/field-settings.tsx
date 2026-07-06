@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { FormField, FieldType } from "../../types/form";
 import { ChevronDown, Trash2, MousePointer2 } from "lucide-react";
 import ToggleRow from "./toggle-row";
@@ -23,6 +24,84 @@ const fieldTypes: { type: FieldType; label: string }[] = [
   { type: "website", label: "Website" },
   { type: "date", label: "Date" },
 ];
+
+function FieldTypeSelect({
+  value,
+  onChange,
+  disabled,
+}: {
+  value: FieldType;
+  onChange: (type: FieldType) => void;
+  disabled?: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
+
+  const current = fieldTypes.find((f) => f.type === value);
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => setOpen((o) => !o)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-white px-3 py-2 text-left text-sm text-gray-700 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-400 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400"
+      >
+        <span className="truncate">{current?.label ?? value}</span>
+        <ChevronDown className="h-4 w-4 shrink-0 text-gray-400" />
+      </button>
+
+      {open && !disabled && (
+        <div
+          role="listbox"
+          className="custom-scroll absolute z-30 mt-1 max-h-64 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-sm"
+        >
+          {fieldTypes.map((f) => {
+            const isSelected = f.type === value;
+            return (
+              <button
+                key={f.type}
+                type="button"
+                role="option"
+                aria-selected={isSelected}
+                onClick={() => {
+                  onChange(f.type);
+                  setOpen(false);
+                }}
+                className={`block w-full px-3 py-2 text-left text-sm transition ${
+                  isSelected
+                    ? "bg-blue-50 text-blue-600"
+                    : "text-gray-700 hover:bg-gray-50"
+                }`}
+              >
+                {f.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function FieldSettings({
   selectedField,
@@ -75,25 +154,11 @@ export default function FieldSettings({
         {/* Field Type */}
         <div>
           <label className={labelClass}>Field Type</label>
-          <div className="relative">
-            <select
-              disabled={disabled}
-              value={selectedField.type}
-              onChange={(e) =>
-                updateField(selectedField.id, {
-                  type: e.target.value as FieldType,
-                })
-              }
-              className={`${inputClass} appearance-none pr-9`}
-            >
-              {fieldTypes.map((f) => (
-                <option key={f.type} value={f.type}>
-                  {f.label}
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-          </div>
+          <FieldTypeSelect
+            value={selectedField.type}
+            onChange={(type) => updateField(selectedField.id, { type })}
+            disabled={disabled}
+          />
         </div>
 
         {/* Question */}

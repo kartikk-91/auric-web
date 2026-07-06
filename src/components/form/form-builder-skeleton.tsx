@@ -19,7 +19,7 @@ function Shimmer({ className }: { className?: string }) {
 
 export function FormBuilderSkeleton() {
   return (
-    <div className="relative flex h-[calc(100vh-130px)] overflow-hidden">
+    <div className="relative flex flex-col lg:h-[calc(100vh-130px)] lg:flex-row lg:overflow-hidden">
       
       <div className="ml-4 mt-3 hidden h-full w-[240px] overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm lg:block">
         <div className="px-4 py-5">
@@ -36,7 +36,7 @@ export function FormBuilderSkeleton() {
       </div>
 
       
-      <div className="min-w-0 flex-1 overflow-y-auto px-3 py-3 sm:px-5 lg:px-6">
+      <div className="min-w-0 px-3 py-3 sm:px-5 lg:flex-1 lg:px-6">
         <div className="mx-auto max-w-5xl">
           <div className="w-full rounded-2xl border border-gray-200 bg-white shadow-sm">
             <div className="px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
