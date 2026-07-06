@@ -54,7 +54,7 @@ const fieldGroups = [
 
 export default function Sidebar({ addField, disabled }: Props) {
   return (
-    <div className="h-full overflow-y-auto px-3 py-5">
+    <div className="custom-scroll h-full overflow-y-auto px-3 py-5">
       <p className="mb-4 px-2 text-[11px] font-semibold uppercase tracking-widest text-gray-400">
         Field Types
       </p>

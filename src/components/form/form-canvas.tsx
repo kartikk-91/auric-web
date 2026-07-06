@@ -11,6 +11,7 @@ export default function FormCanvas({
   setSelectedFieldId,
   deleteField,
   duplicateField,
+  addField,
   title,
   setTitle,
   tagline,
@@ -26,14 +27,20 @@ export default function FormCanvas({
     setFields(items);
   };
 
+  const handleAddField = () => {
+    if (typeof addField === "function") {
+      addField("short-answer");
+    }
+  };
+
   return (
-    <div className="flex justify-center">
+    <div className="flex h-full justify-center">
       <div
-        className={`w-full rounded-2xl border border-gray-200 bg-white shadow-sm transition-all ${
+        className={`custom-scroll h-full w-full overflow-y-auto rounded-2xl border border-gray-200 bg-white shadow-sm transition-all ${
           disabled ? "pointer-events-none opacity-60" : ""
         }`}
       >
-        <div className="px-5 py-6 sm:px-7 sm:py-8 lg:px-9 lg:py-10">
+        <div className="px-5 py-6 sm:px-7 sm:py-8 lg:px-9 lg:py-10 ">
           <EditableHeader
             title={title}
             setTitle={setTitle}
@@ -85,9 +92,9 @@ export default function FormCanvas({
             </Droppable>
           </DragDropContext>
 
-          
           <button
-            onClick={() => setSelectedFieldId(null)}
+            type="button"
+            onClick={handleAddField}
             disabled={disabled}
             className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-gray-300 bg-transparent text-sm font-medium text-gray-400 transition hover:border-blue-400 hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
           >

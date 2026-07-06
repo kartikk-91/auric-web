@@ -39,9 +39,8 @@ export default function FormBuilder({
   }, [showSidebar, showSettings]);
 
   return (
-    <div className="relative flex h-[calc(100vh-130px)] flex-col overflow-hidden bg-gradient-to-b from-gray-50/80 to-white lg:flex-row">
+    <div className="relative flex h-[calc(100vh-100px)] pb-4 flex-col overflow-hidden bg-gradient-to-b from-gray-50/80 to-white lg:flex-row">
 
-      
       <div className="flex items-center justify-between border-b border-gray-200 bg-white px-4 py-2.5 lg:hidden">
         <button
           onClick={() => setShowSidebar(true)}
@@ -65,14 +64,12 @@ export default function FormBuilder({
         </button>
       </div>
 
-      
       <div className="ml-4 mt-3 hidden h-full w-[220px] shrink-0 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm lg:block">
         <Sidebar addField={form.addField} disabled={disabled} />
       </div>
 
-      
-      <div className="min-w-0 flex-1 overflow-y-auto px-3 py-3 sm:px-5 lg:px-5">
-        <div className="mx-auto max-w-3xl">
+      <div className="min-w-0 flex-1 overflow-hidden px-3 pt-3 sm:px-5 lg:px-5">
+        <div className="mx-auto h-full max-w-3xl">
           <FormCanvas
             fields={form.fields}
             setFields={form.setFields}
@@ -80,6 +77,7 @@ export default function FormBuilder({
             setSelectedFieldId={form.setSelectedFieldId}
             deleteField={form.deleteField}
             duplicateField={form.duplicateField}
+            addField={form.addField}
             title={title}
             setTitle={setTitle}
             tagline={tagline}
@@ -89,7 +87,6 @@ export default function FormBuilder({
         </div>
       </div>
 
-      
       <div className="mr-4 mt-3 hidden h-full w-[300px] shrink-0 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm xl:block">
         <FieldSettings
           selectedField={selectedField}
@@ -99,7 +96,6 @@ export default function FormBuilder({
         />
       </div>
 
-      
       {showSidebar && (
         <>
           <div
@@ -126,7 +122,6 @@ export default function FormBuilder({
         </>
       )}
 
-      
       {showSettings && (
         <>
           <div
@@ -151,6 +146,32 @@ export default function FormBuilder({
           </div>
         </>
       )}
+
+      <style>{`
+        .custom-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
+        }
+        .custom-scroll::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+          background-color: rgba(0, 0, 0, 0.18);
+          border-radius: 9999px;
+          background-clip: padding-box;
+          border: 1px solid transparent;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+          background-color: rgba(0, 0, 0, 0.32);
+        }
+        .custom-scroll::-webkit-scrollbar-corner {
+          background: transparent;
+        }
+      `}</style>
     </div>
   );
 }
