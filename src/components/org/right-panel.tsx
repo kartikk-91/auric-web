@@ -70,17 +70,17 @@ const RightPanel = () => {
 
     return (
         <div className="flex-1 relative z-10">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 lg:p-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
+                <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-2">
                     Tell us about your organization
                 </h2>
-                <p className="text-gray-600 text-sm mb-8">
+                <p className="text-gray-600 text-xs sm:text-sm mb-6 sm:mb-8">
                     Fill in the details below to get started.
                 </p>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div className="lg:col-span-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                        <div className="sm:col-span-2">
                             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                                 Company Name
                                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,7 +115,7 @@ const RightPanel = () => {
                                 </svg>
                             </label>
 
-                            <label className="border border-dashed border-gray-300 rounded-md px-3 py-2 text-center hover:border-blue-400 transition-colors cursor-pointer block">
+                            <label className="h-[50px] sm:h-full border border-dashed border-gray-300 rounded-lg px-3 py-2 flex flex-col items-center justify-center text-center hover:border-blue-400 transition-colors cursor-pointer">
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -133,12 +133,12 @@ const RightPanel = () => {
                                     <img
                                         src={preview}
                                         alt="logo preview"
-                                        className="mx-auto h-10 object-contain"
+                                        className="mx-auto h-8 sm:h-10 object-contain"
                                     />
                                 ) : (
                                     <>
                                         <div className="flex items-center justify-center gap-2">
-                                            <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg className="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13l-3-3m0 0l-3 3m3-3v12" />
                                             </svg>
 
@@ -147,7 +147,7 @@ const RightPanel = () => {
                                             </span>
                                         </div>
 
-                                        <p className="text-[10px] text-gray-500 mt-0.5">
+                                        <p className="text-[10px] text-gray-500 mt-0.5 hidden sm:block">
                                             JPG, PNG, SVG
                                         </p>
                                     </>
@@ -158,7 +158,7 @@ const RightPanel = () => {
                             )}
                         </div>
                     </div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                         <div>
                             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                                 Mobile Number
@@ -274,8 +274,8 @@ const RightPanel = () => {
                         )}
                     </div>
 
-                    <div className="flex justify-end gap-4 ">
-                        <button type='submit' disabled={isSubmitting} className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+                    <div className="flex justify-end gap-4">
+                        <button type='submit' disabled={isSubmitting} className="w-full sm:w-auto justify-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
                             {isSubmitting ? "Submitting..." : "Submit"}
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />

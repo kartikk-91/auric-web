@@ -2,21 +2,22 @@ import Image from 'next/image'
 
 const LeftPanel = () => {
     return (
-        <div className="lg:w-80 space-y-8">
+        <div className="w-full lg:w-80 space-y-4 lg:space-y-8">
             <div>
-                <p className="text-xs uppercase font-semibold text-blue-600 tracking-wider mb-2">
+                <p className="text-[11px] sm:text-xs uppercase font-semibold text-blue-600 tracking-wider mb-1.5 sm:mb-2">
                     welcome to auric
                 </p>
-                <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2 sm:mb-4">
                     Let's set up your organization 👋
                 </h1>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">
                     This information helps us personalize your experience and organize your feedback beautifully.
                 </p>
             </div>
 
 
-            <div className="space-y-4">
+            {/* Timeline - hidden on small screens to save vertical space above the form, shown once the two-column layout kicks in */}
+            <div className="hidden lg:block space-y-4">
                 <div className="flex items-start gap-4">
                     <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
                         <span className="text-white font-semibold">1</span>
@@ -41,13 +42,13 @@ const LeftPanel = () => {
                         <span className="text-gray-600 font-semibold">3</span>
                     </div>
                     <div className="pt-1">
-                        <p className="text-sm font-semibold text-gray-400">Invite Your Team</p>
-                        <p className="text-sm text-gray-400">Add members to get started</p>
+                        <p className="text-sm font-semibold text-gray-400">Share with Customers</p>
+                        <p className="text-sm text-gray-400">Start collecting feedback and analytics</p>
                     </div>
                 </div>
             </div>
 
-            <div className="relative md:mt-16">
+            <div className="hidden lg:block relative md:mt-16">
                 <div>
                     <Image
                         src={"/bg/dots.png"}

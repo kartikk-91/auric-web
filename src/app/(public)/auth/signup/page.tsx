@@ -72,7 +72,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen w-full bg-[#F4F5FF] flex flex-col overflow-hidden">
 
-      <nav className="absolute top-0 w-full flex items-center justify-between px-6 md:px-10 py-4 shrink-0">
+      <nav className="absolute top-0 w-full flex items-center justify-between px-4 md:px-10 py-4 shrink-0">
         <div className="flex items-center gap-2">
           <div className="w-fit h-fit flex items-center justify-center">
             <Image
@@ -80,18 +80,19 @@ export default function SignupPage() {
               width={100}
               height={100}
               alt={'Auric'}
-              className="w-24 h-fit"
+              className="w-20 md:w-24 h-fit"
             />
           </div>
         </div>
-        <div className="text-sm text-slate-500 relative z-999 pointer-events-auto">
+        {/* Hidden on small screens - moved into the card below so it doesn't float awkwardly above it */}
+        <div className="hidden md:block text-sm text-slate-500 relative z-999 pointer-events-auto">
           Already have an account?{" "}
           <a href="/auth/login" className="text-[#3B5BDB] font-semibold hover:underline">
             Log in
           </a>
         </div>
       </nav>
-      <div className="flex-1 flex items-center justify-center px-4 relative overflow-hidden">
+      <div className="flex-1 flex items-center justify-center px-3 sm:px-4 relative overflow-hidden pt-16 md:pt-0">
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="w-[700px] h-[700px] rounded-full bg-indigo-100/40" />
         </div>
@@ -100,7 +101,7 @@ export default function SignupPage() {
 
 
         <div className="relative z-10 w-full max-w-md">
-          <div className="bg-white rounded-3xl shadow-[0_20px_60px_rgba(99,102,241,0.15)] border border-indigo-50 px-8 pt-4 pb-6">
+          <div className="bg-white rounded-3xl shadow-[0_20px_60px_rgba(99,102,241,0.15)] border border-indigo-50 px-5 sm:px-8 pt-4 pb-6">
             <div className="flex justify-center mb-4">
               <div className="w-16 h-16 rounded-full bg-indigo-50 border-4 border-indigo-100 flex items-center justify-center">
                 <svg className="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -265,6 +266,14 @@ export default function SignupPage() {
                 </svg>
                 Continue with GitHub
               </button>
+            </div>
+
+            {/* Mobile-only switcher, moved out of the nav to avoid the floating overlap */}
+            <div className="mt-4 text-center text-sm text-slate-500 md:hidden">
+              Already have an account?{" "}
+              <a href="/auth/login" className="text-[#3B5BDB] font-semibold hover:underline">
+                Log in
+              </a>
             </div>
           </div>
         </div>
