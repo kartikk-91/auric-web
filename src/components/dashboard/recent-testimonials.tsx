@@ -1,6 +1,6 @@
 "use client";
 
-import { Star } from "lucide-react";
+import { MessageSquareQuote, Star } from "lucide-react";
 import { useDashboard } from "@/providers/dashboard-provider";
 
 interface Testimonial {
@@ -62,6 +62,20 @@ export default function RecentTestimonials() {
         </button>
       </div>
 
+      {testimonials.length === 0 ? (
+        <div className="flex flex-1 flex-col items-center justify-center gap-2 py-10 text-center">
+          <div className="rounded-full bg-blue-50 p-3">
+            <MessageSquareQuote className="h-5 w-5 text-blue-400" />
+          </div>
+          <p className="text-sm font-medium text-gray-700">
+            No testimonials yet
+          </p>
+          <p className="max-w-[240px] text-xs text-gray-400">
+            Once customers start leaving reviews, you&apos;ll see their
+            testimonials here.
+          </p>
+        </div>
+      ) : (
       <div className="flex flex-1 flex-col justify-between gap-4">
         {testimonials.map((testimonial, idx) => (
           <div key={idx} className="flex gap-3 sm:gap-4">
@@ -103,6 +117,7 @@ export default function RecentTestimonials() {
           </div>
         ))}
       </div>
+      )}
     </div>
   );
 }
