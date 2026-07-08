@@ -1,204 +1,89 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-
-import { parseFeedbackData } from "@/lib/feedback-parser";
-import type { Feedback } from "@/types/feedback";
 import { prisma } from "@/lib/db";
 
-export async function GET() {
+import { mapFeedbackRecord } from "@/lib/feedback-mapper";
+import { buildFeedbackWhere, parsePage, parsePageSize } from "@/lib/feedback-query";
+import { Prisma } from "@/generated/prisma/client";
+
+export async function GET(request: NextRequest) {
   try {
     const session = await auth();
 
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const company = await prisma.company.findFirst({
-      where: {
-        user: {
-          email: session.user.email,
-        },
-      },
-      select: {
-        c_id: true,
-      },
+      where: { user: { email: session.user.email } },
+      select: { c_id: true },
     });
 
     if (!company) {
-      return NextResponse.json([]);
+      return NextResponse.json({
+        data: [],
+        page: 1,
+        pageSize: 0,
+        total: 0,
+        totalPages: 0,
+        stats: { total: 0, positive: 0, neutral: 0, negative: 0 },
+      });
     }
 
-    const feedbacks = await prisma.feedback.findMany({
-      where: {
-        c_id: company.c_id,
-      },
-      include: {
-        form: {
-          select: {
-            formId: true,
-            title: true,
+    const { searchParams } = request.nextUrl;
+
+    const page = parsePage(searchParams.get("page"));
+    const pageSize = parsePageSize(searchParams.get("pageSize"), 8, 100);
+
+    const where = buildFeedbackWhere(company.c_id, {
+      dateRange: searchParams.get("dateRange"),
+      sentiment: searchParams.get("sentiment"),
+      location: searchParams.get("location"),
+      ageRange: searchParams.get("ageRange"),
+    });
+    const sentimentWhere = (sentiment: string): Prisma.FeedbackWhereInput => ({
+      AND: [
+        where,
+        {
+          result: {
+            is: { sentiment: { equals: sentiment, mode: "insensitive" } },
           },
         },
-        result: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
+      ],
     });
-
-    const response: Feedback[] = feedbacks.map((feedback) => {
-      const parsed = parseFeedbackData(feedback.data);
-
-      return {
-        id: feedback.f_id,
-
-        formId: feedback.formId,
-
-        name: feedback.name,
-
-        email: feedback.email,
-
-        age: feedback.age,
-
-        feedback: parsed.feedback,
-
-        responses: parsed.responses,
-
-        createdAt: feedback.createdAt.toISOString(),
-
-        received: getRelativeTime(feedback.createdAt),
-
-        receivedFull: feedback.createdAt.toLocaleString(),
-
-        processingStatus: feedback.processingStatus,
-
-        location: {
-          country:
-            feedback.result?.country ??
-            feedback.country,
-
-          state:
-            feedback.result?.state ??
-            feedback.state,
-
-          formatted:
-            feedback.result?.formattedLocation ??
-            `${feedback.state}, ${feedback.country}`,
-
-          flag:
-            feedback.result?.countryFlag ??
-            undefined,
+    const [total, positive, neutral, negative, feedbacks] = await Promise.all([
+      prisma.feedback.count({ where }),
+      prisma.feedback.count({ where: sentimentWhere("positive") }),
+      prisma.feedback.count({ where: sentimentWhere("neutral") }),
+      prisma.feedback.count({ where: sentimentWhere("negative") }),
+      prisma.feedback.findMany({
+        where,
+        include: {
+          form: { select: { formId: true, title: true } },
+          result: true,
         },
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+    ]);
 
-        analysis: {
-          sentiment:
-            capitalizeSentiment(
-              feedback.result?.sentiment
-            ),
+    const data = feedbacks.map(mapFeedbackRecord);
 
-          sentimentScore:
-            feedback.result?.sentimentScore ??
-            0,
-
-          rating:
-            feedback.result?.rating ??
-            parsed.rating,
-
-          summary:
-            feedback.result?.summary ??
-            "",
-
-          testimonial:
-            feedback.result?.testimonial ??
-            "",
-
-          praisedFeatures:
-            Array.isArray(
-              feedback.result?.praisedFeatures
-            )
-              ? (feedback.result
-                  ?.praisedFeatures as string[])
-              : [],
-
-          criticizedFeatures:
-            Array.isArray(
-              feedback.result
-                ?.criticizedFeatures
-            )
-              ? (feedback.result
-                  ?.criticizedFeatures as string[])
-              : [],
-
-          confidence:
-            feedback.result?.confidence ??
-            0,
-        },
-      };
+    return NextResponse.json({
+      data,
+      page,
+      pageSize,
+      total,
+      totalPages: Math.max(1, Math.ceil(total / pageSize)),
+      stats: { total, positive, neutral, negative },
     });
-
-    return NextResponse.json(response);
   } catch (error) {
     console.error(error);
 
     return NextResponse.json(
-      {
-        message:
-          "Failed to fetch feedback.",
-      },
-      {
-        status: 500,
-      }
+      { message: "Failed to fetch feedback." },
+      { status: 500 }
     );
   }
-}
-
-function capitalizeSentiment(
-  sentiment?: string
-): "Positive" | "Neutral" | "Negative" {
-  switch (sentiment?.toLowerCase()) {
-    case "positive":
-      return "Positive";
-
-    case "negative":
-      return "Negative";
-
-    default:
-      return "Neutral";
-  }
-}
-
-function getRelativeTime(date: Date) {
-  const now = new Date();
-
-  const diff =
-    Math.floor(
-      (now.getTime() -
-        date.getTime()) /
-        (1000 * 60 * 60 * 24)
-    );
-
-  if (diff === 0) return "Today";
-
-  if (diff === 1)
-    return "Yesterday";
-
-  if (diff < 7)
-    return `${diff} days ago`;
-
-  if (diff < 30)
-    return `${Math.floor(
-      diff / 7
-    )} week${diff >= 14 ? "s" : ""} ago`;
-
-  if (diff < 365)
-    return `${Math.floor(
-      diff / 30
-    )} month${diff >= 60 ? "s" : ""} ago`;
-
-  return `${Math.floor(
-    diff / 365
-  )} year${diff >= 730 ? "s" : ""} ago`;
 }

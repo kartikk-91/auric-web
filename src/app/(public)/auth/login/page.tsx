@@ -105,7 +105,7 @@ export default function LoginPage() {
           />
         </div>
 
-        {/* Hidden on small screens - moved into the card below so it doesn't float awkwardly above it */}
+        
         <div className="hidden md:block text-sm text-slate-500 relative pointer-events-auto">
           Don&apos;t have an account?{" "}
           <a
@@ -345,7 +345,7 @@ export default function LoginPage() {
               </button>
             </div>
 
-            {/* Mobile-only switcher, moved out of the nav to avoid the floating overlap */}
+            
             <div className="mt-4 text-center text-sm text-slate-500 md:hidden">
               Don&apos;t have an account?{" "}
               <a

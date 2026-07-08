@@ -16,7 +16,7 @@ const LeftPanel = () => {
             </div>
 
 
-            {/* Timeline - hidden on small screens to save vertical space above the form, shown once the two-column layout kicks in */}
+           
             <div className="hidden lg:block space-y-4">
                 <div className="flex items-start gap-4">
                     <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0">

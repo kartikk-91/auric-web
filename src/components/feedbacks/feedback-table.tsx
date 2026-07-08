@@ -124,12 +124,21 @@ export default function FeedbackTable({
   const renderRating = (
     rating?: number
   ) => {
-    if (!rating)
+    if (!rating) {
       return (
-        <span className="text-gray-400">
-          —
-        </span>
+        <div className="flex items-center gap-1 opacity-60">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <svg
+              key={index}
+              className="w-4 h-4 text-gray-200 fill-current"
+              viewBox="0 0 20 20"
+            >
+              <path d="M9.049.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.889a1 1 0 00-.364 1.118l1.519 4.674c.3.921-.755 1.688-1.538 1.118l-3.976-2.889a1 1 0 00-1.176 0l-3.976 2.889c-.783.57-1.838-.197-1.539-1.118l1.52-4.674a1 1 0 00-.364-1.118L.077 8.101c-.783-.57-.38-1.81.588-1.81H5.58a1 1 0 00.95-.69L8.049.927z" />
+            </svg>
+          ))}
+        </div>
       );
+    }
 
     return (
       <div className="flex items-center gap-1">
@@ -140,7 +149,7 @@ export default function FeedbackTable({
             key={index}
             className={`w-4 h-4 ${index < rating
               ? 'text-yellow-400 fill-current'
-              : 'text-gray-200'
+              : 'text-gray-200 fill-current'
               }`}
             viewBox="0 0 20 20"
           >

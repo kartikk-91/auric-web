@@ -151,7 +151,7 @@ export default function FieldSettings({
       </div>
 
       <div className="custom-scroll flex-1 space-y-5 overflow-y-auto px-5 py-5">
-        {/* Field Type */}
+       
         <div>
           <label className={labelClass}>Field Type</label>
           <FieldTypeSelect
@@ -161,7 +161,7 @@ export default function FieldSettings({
           />
         </div>
 
-        {/* Question */}
+   
         <div>
           <label className={labelClass}>Question</label>
           <input
@@ -178,7 +178,7 @@ export default function FieldSettings({
 
         <div className="h-px w-full bg-gray-100" />
 
-        {/* Required */}
+        
         <ToggleRow
           label="Required"
           description="Respondents must answer this field."
@@ -191,7 +191,6 @@ export default function FieldSettings({
 
         <div className="h-px w-full bg-gray-100" />
 
-        {/* Help Text */}
         <div>
           <label className={labelClass}>Help Text</label>
           <input

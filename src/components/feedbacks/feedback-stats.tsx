@@ -1,25 +1,19 @@
-import { Feedback } from "@/types/feedback";
+interface FeedbackStatsData {
+  total: number;
+  positive: number;
+  neutral: number;
+  negative: number;
+}
 
 interface FeedbackStatsProps {
-  data: Feedback[];
+  data: FeedbackStatsData;
 }
 
 export default function FeedbackStats({
   data,
 }: FeedbackStatsProps) {
-  const totalFeedback = data.length;
-
-  const positive = data.filter(
-    (f) => f.analysis.sentiment === "Positive"
-  ).length;
-
-  const neutral = data.filter(
-    (f) => f.analysis.sentiment === "Neutral"
-  ).length;
-
-  const negative = data.filter(
-    (f) => f.analysis.sentiment === "Negative"
-  ).length;
+  const totalFeedback = data.total;
+  const { positive, neutral, negative } = data;
 
   const positivePercent = totalFeedback
     ? Math.round(

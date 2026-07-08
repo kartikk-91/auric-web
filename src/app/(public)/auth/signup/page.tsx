@@ -84,7 +84,7 @@ export default function SignupPage() {
             />
           </div>
         </div>
-        {/* Hidden on small screens - moved into the card below so it doesn't float awkwardly above it */}
+        
         <div className="hidden md:block text-sm text-slate-500 relative z-999 pointer-events-auto">
           Already have an account?{" "}
           <a href="/auth/login" className="text-[#3B5BDB] font-semibold hover:underline">
@@ -268,7 +268,7 @@ export default function SignupPage() {
               </button>
             </div>
 
-            {/* Mobile-only switcher, moved out of the nav to avoid the floating overlap */}
+            
             <div className="mt-4 text-center text-sm text-slate-500 md:hidden">
               Already have an account?{" "}
               <a href="/auth/login" className="text-[#3B5BDB] font-semibold hover:underline">

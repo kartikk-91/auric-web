@@ -51,10 +51,7 @@ const AGE_OPTIONS = [
   { label: "36–50", value: "36-50" },
   { label: "50+", value: "50+" },
 ];
-
-// Viewport margin the menu should never cross, in px.
 const VIEWPORT_MARGIN = 16;
-// Gap between the trigger button and the menu, in px (matches the old mt-2).
 const MENU_GAP = 8;
 
 interface MenuStyle {
@@ -76,11 +73,7 @@ function computeMenuStyle(
   const viewportWidth = window.innerWidth;
 
   const width = Math.min(desiredWidth, viewportWidth - VIEWPORT_MARGIN * 2);
-
-  // Default to right-aligning the menu with the button, like the original design.
   let left = rect.right - width;
-
-  // Clamp so the menu never crosses either edge of the viewport.
   left = Math.max(
     VIEWPORT_MARGIN,
     Math.min(left, viewportWidth - width - VIEWPORT_MARGIN)
@@ -138,9 +131,6 @@ export default function FeedbackHeader({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  // Recompute (and re-clamp) menu positions on open, resize, and scroll, so
-  // menus never drift off-screen or get stranded after a viewport change.
   useLayoutEffect(() => {
     const recalculate = () => {
       if (isDateOpen && dateButtonRef.current) {
@@ -190,7 +180,7 @@ export default function FeedbackHeader({
           ref={dropdownRef}
           className="flex flex-wrap items-center gap-2.5 lg:flex-nowrap"
         >
-          {/* Date range dropdown */}
+         
           <div className="relative">
             <button
               ref={dateButtonRef}
@@ -288,7 +278,7 @@ export default function FeedbackHeader({
             )}
           </div>
 
-          {/* Filters dropdown */}
+   
           <div className="relative">
             <button
               ref={filterButtonRef}
@@ -441,7 +431,7 @@ export default function FeedbackHeader({
             )}
           </div>
 
-          {/* Export dropdown */}
+          
           <div className="relative">
             <button
               ref={exportButtonRef}
