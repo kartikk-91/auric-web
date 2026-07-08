@@ -36,9 +36,7 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <h1 className="text-lg font-semibold text-gray-900 leading-none">Ask Auric</h1>
-                <span className="rounded border border-gray-200 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-gray-400 shrink-0">
-                  Beta
-                </span>
+
               </div>
               <p className="mt-0.5 text-xs text-gray-400 truncate">
                 AI-powered insights from your feedback

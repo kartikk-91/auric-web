@@ -263,7 +263,7 @@ export default function FeedbackTable({
                   </div>
 
                   <div className="min-w-0">
-                    <p className="font-medium text-gray-900 truncate">
+                    <p className="font-medium text-gray-900 truncate text-sm sm:text-lg">
                       {feedback.name}
                     </p>
 
