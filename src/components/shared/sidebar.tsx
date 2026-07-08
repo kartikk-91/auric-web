@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard,
-  MessageSquareQuote,
   MessageSquare,
   FileText,
   Settings,
@@ -105,7 +104,7 @@ export default function Sidebar() {
   return (
     <>
       
-      <div className="fixed top-0 left-0 right-0 z-40 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 md:hidden">
+      <div className="fixed top-0 left-0 right-0 z-100 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 md:hidden">
         <Image src="/logo.png" width={90} height={90} alt="Auric" className="h-8 w-auto" />
         <button
           onClick={() => setIsOpen(true)}
@@ -125,7 +124,6 @@ export default function Sidebar() {
       <aside
         className={`
     fixed left-0 top-0 z-50 flex h-[100dvh] flex-col
-    overflow-hidden
     border-r border-gray-200 bg-white
     transition-[transform,width] duration-300 ease-in-out
     w-[280px] sm:w-[300px]
@@ -136,7 +134,7 @@ export default function Sidebar() {
         style={{ height: '100dvh' }}
       >
         
-        <div className="relative shrink-0 border-b border-gray-100 px-6 py-6">
+        <div className="relative shrink-0 border-b border-gray-100 px-6 py-6 ">
           <div className="flex items-start justify-between">
             {!collapsed && (
               <div>
@@ -146,7 +144,13 @@ export default function Sidebar() {
             )}
 
             {collapsed && (
-              <Image src="/logo.png" width={36} height={36} alt="Auric" className="mx-auto h-8 w-8 object-contain" />
+              <Image
+                src="/emblem-transparent.png"
+                width={36}
+                height={36}
+                alt="Auric"
+                className="mx-auto h-8 w-8 object-contain"
+              />
             )}
 
             <button
@@ -160,7 +164,7 @@ export default function Sidebar() {
           
           <button
             onClick={() => setCollapsed((v) => !v)}
-            className="absolute -right-3 top-7 hidden h-6 w-6 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-sm transition hover:bg-gray-50 hover:text-blue-600 md:flex"
+            className="absolute -right-3 top-7 z-10 hidden h-6 w-6 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-sm transition hover:bg-gray-50 hover:text-blue-600 md:flex"
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             {collapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}
