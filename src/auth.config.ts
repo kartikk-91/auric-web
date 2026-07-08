@@ -56,6 +56,7 @@ export default {
           email:
             email ??
             `${profile.login}.github@local.com`,
+          image: profile.avatar_url,
         };
       },
     }),

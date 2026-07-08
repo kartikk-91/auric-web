@@ -51,17 +51,21 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return true;
     },
 
-    async jwt({ token }) {
+    async jwt({ token, user }) {
+      if (user && "image" in user && user.image) {
+        token.picture = user.image;
+      }
+
       if (!token.email) return token;
 
-      const user = await getUserByEmail(token.email);
+      const user_ = await getUserByEmail(token.email);
 
-      if (!user) return token;
-      token.sub = user.u_id;
+      if (!user_) return token;
+      token.sub = user_.u_id;
 
       const company = await prisma.company.findFirst({
         where: {
-          u_id: user.u_id,
+          u_id: user_.u_id,
         },
         select: {
           c_id: true,
@@ -77,10 +81,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (session.user) {
         session.user.id = token.sub!;
         session.user.c_id = token.c_id as string | undefined;
+        session.user.image = (token.picture as string | null) ?? null;
       }
-
-      delete (session.user as typeof session.user & { image?: string })
-        ?.image;
 
       return session;
     },

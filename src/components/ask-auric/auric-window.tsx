@@ -7,14 +7,9 @@ import Sidebar from "./sidebar";
 import { useAskAuric } from "@/hooks/use-ask-auric";
 
 interface AskAuricWindowProps {
-  /**
-   * Pass the company_id from your session/auth context.
-   * e.g. <AskAuricWindow companyId={session.user.companyId} />
-   */
   companyId: string | undefined | null;
 }
 
-// Minimum horizontal drag distance before we treat it as a deliberate swipe.
 const OPEN_THRESHOLD_PX = 30;
 const CLOSE_THRESHOLD_PX = 50;
 
@@ -41,7 +36,7 @@ export default function AskAuricWindow({ companyId }: AskAuricWindowProps) {
 
   const isStreaming = messages.some((m) => m.role === "assistant" && m.isStreaming);
 
-  // --- Always land on "new chat" on load, never auto-resume the last chat ---
+
   const didInitRef = useRef(false);
   useEffect(() => {
     if (didInitRef.current) return;
@@ -49,10 +44,10 @@ export default function AskAuricWindow({ companyId }: AskAuricWindowProps) {
     if (activeChatId) {
       setActiveChatId("");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, []);
 
-  // --- Dynamic viewport height, resilient to mobile browser chrome ---
+
   useEffect(() => {
     const setAppHeight = () => {
       const vh = window.visualViewport?.height ?? window.innerHeight;
@@ -77,21 +72,7 @@ export default function AskAuricWindow({ companyId }: AskAuricWindowProps) {
     return () => { document.body.style.overflow = ""; };
   }, [sidebarOpen]);
 
-  // --- Swipe-to-open handle ---
-  // We deliberately don't watch the bare screen edge for a swipe: on iOS/
-  // Android that's the same zone the browser/OS reserves for its own
-  // "swipe back" gesture, so touches starting there are frequently stolen
-  // before our JS ever sees them (this is why the earlier edge-swipe
-  // implementation silently did nothing). Instead we give people a small,
-  // always-visible pull-tab a few pixels in from the true edge. It's tap-
-  // able on its own (guaranteed way to open) and also drag-to-open, and
-  // because it's a real element (not raw viewport edge) it doesn't fight
-  // with the native gesture.
-  //
-  // Native (non-passive) listeners are used here instead of React's
-  // onTouch* props: React registers touch handlers as passive by default,
-  // which silently no-ops preventDefault() and lets the browser treat the
-  // drag as a scroll/navigation gesture instead of handing it to us.
+
   const openTabRef = useRef<HTMLButtonElement>(null);
   const openDragStart = useRef<{ x: number; y: number } | null>(null);
 
@@ -110,10 +91,9 @@ export default function AskAuricWindow({ companyId }: AskAuricWindowProps) {
       const dx = t.clientX - openDragStart.current.x;
       const dy = t.clientY - openDragStart.current.y;
 
-      if (Math.abs(dy) > Math.abs(dx)) return; // mostly vertical, ignore
+      if (Math.abs(dy) > Math.abs(dx)) return; 
 
       if (dx < 0) {
-        // Stop the browser from also interpreting this as a back gesture.
         e.preventDefault();
       }
 
@@ -138,9 +118,7 @@ export default function AskAuricWindow({ companyId }: AskAuricWindowProps) {
     };
   }, []);
 
-  // --- Swipe-to-close for the open drawer ---
-  // Safe to bind to the raw drawer panel because it's already-open app UI,
-  // not the system edge, so there's no native gesture to fight with.
+
   const drawerRef = useRef<HTMLDivElement>(null);
   const closeDragStart = useRef<{ x: number; y: number } | null>(null);
 
@@ -233,7 +211,7 @@ export default function AskAuricWindow({ companyId }: AskAuricWindowProps) {
           />
         </div>
 
-        {/* Pull tab: tap or drag left to open the drawer on mobile/tablet */}
+        
         {!sidebarOpen && (
           <button
             ref={openTabRef}

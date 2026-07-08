@@ -249,8 +249,6 @@ export default function FeedbackDashboard() {
           totalFeedbacks={total}
         />
 
-        {/* Thin top progress bar instead of a skeleton swap — signals
-            "updating" without moving or hiding any existing content. */}
         <div className="h-0.5 -mt-2 mb-4 rounded-full overflow-hidden bg-transparent">
           {isFetching && (
             <div className="h-full w-full bg-blue-100 relative overflow-hidden rounded-full">
@@ -259,9 +257,6 @@ export default function FeedbackDashboard() {
           )}
         </div>
 
-        {/* Content dims very slightly and becomes non-interactive while a
-            background refetch is in flight, but never unmounts — no layout
-            shift, no flash of an empty skeleton, just a smooth crossfade. */}
         <div
           className={`transition-opacity duration-150 ${
             isFetching ? 'opacity-60 pointer-events-none' : 'opacity-100'

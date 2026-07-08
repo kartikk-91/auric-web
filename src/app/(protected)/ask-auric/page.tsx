@@ -25,7 +25,9 @@ const AskAuricPage = () => {
 
   return (
     <div className="w-full h-screen flex overflow-y-hidden">
-      <Sidebar />
+      <div>
+        <Sidebar />
+      </div>
       <div className="w-full">
         <AskAuricWindow companyId={companyId} />
       </div>

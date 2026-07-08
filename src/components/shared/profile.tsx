@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { LogOut } from 'lucide-react';
+import Image from 'next/image';
 
 interface Props {
   collapsed?: boolean;
@@ -9,6 +11,7 @@ interface Props {
 
 export default function UserProfileFooter({ collapsed = false }: Props) {
   const { data: session } = useSession();
+  const [imgFailed, setImgFailed] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -20,13 +23,27 @@ export default function UserProfileFooter({ collapsed = false }: Props) {
 
   const userName = session?.user?.name || 'Auric User';
   const userEmail = session?.user?.email || 'user@auric.app';
+  const userImage = session?.user?.image;
   const userInitials = userName.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase();
+  const showImage = Boolean(userImage) && !imgFailed;
 
   return (
     <div className="border-t border-gray-200 px-3 py-4">
       <div className={`flex items-center gap-3 ${collapsed ? 'flex-col' : ''}`}>
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100">
-          <span className="text-sm font-semibold text-blue-600">{userInitials}</span>
+        <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blue-100">
+          {showImage ? (
+            <Image
+              src={userImage as string}
+              alt={userName}
+              fill
+              sizes="40px"
+              className="object-cover"
+              onError={() => setImgFailed(true)}
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <span className="text-sm font-semibold text-blue-600">{userInitials}</span>
+          )}
         </div>
 
         {!collapsed && (

@@ -98,19 +98,56 @@ export default function CompanyProfile() {
 
   if (!company) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-        <div className="space-y-4 animate-pulse">
-          <div className="h-16 w-16 rounded-2xl bg-gray-100" />
-          <div className="h-4 w-1/3 bg-gray-100 rounded" />
-          <div className="h-10 bg-gray-100 rounded-xl" />
-          <div className="h-10 bg-gray-100 rounded-xl" />
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+        <div className="animate-pulse">
+          <div className="h-4 w-32 sm:w-40 bg-gray-100 rounded mb-2" />
+          <div className="h-3 w-48 sm:w-64 bg-gray-100 rounded mb-6" />
+
+          <div className="flex items-center gap-4 mb-6">
+            <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl bg-gray-100 shrink-0" />
+            <div className="space-y-2">
+              <div className="h-3 w-16 bg-gray-100 rounded" />
+              <div className="h-2.5 w-36 bg-gray-100 rounded" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div className="space-y-1.5">
+              <div className="h-2.5 w-20 bg-gray-100 rounded" />
+              <div className="h-9 bg-gray-100 rounded-xl" />
+            </div>
+            <div className="space-y-1.5">
+              <div className="h-2.5 w-24 bg-gray-100 rounded" />
+              <div className="h-9 bg-gray-100 rounded-xl" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div className="space-y-1.5">
+              <div className="h-2.5 w-16 bg-gray-100 rounded" />
+              <div className="h-9 bg-gray-100 rounded-xl" />
+            </div>
+            <div className="space-y-1.5">
+              <div className="h-2.5 w-14 bg-gray-100 rounded" />
+              <div className="h-9 bg-gray-100 rounded-xl" />
+            </div>
+          </div>
+
+          <div className="space-y-1.5 mb-6">
+            <div className="h-2.5 w-24 bg-gray-100 rounded" />
+            <div className="h-20 bg-gray-100 rounded-xl" />
+          </div>
+
+          <div className="flex justify-end">
+            <div className="h-10 w-32 bg-gray-100 rounded-xl" />
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
       <h2 className="text-base font-semibold text-gray-900 mb-1">Company profile</h2>
       <p className="text-sm text-gray-500 mb-6">
         This information helps AuricBot describe your company accurately.
@@ -118,17 +155,17 @@ export default function CompanyProfile() {
 
       
       <div className="flex items-center gap-4 mb-6">
-        <div className="relative w-16 h-16 shrink-0">
-          <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-gray-100 flex items-center justify-center overflow-hidden">
+        <div className="relative w-14 h-14 sm:w-16 sm:h-16 shrink-0">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-blue-50 border border-gray-100 flex items-center justify-center overflow-hidden">
             {company.logoUrl ? (
               <img src={company.logoUrl} alt="Company logo" className="w-full h-full object-cover" />
             ) : (
-              <Building2 className="w-6 h-6 text-blue-600" />
+              <Building2 className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
             )}
           </div>
           <button
             onClick={() => logoInputRef.current?.click()}
-            className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-sm hover:bg-blue-700 transition-colors"
+            className="absolute -bottom-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-sm hover:bg-blue-700 transition-colors"
             aria-label="Change logo"
           >
             {uploadingLogo ? (
@@ -145,14 +182,14 @@ export default function CompanyProfile() {
             onChange={handleLogoChange}
           />
         </div>
-        <div>
-          <p className="text-sm font-medium text-gray-900">Logo</p>
-          <p className="text-xs text-gray-400">PNG, JPG, WEBP, or SVG — up to 2MB</p>
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-gray-900 truncate">Logo</p>
+          <p className="text-xs text-gray-400 truncate">PNG, JPG, WEBP, or SVG — up to 2MB</p>
         </div>
       </div>
 
       
-      <div className="grid sm:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <Field label="Company name">
           <input
             value={form.cname}
@@ -171,7 +208,7 @@ export default function CompanyProfile() {
         </Field>
       </div>
 
-      <div className="grid sm:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <Field label="Address">
           <input
             value={form.address}
@@ -210,7 +247,7 @@ export default function CompanyProfile() {
         </div>
       )}
 
-      <div className="flex items-center justify-end gap-3 mt-6">
+      <div className="flex flex-wrap items-center justify-end gap-3 mt-6">
         {saved && (
           <span className="flex items-center gap-1 text-sm text-emerald-600">
             <Check className="w-4 h-4" /> Saved
@@ -232,7 +269,7 @@ export default function CompanyProfile() {
           border: 1px solid #e5e7eb;
           border-radius: 0.75rem;
           padding: 0.5rem 0.75rem;
-          font-size: 0.875rem;
+          font-size: 16px;
           color: #111827;
           outline: none;
           transition: border-color 0.15s;
@@ -240,6 +277,11 @@ export default function CompanyProfile() {
         .input:focus {
           border-color: #2563eb;
           box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        @media (min-width: 640px) {
+          .input {
+            font-size: 0.875rem;
+          }
         }
       `}</style>
     </div>

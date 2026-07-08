@@ -31,7 +31,64 @@ interface UsageData {
   limit: number;
 }
 
-const DAILY_TOKEN_LIMIT = 100_000;
+const USAGE_REFRESH_EVENT = 'auric:usage-updated';
+
+function useTokenUsage() {
+  const [usage, setUsage] = useState<UsageData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    let es: EventSource | null = null;
+    let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const connect = () => {
+      es = new EventSource('/api/usage/stream');
+
+      es.onmessage = (event) => {
+        if (cancelled) return;
+        try {
+          const data = JSON.parse(event.data);
+          setUsage(data);
+          setLoading(false);
+        } catch {
+          // ignore malformed payload
+        }
+      };
+
+      es.onerror = () => {
+        es?.close();
+        if (!cancelled) {
+          reconnectTimer = setTimeout(connect, 3000);
+        }
+      };
+    };
+
+
+    const refetchNow = async () => {
+      try {
+        const res = await fetch('/api/usage', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled) setUsage(data);
+      } catch {
+        // ignore, the SSE stream will catch up shortly
+      }
+    };
+
+    connect();
+    window.addEventListener(USAGE_REFRESH_EVENT, refetchNow);
+
+    return () => {
+      cancelled = true;
+      es?.close();
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+      window.removeEventListener(USAGE_REFRESH_EVENT, refetchNow);
+    };
+  }, []);
+
+  return { usage, loading };
+}
 
 export default function Sidebar() {
   const router = useRouter();
@@ -39,27 +96,9 @@ export default function Sidebar() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  const [usage, setUsage] = useState<UsageData | null>(null);
+  const { usage, loading } = useTokenUsage();
 
-  useEffect(() => {
-    let cancelled = false;
-
-    (async () => {
-      try {
-        const res = await fetch('/api/usage');
-        if (!res.ok) return;
-        const data = await res.json();
-        if (!cancelled) setUsage(data);
-      } catch {
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const limit = usage?.limit ?? DAILY_TOKEN_LIMIT;
+  const limit = usage?.limit ?? 0;
   const used = usage?.used ?? 0;
   const pct = limit > 0 ? Math.min(100, (used / limit) * 100) : 0;
 
@@ -164,10 +203,25 @@ export default function Sidebar() {
         <div className="shrink-0 border-t border-gray-200 px-3 py-4">
           {collapsed ? (
             <div
-              title={`${used.toLocaleString()} / ${limit.toLocaleString()} tokens today`}
-              className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
+              title={
+                loading
+                  ? 'Loading usage…'
+                  : `${used.toLocaleString()} / ${limit.toLocaleString()} tokens today`
+              }
+              className={`mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 ${
+                loading ? 'animate-pulse' : ''
+              }`}
             >
               <Sparkles className="h-4 w-4" />
+            </div>
+          ) : loading ? (
+            <div className="rounded-2xl bg-gray-50 p-3.5">
+              <div className="mb-2 flex items-center justify-between">
+                <div className="h-3 w-20 animate-pulse rounded bg-gray-200" />
+                <div className="h-3 w-14 animate-pulse rounded bg-gray-200" />
+              </div>
+              <div className="h-1.5 w-full animate-pulse rounded-full bg-gray-200" />
+              <div className="mt-2 h-2.5 w-24 animate-pulse rounded bg-gray-100" />
             </div>
           ) : (
             <div className="rounded-2xl bg-gray-50 p-3.5">
@@ -177,7 +231,7 @@ export default function Sidebar() {
                   <span className="text-xs font-semibold text-gray-900">Daily Usage</span>
                 </div>
                 <span className="text-[11px] text-gray-500">
-                  {usage ? `${used.toLocaleString()} / ${limit.toLocaleString()}` : '—'}
+                  {`${used.toLocaleString()} / ${limit.toLocaleString()}`}
                 </span>
               </div>
 

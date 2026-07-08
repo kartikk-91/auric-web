@@ -389,7 +389,18 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
               ),
             );
             setSendingMessage(false);
-            loadChats();
+
+            if (optimisticNewChat) {
+              loadChats();
+            } else {
+              setChats((prev) =>
+                prev.map((c) =>
+                  c.chatId === activeChatId
+                    ? { ...c, updatedAt: new Date().toISOString() }
+                    : c,
+                ),
+              );
+            }
           },
 
           onError: (errMsg) => {

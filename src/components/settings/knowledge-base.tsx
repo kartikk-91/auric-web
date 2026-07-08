@@ -97,13 +97,14 @@ export default function KnowledgeBase() {
 
   return (
     <div className="space-y-6">
-      <div className="grid sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <StatCard
           icon={Database}
           iconBg="bg-blue-50"
           iconColor="text-blue-600"
           label="Documents indexed"
-          value={documents === null ? "—" : String(documents.length)}
+          value={documents === null ? "" : String(documents.length)}
+          loading={documents === null}
         />
         <StatCard
           icon={Clock}
@@ -111,10 +112,11 @@ export default function KnowledgeBase() {
           iconColor="text-purple-600"
           label="Last upload"
           value={lastUpload}
+          loading={documents === null}
         />
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
       <div className="flex items-center justify-between mb-1">
         <h2 className="text-base font-semibold text-gray-900">Knowledge base</h2>
       </div>
@@ -131,7 +133,7 @@ export default function KnowledgeBase() {
         onDragLeave={() => setIsDragging(false)}
         onDrop={onDrop}
         onClick={() => inputRef.current?.click()}
-        className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-6 py-10 text-center cursor-pointer transition-colors ${
+        className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-4 sm:px-6 py-8 sm:py-10 text-center cursor-pointer transition-colors ${
           isDragging ? "border-blue-500 bg-blue-50/50" : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
         }`}
       >
@@ -153,11 +155,11 @@ export default function KnowledgeBase() {
           </>
         ) : (
           <>
-            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
-              <UploadCloud className="w-5 h-5 text-blue-600" />
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-50 flex items-center justify-center">
+              <UploadCloud className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-blue-600" />
             </div>
-            <p className="text-sm font-medium text-gray-700">
-              Click to upload or drag and drop
+            <p className="text-sm font-medium text-gray-700 px-2">
+              Tap to upload, or drag and drop
             </p>
             <p className="text-xs text-gray-400">PDF, DOCX, TXT, MD, or CSV — up to 20MB</p>
           </>
@@ -173,11 +175,20 @@ export default function KnowledgeBase() {
 
       <div className="mt-6">
         {documents === null ? (
-          <div className="space-y-2">
+          <ul className="divide-y divide-gray-100">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-14 rounded-xl bg-gray-50 animate-pulse" />
+              <li key={i} className="flex items-center justify-between py-3 animate-pulse">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-9 h-9 rounded-lg bg-gray-100 shrink-0" />
+                  <div className="space-y-1.5 min-w-0">
+                    <div className="h-3 w-32 sm:w-48 bg-gray-100 rounded" />
+                    <div className="h-2.5 w-20 bg-gray-100 rounded" />
+                  </div>
+                </div>
+                <div className="w-8 h-8 rounded-lg bg-gray-100 shrink-0" />
+              </li>
             ))}
-          </div>
+          </ul>
         ) : documents.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-sm text-gray-400">No documents uploaded yet.</p>
@@ -185,7 +196,7 @@ export default function KnowledgeBase() {
         ) : (
           <ul className="divide-y divide-gray-100">
             {documents.map((doc) => (
-              <li key={doc.document_id} className="flex items-center justify-between py-3">
+              <li key={doc.document_id} className="flex items-center justify-between gap-2 py-3">
                 <div className="flex items-center gap-3 min-w-0">
                   <div
                     className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
@@ -196,7 +207,7 @@ export default function KnowledgeBase() {
                   </div>
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">{doc.name}</p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-gray-400 truncate">
                       {doc.type.toUpperCase()} · Uploaded {formatDate(doc.uploadedAt)}
                     </p>
                   </div>
@@ -204,7 +215,7 @@ export default function KnowledgeBase() {
                 <button
                   onClick={() => handleDelete(doc.document_id)}
                   disabled={deletingId === doc.document_id}
-                  className="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                  className="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 shrink-0"
                   aria-label={`Delete ${doc.name}`}
                 >
                   {deletingId === doc.document_id ? (
@@ -229,21 +240,27 @@ function StatCard({
   iconColor,
   label,
   value,
+  loading,
 }: {
   icon: React.ElementType;
   iconBg: string;
   iconColor: string;
   label: string;
   value: string;
+  loading?: boolean;
 }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center gap-3">
-      <div className={`w-10 h-10 rounded-xl ${iconBg} flex items-center justify-center shrink-0`}>
-        <Icon className={`w-4.5 h-4.5 ${iconColor}`} />
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-5 flex items-center gap-3">
+      <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${iconBg} flex items-center justify-center shrink-0`}>
+        <Icon className={`w-4 h-4 sm:w-4.5 sm:h-4.5 ${iconColor}`} />
       </div>
-      <div>
-        <p className="text-lg font-semibold text-gray-900 leading-tight">{value}</p>
-        <p className="text-xs text-gray-500">{label}</p>
+      <div className="min-w-0">
+        {loading ? (
+          <div className="h-5 w-10 bg-gray-100 rounded animate-pulse mb-1" />
+        ) : (
+          <p className="text-base sm:text-lg font-semibold text-gray-900 leading-tight">{value}</p>
+        )}
+        <p className="text-xs text-gray-500 truncate">{label}</p>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import { getCurrentCompany } from "@/lib/auth-session";
 export const maxDuration = 120;
 
-const MAX_FILE_BYTES = 20 * 1024 * 1024; // 20MB — match your FastAPI validate_file_size
+const MAX_FILE_BYTES = 20 * 1024 * 1024; // 20MB 
 const ALLOWED_EXTENSIONS = ["pdf", "docx", "doc", "txt", "md", "csv"];
 const ENGINE_TIMEOUT_MS = 110_000;
 
