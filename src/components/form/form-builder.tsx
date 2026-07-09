@@ -102,7 +102,7 @@ export default function FormBuilder({
             className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
             onClick={() => setShowSidebar(false)}
           />
-          <div className="fixed left-0 top-0 z-50 flex h-dvh w-[300px] max-w-[90vw] flex-col overflow-hidden bg-white shadow-2xl animate-in slide-in-from-left duration-200">
+          <div className="fixed left-0 top-0 z-100 flex h-dvh w-[300px] max-w-[90vw] flex-col overflow-hidden bg-white shadow-2xl animate-in slide-in-from-left duration-200">
             <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-5 py-4">
               <h3 className="text-sm font-semibold text-gray-900">Add Field</h3>
               <button
@@ -130,7 +130,7 @@ export default function FormBuilder({
             className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
             onClick={() => setShowSettings(false)}
           />
-          <div className="fixed right-0 top-0 z-50 flex h-dvh w-[340px] max-w-[95vw] flex-col overflow-hidden bg-white shadow-2xl animate-in slide-in-from-right duration-200">
+          <div className="fixed right-0 top-0 z-100 flex h-dvh w-[340px] max-w-[95vw] flex-col overflow-hidden bg-white shadow-2xl animate-in slide-in-from-right duration-200">
             <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-5 py-4">
               <h3 className="text-sm font-semibold text-gray-900">Field Settings</h3>
               <button

@@ -73,7 +73,7 @@ function FieldTypeSelect({
       {open && !disabled && (
         <div
           role="listbox"
-          className="custom-scroll absolute z-30 mt-1 max-h-64 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-sm"
+          className="custom-scroll absolute z-100 mt-1 max-h-64 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-sm"
         >
           {fieldTypes.map((f) => {
             const isSelected = f.type === value;

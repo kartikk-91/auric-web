@@ -49,17 +49,8 @@ export default function FeedbackTable({
 
     observer.observe(tableRef.current);
 
-    // Reading offsetWidth synchronously on mount can capture a stale
-    // value (e.g. 0) if this component mounts while the browser tab is
-    // backgrounded, since layout work is throttled for hidden tabs.
-    // Deferring to the next frame ensures layout has actually settled.
     const raf = requestAnimationFrame(measure);
 
-    // If the width was captured while the tab was hidden, the
-    // ResizeObserver won't fire again on its own once the tab becomes
-    // active (the element's true size never changed, only our reading
-    // of it was wrong). Re-measure explicitly when the tab regains
-    // visibility.
     const handleVisibilityChange = () => {
       if (!document.hidden) {
         requestAnimationFrame(measure);

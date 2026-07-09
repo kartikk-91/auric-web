@@ -291,7 +291,7 @@ export default function FeedbackDashboard() {
 
       {!isDesktop && isMobileModalOpen && selectedFeedback && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
-          <div className="bg-white rounded-3xl sm:rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
+          <div className="bg-white rounded-3xl sm:rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto shadow-2xl">
             <FeedbackDetailPanel
               feedback={selectedFeedback}
               onClose={() => setIsMobileModalOpen(false)}
