@@ -102,7 +102,7 @@ const MainForm = ({ form }: { form: any }) => {
 
   if (submitStatus === 'success') {
     return (
-      <div className={`${CARD_CLASSES} flex min-h-[420px] flex-col items-center justify-center text-center`}>
+      <div className={`${CARD_CLASSES} min-h-[100dvh] flex-col items-center justify-center text-center sm:min-h-[420px]`}>
         <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-green-100 bg-green-50">
           <CheckCircle2 className="h-7 w-7 text-green-600" />
         </div>
@@ -128,7 +128,7 @@ const MainForm = ({ form }: { form: any }) => {
 
   if (submitStatus === 'error') {
     return (
-      <div className={`${CARD_CLASSES} flex min-h-[420px] flex-col items-center justify-center text-center`}>
+      <div className={`${CARD_CLASSES} min-h-[100dvh] flex-col items-center justify-center text-center sm:min-h-[420px]`}>
         <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-red-100 bg-red-50">
           <AlertTriangle className="h-7 w-7 text-red-500" />
         </div>
@@ -143,7 +143,7 @@ const MainForm = ({ form }: { form: any }) => {
 
         <button
           onClick={() => setSubmitStatus('idle')}
-          className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-neutral-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-neutral-800"
+          className="mt-8 inline-flex items-center gap-2 rounded-2xl border border-neutral-200 px-5 py-3 text-sm font-medium text-neutral-700 transition hover:bg-neutral-50"
         >
           <RotateCcw className="h-4 w-4" />
           Try again
