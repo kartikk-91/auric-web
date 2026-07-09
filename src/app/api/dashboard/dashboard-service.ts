@@ -120,7 +120,15 @@ async function fetchActiveFormId(c_id: string): Promise<string | null> {
     return form?.formId ?? null;
 }
 
-const EMPTY_DASHBOARD: DashboardData = {
+async function fetchCompanyOwnerName(c_id: string): Promise<string> {
+    const company = await prisma.company.findUnique({
+        where: { c_id },
+        select: { user: { select: { name: true } } },
+    });
+    return company?.user?.name ?? "";
+}
+
+const EMPTY_DASHBOARD: Omit<DashboardData, "userName"> = {
     stats: [],
     ratingDistribution: {},
     sentimentDistribution: { Positive: 0, Neutral: 0, Negative: 0 },
@@ -130,19 +138,19 @@ const EMPTY_DASHBOARD: DashboardData = {
     totalFeedbacks: 0,
     recentTestimonials: [],
     formLink: "",
-    wallLink: "",
 };
 
 export async function getDashboardService(c_id: string): Promise<DashboardData> {
-    const [analytics, comparison, recentTestimonials, formId] =
+    const [analytics, comparison, recentTestimonials, formId, userName] =
         await Promise.all([
             fetchAnalytics(c_id),
             fetchComparisonMetrics(c_id),
             fetchRecentTestimonials(c_id),
             fetchActiveFormId(c_id),
+            fetchCompanyOwnerName(c_id),
         ]);
 
-    if (!analytics) return EMPTY_DASHBOARD;
+    if (!analytics) return { ...EMPTY_DASHBOARD, userName };
     const prevRating = comparison.previous.avgRating;
     const prevSentiment = comparison.previous.avgSentiment;
     const prevAuricScore =
@@ -180,6 +188,7 @@ export async function getDashboardService(c_id: string): Promise<DashboardData> 
     };
 
     return {
+        userName,
         stats,
         ratingDistribution: (analytics.ratingDist ?? {}) as Record<string, number>,
         sentimentDistribution,
@@ -189,6 +198,5 @@ export async function getDashboardService(c_id: string): Promise<DashboardData> 
         totalFeedbacks: analytics.totalFeedbacks ?? 0,
         recentTestimonials,
         formLink: formId ? `/feedback/${formId}` : "",
-        wallLink: `/wall/${c_id}`,
     };
 }

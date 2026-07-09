@@ -59,7 +59,7 @@ export default function DashboardHeader() {
           </h1>
 
           <p className="mt-1 text-sm leading-relaxed text-gray-400 sm:text-[15px]">
-            Welcome back, Kartik! Here's what's happening with your feedbacks.
+            Welcome back{dashboardData.userName ? `, ${dashboardData.userName}` : ""}! Here's what's happening with your feedbacks.
           </p>
         </div>
 

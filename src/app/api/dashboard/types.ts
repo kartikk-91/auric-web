@@ -16,6 +16,7 @@ export interface Testimonial {
 }
 
 export interface DashboardData {
+  userName: string;
   stats: StatCard[];
   ratingDistribution: Record<string, number>;
   sentimentDistribution: {
@@ -29,7 +30,6 @@ export interface DashboardData {
   totalFeedbacks: number;
   recentTestimonials: Testimonial[];
   formLink: string;
-  wallLink: string;
 }
 
 export interface DashboardApiResponse {
