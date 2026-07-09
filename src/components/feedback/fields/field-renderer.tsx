@@ -1,15 +1,15 @@
 
 import { FormField } from "@/types/form";
-import RatingField from "./fields/rating-field";
-import NPSField from "./fields/nps-field";
-import CheckboxesField from "./fields/checkboxes-field";
-import DropdownField from "./fields/dropdown-field";
-import EmailField from "./fields/email-field";
-import PhoneField from "./fields/phone-field";
-import WebsiteField from "./fields/website-field";
-import DateField from "./fields/date-field";
-import ShortAnswerField from "./fields/shortanswer-field";
-import MultipleChoiceField from "./fields/multiple-choice-field";
+import RatingField from "./rating-field";
+import NPSField from "./nps-field";
+import CheckboxesField from "./checkboxes-field";
+import DropdownField from "./dropdown-field";
+import EmailField from "./email-field";
+import PhoneField from "./phone-field";
+import WebsiteField from "./website-field";
+import DateField from "./date-field";
+import ShortAnswerField from "./shortanswer-field";
+import MultipleChoiceField from "./multiple-choice-field";
 
 
 
