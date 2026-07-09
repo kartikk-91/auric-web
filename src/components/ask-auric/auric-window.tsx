@@ -233,7 +233,7 @@ export default function AskAuricWindow({ companyId }: AskAuricWindowProps) {
 
         <div
           ref={drawerRef}
-          className={`fixed right-0 top-0 z-50 w-[85vw] max-w-[320px] transform bg-white shadow-2xl transition-transform duration-300 ease-in-out xl:hidden ${
+          className={`fixed right-0 top-0 z-100 w-[85vw] max-w-[320px] transform bg-white shadow-2xl transition-transform duration-300 ease-in-out xl:hidden ${
             sidebarOpen ? "translate-x-0" : "translate-x-full"
           }`}
           style={{ height: "var(--app-height, 100dvh)" }}
