@@ -75,7 +75,7 @@ Auric transforms raw customer feedback into actionable insights through an async
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/auric.git
+git clone https://github.com/kartikk-91/auric-web
 
 # Navigate to the project
 cd auric
