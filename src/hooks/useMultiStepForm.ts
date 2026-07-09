@@ -1,46 +1,138 @@
+import { useMemo, useState } from 'react'
+import { FormField } from '@/types/form'
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const WEBSITE_RE = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/i
+const PHONE_RE = /^[+]?[\d\s()-]{7,15}$/
 
-import { FormField } from "@/types/form";
-import { useState } from "react";
+function isEmpty(value: any) {
+  if (value === undefined || value === null) return true
+  if (typeof value === 'string') return value.trim().length === 0
+  if (Array.isArray(value)) return value.length === 0
+  return false
+}
 
+function validateField(field: FormField, value: any): string | null {
+  const required = (field as any).required
 
-export function useMultiStepForm(fields: FormField[], onSubmit: any) {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [responses, setResponses] = useState<Record<string, any>>({});
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  if (required && isEmpty(value)) {
+    return 'This field is required.'
+  }
 
-  const currentField = fields[currentStep];
-  const isLastStep = currentStep === fields.length - 1;
+  if (isEmpty(value)) {
+    // not required and empty -> nothing else to validate
+    return null
+  }
 
-  const next = () => {
-    if (currentField.required && !responses[currentField.id]) {
-      setErrors({ [currentField.id]: "This field is required" });
-      return;
-    }
+  switch (field.type) {
+    case 'email':
+      if (!EMAIL_RE.test(String(value))) {
+        return 'Please enter a valid email address.'
+      }
+      break
 
-    setErrors({});
+    case 'website':
+      if (!WEBSITE_RE.test(String(value))) {
+        return 'Please enter a valid website URL.'
+      }
+      break
 
-    if (isLastStep) onSubmit(responses);
-    else setCurrentStep((p) => p + 1);
-  };
+    case 'phone':
+      if (!PHONE_RE.test(String(value))) {
+        return 'Please enter a valid phone number.'
+      }
+      break
 
-  const prev = () => {
-    if (currentStep > 0) setCurrentStep((p) => p - 1);
-  };
+    case 'rating':
+    case 'nps':
+      if (typeof value !== 'number' || Number.isNaN(value)) {
+        return 'Please select a value.'
+      }
+      break
+
+    case 'checkboxes':
+      if (!Array.isArray(value) || value.length === 0) {
+        return 'Please select at least one option.'
+      }
+      break
+
+    default:
+      break
+  }
+
+  return null
+}
+
+export function useMultiStepForm(
+  fields: FormField[],
+  onSubmit: (responses: Record<string, any>) => void
+) {
+  const [currentStep, setCurrentStep] = useState(0)
+  const [responses, setResponses] = useState<Record<string, any>>({})
+  const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const total = fields.length
+  const currentField = fields[currentStep] ?? fields[0]
+  const isLastStep = currentStep === total - 1
 
   const update = (value: any) => {
-    setResponses((prev) => ({ ...prev, [currentField.id]: value }));
-    setErrors({});
-  };
+    setResponses((prev) => ({
+      ...prev,
+      [currentField.id]: value,
+    }))
 
-  return {
-    currentStep,
-    currentField,
-    responses,
-    errors,
-    isLastStep,
-    next,
-    prev,
-    update,
-  };
+    // clear the error for this field as soon as the user starts fixing it
+    setErrors((prev) => {
+      if (!prev[currentField.id]) return prev
+      const next = { ...prev }
+      delete next[currentField.id]
+      return next
+    })
+  }
+
+  const validateCurrent = () => {
+    const error = validateField(currentField, responses[currentField.id])
+
+    setErrors((prev) => {
+      const next = { ...prev }
+      if (error) {
+        next[currentField.id] = error
+      } else {
+        delete next[currentField.id]
+      }
+      return next
+    })
+
+    return !error
+  }
+
+  const next = () => {
+    if (!validateCurrent()) return
+
+    if (isLastStep) {
+      onSubmit(responses)
+      return
+    }
+
+    setCurrentStep((s) => Math.min(s + 1, total - 1))
+  }
+
+  const prev = () => {
+    setCurrentStep((s) => Math.max(s - 1, 0))
+  }
+
+  return useMemo(
+    () => ({
+      currentStep,
+      currentField,
+      responses,
+      errors,
+      isLastStep,
+      next,
+      prev,
+      update,
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [currentStep, currentField, responses, errors, isLastStep]
+  )
 }

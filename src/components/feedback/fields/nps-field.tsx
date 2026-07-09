@@ -1,25 +1,41 @@
-export default function NPSField({ value, onChange }: { value?: number; onChange: (val: number) => void }) {
+export default function NPSField({
+  value,
+  onChange,
+}: {
+  value?: number
+  onChange: (val: number) => void
+}) {
+  const nums = Array.from({ length: 11 }, (_, i) => i)
+
   return (
     <div>
-      <div className="grid grid-cols-11 gap-2 mb-4">
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
-          <button
-            key={num}
-            onClick={() => onChange(num)}
-            className={`aspect-square rounded-lg border-2 transition-all font-semibold text-sm sm:text-base ${
-              value === num
-                ? 'border-purple-600 bg-purple-600 text-white shadow-lg scale-110'
-                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700'
-            }`}
-          >
-            {num}
-          </button>
-        ))}
+      <div className="grid grid-cols-6 gap-1.5 sm:grid-cols-11 sm:gap-2">
+        {nums.map((num) => {
+          const isSelected = value === num
+
+          return (
+            <button
+              key={num}
+              type="button"
+              onClick={() => onChange(num)}
+              aria-pressed={isSelected}
+              className={`aspect-square rounded-lg border-2 text-sm font-semibold transition-all duration-150 active:scale-95 sm:text-base
+                ${
+                  isSelected
+                    ? 'border-purple-600 bg-purple-600 text-white shadow-md shadow-purple-200'
+                    : 'border-gray-200 text-gray-600 hover:border-purple-300 hover:bg-purple-50/50'
+                }`}
+            >
+              {num}
+            </button>
+          )
+        })}
       </div>
-      <div className="flex justify-between text-xs sm:text-sm text-gray-500">
+
+      <div className="mt-3 flex justify-between text-xs font-medium text-gray-400 sm:text-sm">
         <span>Not at all likely</span>
         <span>Extremely likely</span>
       </div>
     </div>
-  );
+  )
 }

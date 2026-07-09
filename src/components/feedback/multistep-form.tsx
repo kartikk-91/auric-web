@@ -21,86 +21,78 @@ export default function MultiStepForm({
     next,
     prev,
     update,
-  } = useMultiStepForm(
-    fields,
-    onSubmit
-  );
+  } = useMultiStepForm(fields, onSubmit);
 
   return (
     <FormLayout>
-
       <ProgressBar
         current={currentStep}
         total={fields.length}
         brandColor={brandColor}
       />
 
-      <QuestionHeader
-        question={
-          currentField.question
-        }
-        subtext={
-          currentField.helpText
-        }
-        brandName={
-          brandName
-        }
-        brandColor={
-          brandColor
-        }
-      />
-
-      
-      <div className="mb-8 min-h-[140px] w-full">
-
-        <FieldRenderer
-          field={currentField}
-          value={
-            responses[
-              currentField.id
-            ]
-          }
-          onChange={update}
+      {/* key on the field id remounts this block on every step change,
+          which combined with the animate-step class below produces a
+          simple, dependency-free fade/slide transition */}
+      <div key={currentField.id} className="animate-step">
+        <QuestionHeader
+          question={currentField.question}
+          subtext={currentField.helpText}
+          brandName={brandName}
+          brandColor={brandColor}
+          required={currentField.required}
         />
 
-        {errors[
-          currentField.id
-        ] && (
-          <p className="mt-2 text-sm text-red-500">
-            {
-              errors[
-                currentField.id
-              ]
-            }
-          </p>
-        )}
+        <div className="mb-8 min-h-[140px] w-full">
+          <FieldRenderer
+            field={currentField}
+            value={responses[currentField.id]}
+            onChange={update}
+          />
+
+          {errors[currentField.id] && (
+            <p className="mt-2 flex items-center gap-1.5 text-sm text-red-500">
+              <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3.75m0 3.75h.008v.008H12v-.008zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {errors[currentField.id]}
+            </p>
+          )}
+        </div>
       </div>
 
-      
       <div
         className={
           isSubmitting
-            ? "pointer-events-none opacity-70 transition"
-            : "transition"
+            ? "pointer-events-none opacity-70 transition-opacity"
+            : "transition-opacity"
         }
       >
         <NavigationButtons
           onPrev={prev}
           onNext={next}
           isLast={isLastStep}
-          disablePrev={
-            currentStep === 0 ||
-            isSubmitting
-          }
-          isSubmitting={
-            isSubmitting
-          }
-          brandColor={
-            brandColor
-          }
+          disablePrev={currentStep === 0 || isSubmitting}
+          isSubmitting={isSubmitting}
+          brandColor={brandColor}
         />
       </div>
 
+      <style jsx>{`
+        @keyframes step-in {
+          from {
+            opacity: 0;
+            transform: translateX(8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        .animate-step {
+          animation: step-in 0.22s ease-out;
+        }
+      `}</style>
     </FormLayout>
   );
 }
