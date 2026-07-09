@@ -9,7 +9,7 @@ export default function NPSField({
 
   return (
     <div>
-      <div className="grid grid-cols-6 gap-1.5 sm:grid-cols-11 sm:gap-2">
+      <div className="grid grid-cols-11 gap-0.5 xs:gap-1 sm:gap-2">
         {nums.map((num) => {
           const isSelected = value === num
 
@@ -19,7 +19,7 @@ export default function NPSField({
               type="button"
               onClick={() => onChange(num)}
               aria-pressed={isSelected}
-              className={`aspect-square rounded-lg border-2 text-sm font-semibold transition-all duration-150 active:scale-95 sm:text-base
+              className={`aspect-square min-w-0 rounded-md border sm:border-2 sm:rounded-lg text-[10px] font-semibold transition-all duration-150 active:scale-95 xs:text-xs sm:text-base
                 ${
                   isSelected
                     ? 'border-purple-600 bg-purple-600 text-white shadow-md shadow-purple-200'

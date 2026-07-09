@@ -9,10 +9,7 @@ export interface FeedbackFilterParams {
   ageRange?: string | null;
 }
 
-/**
- * Turns a UI-facing date range label into a `createdAt` gte bound.
- * "All Time" (or anything unrecognized) means no bound at all.
- */
+
 function getDateRangeStart(dateRange?: string | null): Date | null {
   if (!dateRange || dateRange === "All Time") return null;
 
@@ -35,9 +32,7 @@ function getDateRangeStart(dateRange?: string | null): Date | null {
   }
 }
 
-/**
- * Turns a UI-facing age bucket ("18-25", "50+", ...) into an age range.
- */
+
 function getAgeBounds(ageRange?: string | null): { gte?: number; lte?: number } | null {
   if (!ageRange) return null;
 
@@ -55,12 +50,6 @@ function getAgeBounds(ageRange?: string | null): { gte?: number; lte?: number } 
   return { gte, lte };
 }
 
-/**
- * Builds the full `where` clause for the Feedback model, scoped to a company,
- * given the same filter params the dashboard UI exposes (date range, sentiment,
- * location search, age bucket). Keeping this in one place means the paginated
- * list endpoint and the export endpoint can never drift out of sync.
- */
 export function buildFeedbackWhere(
   companyId: string,
   filters: FeedbackFilterParams

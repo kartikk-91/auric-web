@@ -7,13 +7,12 @@ import { CheckCircle2, RotateCcw, AlertTriangle } from 'lucide-react'
 import FeedbackQuestions from './feedback-questions'
 import PersonalInfo from './personal-info'
 import VerifyIdentity from './verify-identity'
+import FeedbackFooter from './feedback-footer'
 
 type SubmitStatus = 'idle' | 'submitting' | 'success' | 'error'
 
-// Single source of truth for the card's width/sizing so it never shifts
-// between steps or between the form / success / error states.
 const CARD_CLASSES =
-  'relative z-10 w-full max-w-2xl md:w-3/4 lg:w-1/2 rounded-[2rem] border border-neutral-200 bg-white p-5 shadow-[0_10px_40px_rgba(0,0,0,0.06)] sm:p-6 md:p-8'
+  'relative z-10 flex w-full max-w-2xl flex-col md:w-3/4 lg:w-1/2 rounded-none sm:rounded-[2rem] border-0 sm:border sm:border-neutral-200 bg-white p-4 shadow-none sm:shadow-[0_10px_40px_rgba(0,0,0,0.06)] sm:p-6 md:p-8'
 
 const MainForm = ({ form }: { form: any }) => {
   const [step, setStep] = useState(1)
@@ -154,7 +153,7 @@ const MainForm = ({ form }: { form: any }) => {
   }
 
   return (
-    <div className={`${CARD_CLASSES} min-h-[540px]`}>
+    <div className={`${CARD_CLASSES} min-h-[100dvh] sm:min-h-[540px]`}>
       {step === 1 && (
         <VerifyIdentity
           company={company}
@@ -184,6 +183,10 @@ const MainForm = ({ form }: { form: any }) => {
           isSubmitting={submitStatus === 'submitting'}
         />
       )}
+
+      <div className="mt-6 flex justify-center sm:hidden">
+        <FeedbackFooter />
+      </div>
     </div>
   )
 }

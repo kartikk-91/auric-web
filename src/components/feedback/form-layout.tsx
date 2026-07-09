@@ -4,8 +4,8 @@ export default function FormLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="w-full">
-      <div className="mx-auto flex w-full flex-col">
+    <div className="flex w-full flex-1 flex-col">
+      <div className="mx-auto flex w-full flex-1 flex-col">
         {children}
       </div>
     </div>

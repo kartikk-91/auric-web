@@ -40,10 +40,10 @@ const FeedbackForm = async ({
     <div className="relative min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-pink-50 via-white to-purple-50">
       <FeedbackBackground />
 
-      <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-start px-4 py-8 md:justify-center md:py-10">
+      <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-start px-0 py-0 sm:px-4 sm:py-8 md:justify-center md:py-10">
         <MainForm form={form} />
 
-        <div className="mt-6 w-full flex justify-center">
+        <div className="mt-6 hidden w-full justify-center sm:flex">
           <FeedbackFooter />
         </div>
       </div>

@@ -1,11 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
 
-// Pinned to the viewport with `fixed inset-0` so it never shifts as step
-// content changes height. Uses `z-0` (not a negative z-index) and the
-// gradient/content wrapper above it must stay transparent + `relative z-10`,
-// otherwise a sibling's own background paints over this in normal stacking
-// order and the image disappears even though it's technically "there".
 const FeedbackBackground = () => {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none select-none bg-gradient-to-br from-pink-50 via-white to-purple-50">

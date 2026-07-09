@@ -41,7 +41,7 @@ const VerifyIdentity = ({
   }
 
   return (
-    <div className="flex min-h-[540px] w-full flex-col">
+    <div className="flex w-full flex-1 flex-col">
       <Timeline currentStep={1} />
 
       <div className="flex flex-1 flex-col items-center justify-center">
@@ -64,11 +64,11 @@ const VerifyIdentity = ({
             </div>
           </div>
 
-          <p className="mb-3 text-sm font-medium tracking-wide text-purple-600 uppercase">
+          <p className="mb-3 text-base font-semibold tracking-wide text-purple-600 uppercase sm:text-lg">
             {brandName}
           </p>
 
-          <h1 className="mx-auto mb-3 max-w-sm text-3xl font-semibold tracking-tight text-gray-900 sm:text-[38px] sm:leading-[44px]">
+          <h1 className="mx-auto mb-3 max-w-sm text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl sm:leading-[44px]">
             Verify your identity
           </h1>
 

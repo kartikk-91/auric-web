@@ -23,7 +23,7 @@ const Timeline = ({
   return (
     <>
       
-      <div className="mb-6 flex items-center justify-center md:hidden">
+      <div className="mb-6 flex items-center justify-center md:hidden pl-4">
         <div className="flex w-full max-w-xs items-start justify-between">
           {steps.map(
             (step, index) => {

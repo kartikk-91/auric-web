@@ -178,7 +178,7 @@ model Analytics {
 model AuricChat {
   chat_id   String   @id @default(cuid())
   c_id      String
-  title     String?  @db.VarChar(255)  // auto-generated from first user message
+  title     String?  @db.VarChar(255)  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -211,8 +211,8 @@ model AuricDocument {
   document_id String   @id @default(cuid())
   c_id        String
   name        String   @db.VarChar(255)
-  type        String   @db.VarChar(50)   // pdf, docx, txt, url …
-  storageKey  String   @db.VarChar(500)  // S3/GCS object key
+  type        String   @db.VarChar(50)  
+  storageKey  String   @db.VarChar(500) 
   uploadedAt  DateTime @default(now())
 
   company Company @relation(fields: [c_id], references: [c_id], onDelete: Cascade)
@@ -254,7 +254,7 @@ model AuricSettings {
   monthlyTokenLimit Int      @default(1000000)
   internetEnabled   Boolean  @default(true)
   memoryEnabled     Boolean  @default(true)
-  systemPrompt      String?  @db.Text  // optional system-prompt override
+  systemPrompt      String?  @db.Text 
   updatedAt         DateTime @updatedAt
 
   company Company @relation(fields: [c_id], references: [c_id], onDelete: Cascade)

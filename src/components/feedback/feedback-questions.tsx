@@ -26,7 +26,7 @@ const FeedbackQuestions = ({
   const brandName = company?.cname || 'this company'
 
   return (
-    <div className="flex h-full min-h-fit w-full flex-col">
+    <div className="flex h-full w-full flex-1 flex-col">
       <Timeline currentStep={3} />
 
       <div className="flex flex-1 flex-col items-center px-1 sm:px-2 md:px-6">
@@ -63,8 +63,8 @@ const FeedbackQuestions = ({
         <div
           className={
             isSubmitting
-              ? 'w-full transition pointer-events-none opacity-70'
-              : 'w-full transition'
+              ? 'flex w-full flex-1 flex-col pointer-events-none opacity-70 transition'
+              : 'flex w-full flex-1 flex-col transition'
           }
         >
           <MultiStepForm

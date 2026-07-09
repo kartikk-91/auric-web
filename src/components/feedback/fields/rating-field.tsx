@@ -1,4 +1,3 @@
-
 export default function RatingField({ value, onChange }: any) {
   const ratings = [
     { value: 1, emoji: "😞", label: "Very poor", color: "#ef4444", bg: "#fff5f5", darkBg: "#2d1010" },
@@ -18,7 +17,8 @@ export default function RatingField({ value, onChange }: any) {
             onClick={() => onChange(r.value)}
             style={isSelected ? { borderColor: r.color, background: r.bg, borderWidth: "1.5px" } : {}}
             className={`
-              flex flex-1 flex-col items-center gap-2 px-2 py-3
+              flex flex-1 basis-0 flex-col items-center justify-center gap-1 sm:gap-2 px-1 py-2.5 sm:px-2 sm:py-3
+              min-h-[64px] sm:min-h-0
               bg-white border border-gray-200 rounded-xl cursor-pointer
               transition-all duration-150
               hover:-translate-y-0.5 hover:border-gray-300 hover:bg-gray-50
@@ -32,7 +32,7 @@ export default function RatingField({ value, onChange }: any) {
               {r.emoji}
             </span>
 
-            <span className="text-[11px] font-medium text-gray-400 text-center whitespace-nowrap">
+            <span className="hidden sm:block text-[11px] font-medium text-gray-400 text-center whitespace-nowrap">
               {r.label}
             </span>
 

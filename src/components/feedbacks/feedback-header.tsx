@@ -60,11 +60,7 @@ interface MenuStyle {
   width: number;
 }
 
-/**
- * Measures a trigger button and returns a fixed-position style for its menu
- * that is clamped to the viewport, so the menu can never overflow off the
- * left or right edge of the screen no matter where the button sits.
- */
+
 function computeMenuStyle(
   buttonEl: HTMLElement,
   desiredWidth: number

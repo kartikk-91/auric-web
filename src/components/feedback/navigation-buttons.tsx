@@ -13,7 +13,7 @@ export default function NavigationButtons({
   isSubmitting = false,
 }: any) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row">
+    <div className="flex flex-row items-center justify-between gap-2 sm:gap-3">
 
       
       <button
@@ -22,9 +22,9 @@ export default function NavigationButtons({
           disablePrev ||
           isSubmitting
         }
-        className="flex w-full flex-1 items-center justify-center gap-2 rounded-xl border-2 border-gray-200 px-5 py-3.5 text-gray-700 transition disabled:cursor-not-allowed disabled:opacity-40 sm:px-6"
+        className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border-2 border-gray-200 px-3 py-2.5 text-sm text-gray-700 transition disabled:cursor-not-allowed disabled:opacity-40 sm:gap-2 sm:px-6 sm:py-3.5 sm:text-base"
       >
-        <ChevronLeft className="h-5 w-5 shrink-0" />
+        <ChevronLeft className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />
 
         <span className="truncate">
           Previous
@@ -37,7 +37,7 @@ export default function NavigationButtons({
         disabled={
           isSubmitting
         }
-        className="flex w-full flex-1 items-center justify-center gap-2 rounded-xl px-5 py-3.5 text-white transition disabled:cursor-not-allowed disabled:opacity-60 sm:px-6"
+        className="flex flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm text-white transition disabled:cursor-not-allowed disabled:opacity-60 sm:gap-2 sm:px-6 sm:py-3.5 sm:text-base"
         style={{
           backgroundColor:
             brandColor,
@@ -45,7 +45,7 @@ export default function NavigationButtons({
       >
         {isSubmitting ? (
           <>
-            <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
+            <Loader2 className="h-4 w-4 shrink-0 animate-spin sm:h-5 sm:w-5" />
 
             <span className="truncate">
               Submitting...
@@ -60,7 +60,7 @@ export default function NavigationButtons({
             </span>
 
             {!isLast && (
-              <ChevronRight className="h-5 w-5 shrink-0" />
+              <ChevronRight className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />
             )}
           </>
         )}

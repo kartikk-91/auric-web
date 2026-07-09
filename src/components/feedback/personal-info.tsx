@@ -43,7 +43,7 @@ const PersonalInfo = ({
   }
 
   return (
-    <div className="flex min-h-[540px] w-full flex-col">
+    <div className="flex w-full flex-1 flex-col">
       <Timeline currentStep={2} />
 
       <div className="flex w-full flex-col items-center">

@@ -11,11 +11,6 @@ interface TopicCount {
 const MAX_ROWS = 5;
 const MAX_LABEL_LENGTH = 22;
 
-/**
- * Normalizes a raw topic key from the analytics payload into a clean,
- * display-ready label, and merges near-duplicate keys (e.g. "Presentation &
- * Setup" vs "Presentation and Setup") so they don't appear as separate rows.
- */
 function normalizeTopic(raw: string): string {
   return raw
     .trim()
@@ -33,11 +28,7 @@ function truncate(label: string): string {
   return `${label.slice(0, MAX_LABEL_LENGTH - 1).trimEnd()}…`;
 }
 
-/**
- * Collapses a raw {topic: count} map into a sorted, deduped, display-ready
- * list capped at MAX_ROWS. Ties are broken alphabetically for stable
- * ordering across refreshes.
- */
+
 function processTopics(
   raw: Record<string, number> | undefined
 ): TopicCount[] {

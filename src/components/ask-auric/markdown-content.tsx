@@ -2,12 +2,7 @@
 
 import React, { ElementType, useMemo } from "react";
 
-/**
- * Lightweight markdown renderer — no external library needed.
- * Handles: headings, bold, italic, inline code, code blocks,
- * ordered/unordered lists, blockquotes, horizontal rules, tables,
- * and plain paragraphs.
- */
+
 
 type Token =
   | { type: "heading"; level: 1 | 2 | 3 | 4; text: string }
@@ -90,7 +85,7 @@ function tokenize(md: string): Token[] {
           .filter((_, idx, arr) => idx < arr.length - 1 || arr[arr.length - 1] !== "");
 
       const headers = parseRow(line);
-      i += 2; // skip separator
+      i += 2; 
       const rows: string[][] = [];
       while (i < lines.length && lines[i].includes("|")) {
         rows.push(parseRow(lines[i]));

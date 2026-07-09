@@ -20,7 +20,6 @@ function validateField(field: FormField, value: any): string | null {
   }
 
   if (isEmpty(value)) {
-    // not required and empty -> nothing else to validate
     return null
   }
 
@@ -80,8 +79,6 @@ export function useMultiStepForm(
       ...prev,
       [currentField.id]: value,
     }))
-
-    // clear the error for this field as soon as the user starts fixing it
     setErrors((prev) => {
       if (!prev[currentField.id]) return prev
       const next = { ...prev }
@@ -132,7 +129,7 @@ export function useMultiStepForm(
       prev,
       update,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   
     [currentStep, currentField, responses, errors, isLastStep]
   )
 }
