@@ -161,14 +161,14 @@ export default function FeedbackHeader({
 
   return (
     <div className="mb-6 md:mb-8">
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-        <div className="min-w-0">
-          <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+        <div className="min-w-0 ">
+          <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
             Customer Feedback
           </h1>
 
-          <p className="mt-2 text-sm sm:text-base text-gray-500 max-w-2xl leading-6">
-            View customer responses, AI-generated insights and testimonials collected across your feedback forms.
+          <p className="mt-1 text-xs sm:text-base text-gray-500 max-w-2xl leading-6">
+            All your customer feedback in one place.
           </p>
         </div>
 

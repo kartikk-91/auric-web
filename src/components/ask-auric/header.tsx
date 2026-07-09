@@ -35,10 +35,10 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
 
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h1 className="text-lg font-semibold text-gray-900 leading-none">Ask Auric</h1>
+                <h1 className="text-xl font-semibold text-gray-900 leading-none">Ask Auric</h1>
 
               </div>
-              <p className="mt-0.5 text-xs text-gray-400 truncate">
+              <p className="mt-0.5 text-sm text-gray-400 truncate">
                 AI-powered insights from your feedback
               </p>
             </div>

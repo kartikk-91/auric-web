@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Share2, Copy, Check, X, Link2 } from "lucide-react";
 import { useDashboard } from "@/providers/dashboard-provider";
+import PageHeader from "../shared/page-header";
+import HeaderButton from "../shared/header-button";
 
 export default function DashboardHeader() {
   const { dashboardData } = useDashboard();
@@ -30,7 +32,6 @@ export default function DashboardHeader() {
       label: "WhatsApp",
       image: "/icons/whatsapp.png",
       href: `https://wa.me/?text=${encodeURIComponent(formUrl)}`,
-      bg: "bg-white border border-gray-200",
     },
     {
       label: "Email",
@@ -38,7 +39,6 @@ export default function DashboardHeader() {
       href: `mailto:?subject=${encodeURIComponent(
         "Take a look at this form"
       )}&body=${encodeURIComponent(formUrl)}`,
-      bg: "bg-white border border-gray-200 text-black",
     },
     {
       label: "X",
@@ -46,33 +46,25 @@ export default function DashboardHeader() {
       href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(
         formUrl
       )}`,
-      bg: "bg-white border border-gray-200",
     },
   ];
 
   return (
-    <header className="w-full border-b border-gray-100 bg-white px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:pt-4 lg:pb-5">
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-        <div className="min-w-0">
-          <h1 className="text-xl font-semibold text-gray-900 sm:text-2xl">
-            Dashboard
-          </h1>
-
-          <p className="mt-1 text-sm leading-relaxed text-gray-400 sm:text-[15px]">
-            Welcome back{dashboardData.userName ? `, ${dashboardData.userName}` : ""}! Here's what's happening with your feedbacks.
-          </p>
-        </div>
-
-        <div className="flex w-full flex-col gap-3 sm:flex-row lg:w-auto lg:items-center lg:justify-end">
-          <button
+    <>
+      <PageHeader
+        title="Dashboard"
+        subtitle={`Welcome back${
+          dashboardData.userName ? `, ${dashboardData.userName}` : ""
+        }! Here's what's happening with your feedbacks.`}
+        actions={
+          <HeaderButton
             onClick={() => setShowShare(true)}
-            className="group relative flex h-11 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-blue-600 px-5 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-md active:translate-y-0 active:scale-[0.98] sm:w-auto"
+            icon={<Share2 className="h-4 w-4" />}
           >
-            <Share2 className="h-4 w-4 transition-transform duration-200 group-hover:rotate-12" />
             Share Form
-          </button>
-        </div>
-      </div>
+          </HeaderButton>
+        }
+      />
 
       {showShare && (
         <>
@@ -150,16 +142,12 @@ export default function DashboardHeader() {
                       rel="noopener noreferrer"
                       className="group flex flex-col items-center gap-2"
                     >
-                      <span
-                        className={`flex h-12 w-12 items-center justify-center rounded-full text-white shadow-sm transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-md group-active:scale-95 ${option.bg}`}
-                      >
-                        {option.image && (
-                          <img
-                            src={option.image}
-                            alt={option.label}
-                            className="h-8 w-8 object-contain"
-                          />
-                        )}
+                      <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white text-white shadow-sm transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-md group-active:scale-95">
+                        <img
+                          src={option.image}
+                          alt={option.label}
+                          className="h-8 w-8 object-contain"
+                        />
                       </span>
                       <span className="text-xs font-medium text-gray-500 transition group-hover:text-gray-800">
                         {option.label}
@@ -172,6 +160,6 @@ export default function DashboardHeader() {
           </div>
         </>
       )}
-    </header>
+    </>
   );
 }

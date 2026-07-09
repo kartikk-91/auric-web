@@ -16,6 +16,7 @@ import {
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import UserProfileFooter from './profile';
+import { cn } from '@/lib/utils';
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
@@ -103,8 +104,13 @@ export default function Sidebar() {
 
   return (
     <>
-      
-      <div className="fixed top-0 left-0 right-0 z-100 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 md:hidden">
+
+      <div
+        className={cn(
+          "fixed top-0 left-0 right-0 z-[100] flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 md:hidden",
+          isOpen && "hidden"
+        )}
+      >
         <Image src="/logo.png" width={90} height={90} alt="Auric" className="h-8 w-auto" />
         <button
           onClick={() => setIsOpen(true)}
@@ -123,7 +129,7 @@ export default function Sidebar() {
 
       <aside
         className={`
-    fixed left-0 top-0 z-50 flex h-[100dvh] flex-col
+    fixed left-0 top-0 z-100 flex h-[100dvh] flex-col
     border-r border-gray-200 bg-white
     transition-[transform,width] duration-300 ease-in-out
     w-[280px] sm:w-[300px]
@@ -133,7 +139,7 @@ export default function Sidebar() {
   `}
         style={{ height: '100dvh' }}
       >
-        
+
         <div className="relative shrink-0 border-b border-gray-100 px-6 py-6 ">
           <div className="flex items-start justify-between">
             {!collapsed && (
@@ -161,7 +167,7 @@ export default function Sidebar() {
             </button>
           </div>
 
-          
+
           <button
             onClick={() => setCollapsed((v) => !v)}
             className="absolute -right-3 top-7 z-10 hidden h-6 w-6 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-sm transition hover:bg-gray-50 hover:text-blue-600 md:flex"
@@ -171,7 +177,7 @@ export default function Sidebar() {
           </button>
         </div>
 
-        
+
         <nav className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-3 py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <ul className="space-y-1">
             {menuItems.map((item) => {
@@ -203,7 +209,7 @@ export default function Sidebar() {
           </ul>
         </nav>
 
-        
+
         <div className="shrink-0 border-t border-gray-200 px-3 py-4">
           {collapsed ? (
             <div
@@ -212,9 +218,8 @@ export default function Sidebar() {
                   ? 'Loading usage…'
                   : `${used.toLocaleString()} / ${limit.toLocaleString()} tokens today`
               }
-              className={`mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 ${
-                loading ? 'animate-pulse' : ''
-              }`}
+              className={`mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 ${loading ? 'animate-pulse' : ''
+                }`}
             >
               <Sparkles className="h-4 w-4" />
             </div>
