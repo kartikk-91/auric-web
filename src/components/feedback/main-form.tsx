@@ -12,7 +12,7 @@ import FeedbackFooter from './feedback-footer'
 type SubmitStatus = 'idle' | 'submitting' | 'success' | 'error'
 
 const CARD_CLASSES =
-  'relative z-10 flex w-full max-w-2xl flex-col md:w-3/4 lg:w-1/2 rounded-none sm:rounded-[2rem] border-0 sm:border sm:border-neutral-200 bg-white p-4 shadow-none sm:shadow-[0_10px_40px_rgba(0,0,0,0.06)] sm:p-6 md:p-8'
+  'relative z-10 flex w-full max-w-2xl flex-col md:w-3/4 lg:w-1/2 rounded-none sm:rounded-2xl border-0 sm:border sm:border-slate-200 bg-white p-4 shadow-none sm:shadow-[0_20px_48px_-32px_rgba(15,23,42,0.28)] sm:p-6 md:p-8'
 
 const MainForm = ({ form }: { form: any }) => {
   const [step, setStep] = useState(1)

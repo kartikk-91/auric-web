@@ -33,9 +33,13 @@ interface UsageData {
 
 const USAGE_REFRESH_EVENT = 'auric:usage-updated';
 
+// This module survives client-side route changes. Keeping the last value means
+// the usage card never falls back to a skeleton just because the sidebar remounts.
+let cachedUsage: UsageData | null = null;
+
 function useTokenUsage() {
-  const [usage, setUsage] = useState<UsageData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [usage, setUsage] = useState<UsageData | null>(cachedUsage);
+  const [loading, setLoading] = useState(!cachedUsage);
 
   useEffect(() => {
     let cancelled = false;
@@ -49,6 +53,7 @@ function useTokenUsage() {
         if (cancelled) return;
         try {
           const data = JSON.parse(event.data);
+          cachedUsage = data;
           setUsage(data);
           setLoading(false);
         } catch {
@@ -70,7 +75,11 @@ function useTokenUsage() {
         const res = await fetch('/api/usage', { cache: 'no-store' });
         if (!res.ok) return;
         const data = await res.json();
-        if (!cancelled) setUsage(data);
+        cachedUsage = data;
+        if (!cancelled) {
+          setUsage(data);
+          setLoading(false);
+        }
       } catch {
         // ignore, the SSE stream will catch up shortly
       }
@@ -98,6 +107,11 @@ export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const { usage, loading } = useTokenUsage();
 
+  useEffect(() => {
+    // Warm Next's route cache after the sidebar is interactive.
+    for (const item of menuItems) router.prefetch(item.href);
+  }, [router]);
+
   const limit = usage?.limit ?? 0;
   const used = usage?.used ?? 0;
   const pct = limit > 0 ? Math.min(100, (used / limit) * 100) : 0;
@@ -107,7 +121,7 @@ export default function Sidebar() {
 
       <div
         className={cn(
-          "fixed top-0 left-0 right-0 z-[100] flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 md:hidden",
+          "fixed top-0 left-0 right-0 z-[100] flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 md:hidden",
           isOpen && "hidden"
         )}
       >
@@ -130,7 +144,7 @@ export default function Sidebar() {
       <aside
         className={`
     fixed left-0 top-0 z-100 flex h-[100dvh] flex-col
-    border-r border-gray-200 bg-white
+    border-r border-slate-200 bg-white
     transition-[transform,width] duration-300 ease-in-out
     w-[280px] sm:w-[300px]
     ${isOpen ? 'translate-x-0' : '-translate-x-full'}
@@ -140,12 +154,12 @@ export default function Sidebar() {
         style={{ height: '100dvh' }}
       >
 
-        <div className="relative shrink-0 border-b border-gray-100 px-6 py-6 ">
+        <div className="relative shrink-0 border-b border-slate-100 px-6 py-6 ">
           <div className="flex items-start justify-between">
             {!collapsed && (
               <div>
                 <Image src="/logo.png" width={110} height={110} alt="Auric" className="h-9 w-auto" />
-                <p className="mt-2 text-sm text-gray-500">Make every review count</p>
+                <p className="mt-2 text-xs font-medium tracking-wide text-slate-400">CUSTOMER INTELLIGENCE</p>
               </div>
             )}
 
@@ -170,7 +184,7 @@ export default function Sidebar() {
 
           <button
             onClick={() => setCollapsed((v) => !v)}
-            className="absolute -right-3 top-7 z-10 hidden h-6 w-6 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-sm transition hover:bg-gray-50 hover:text-blue-600 md:flex"
+            className="absolute -right-3 top-7 z-10 hidden h-6 w-6 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:bg-blue-50 hover:text-blue-600 md:flex"
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             {collapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}
@@ -197,7 +211,7 @@ export default function Sidebar() {
                       px-4 py-3 text-sm font-medium
                       transition-all duration-200
                       ${collapsed ? 'justify-center px-0' : ''}
-                      ${isActive ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50'}
+                      ${isActive ? 'bg-blue-50 text-blue-700 shadow-[inset_0_0_0_1px_rgba(37,99,235,0.08)]' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-950'}
                     `}
                   >
                     <Icon className="h-5 w-5 shrink-0" strokeWidth={2} />
@@ -210,7 +224,7 @@ export default function Sidebar() {
         </nav>
 
 
-        <div className="shrink-0 border-t border-gray-200 px-3 py-4">
+        <div className="shrink-0 border-t border-slate-100 px-3 py-4">
           {collapsed ? (
             <div
               title={
@@ -224,7 +238,7 @@ export default function Sidebar() {
               <Sparkles className="h-4 w-4" />
             </div>
           ) : loading ? (
-            <div className="rounded-2xl bg-gray-50 p-3.5">
+            <div className="rounded-xl border border-slate-100 bg-slate-50 p-3.5">
               <div className="mb-2 flex items-center justify-between">
                 <div className="h-3 w-20 animate-pulse rounded bg-gray-200" />
                 <div className="h-3 w-14 animate-pulse rounded bg-gray-200" />

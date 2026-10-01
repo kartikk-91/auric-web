@@ -163,12 +163,12 @@ export default function FeedbackHeader({
     <div className="mb-6 md:mb-8">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div className="min-w-0 ">
-          <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
+          <h1 className="text-2xl font-semibold tracking-[-0.035em] text-slate-950">
             Customer Feedback
           </h1>
 
-          <p className="mt-1 text-xs sm:text-base text-gray-500 max-w-2xl leading-6">
-            All your customer feedback in one place.
+          <p className="mt-1 text-sm text-slate-500 max-w-2xl leading-6">
+            Review the conversations and patterns that matter most.
           </p>
         </div>
 

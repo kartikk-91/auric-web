@@ -74,7 +74,7 @@ const FeedbackForm = () => {
   }, []);
 
   return (
-    <div className="flex min-h-dvh w-full bg-[#fafafa] lg:h-dvh lg:overflow-hidden">
+    <div className="app-shell flex min-h-dvh w-full lg:h-dvh lg:overflow-hidden">
       <Sidebar />
 
       <div className="flex min-w-0 flex-1 flex-col mt-14 md:mt-0 lg:overflow-hidden">

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getCurrentCompany } from "@/lib/auth-session";
+import { auricFetch } from "@/lib/auric-api";
 
 export async function DELETE(
   _req: NextRequest,
@@ -20,9 +21,10 @@ export async function DELETE(
   if (!document || document.c_id !== company.c_id) {
     return NextResponse.json({ error: "Document not found." }, { status: 404 });
   }
-  const engineRes = await fetch(
-    `${process.env.NEXT_PUBLIC_AURIC_API_ENDPOINT}/knowledge/${document_id}?c_id=${company.c_id}`,
-    { method: "DELETE" }
+  const engineRes = await auricFetch(
+    `/knowledge/${encodeURIComponent(document_id)}`,
+    { method: "DELETE" },
+    ["knowledge:write"],
   );
 
   if (!engineRes.ok && engineRes.status !== 404) {

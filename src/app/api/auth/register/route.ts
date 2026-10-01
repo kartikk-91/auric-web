@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { getUserByEmail } from "@/data/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import { prisma } from "@/lib/db";
-import { sendVerificationAction } from "@/app/actions/send-verification";
+import { sendVerificationEmail } from "@/lib/mailer";
 
 export async function POST(req: Request) {
   try {
@@ -48,8 +48,8 @@ export async function POST(req: Request) {
       await prisma.user.create({
         data: { name, email, hashedPassword },
       });
-    } catch (dbError: any) {
-      if (dbError?.code === "P2002") {
+    } catch (dbError: unknown) {
+      if ((dbError as { code?: string })?.code === "P2002") {
         return Response.json(
           {
             error: "An account with this email already exists. Try logging in instead.",
@@ -64,7 +64,7 @@ export async function POST(req: Request) {
     const verificationToken = await generateVerificationToken(email);
 
     try {
-      await sendVerificationAction(email, name, verificationToken.token);
+      await sendVerificationEmail(email, name ?? "user", verificationToken.token);
     } catch (emailError) {
       console.error("SEND VERIFICATION EMAIL ERROR:", emailError);
       return Response.json(

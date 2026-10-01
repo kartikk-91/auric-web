@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 export default function FeedbackFormSection() {
   const router=useRouter();
   return (
-    <section className="py-16 bg-linear-to-br from-blue-50/30 via-purple-50/20 to-pink-50/10">
+    <section id="workflow" className="border-y border-slate-200 bg-slate-50 py-20 sm:py-24">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
 
@@ -20,21 +20,16 @@ export default function FeedbackFormSection() {
 
           <div className="space-y-8">
 
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full">
-              <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium text-blue-700">
-                Easy to get started
-              </span>
-            </div>
+            <p className="text-xs font-semibold tracking-[0.16em] text-blue-600">FROM RESPONSE TO DECISION</p>
 
 
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-              Create forms that get you better feedback
+            <h2 className="text-3xl font-semibold tracking-[-0.04em] text-slate-950 md:text-4xl leading-tight">
+              Build a feedback system people actually want to use.
             </h2>
 
 
-            <p className="text-xl text-gray-600 leading-relaxed">
-              Build beautiful feedback forms in minutes. Customize questions, logic, and design to match your brand.
+            <p className="text-lg text-slate-600 leading-8">
+              Start with a polished form, keep every response in one place, and give your team a shared understanding of what to do next.
             </p>
 
 
@@ -42,8 +37,8 @@ export default function FeedbackFormSection() {
 
 
             <div>
-              <button onClick={()=>{router.push('/auth/login')}} className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 shadow-lg shadow-blue-600/20 hover:shadow-xl hover:shadow-blue-600/30 hover:scale-105">
-                Start Building for Free
+              <button onClick={()=>{router.push('/auth/signup')}} className="bg-slate-950 hover:bg-slate-800 text-white px-6 py-3.5 rounded-xl font-semibold transition-all shadow-lg shadow-slate-900/15">
+                Build your first form
               </button>
             </div>
           </div>

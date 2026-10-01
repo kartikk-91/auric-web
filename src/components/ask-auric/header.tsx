@@ -9,7 +9,7 @@ interface HeaderProps {
 
 export default function Header({ onOpenSidebar }: HeaderProps) {
   return (
-    <header className="w-full shrink-0 border-b border-gray-100 bg-white">
+    <header className="w-full shrink-0 border-b border-slate-200 bg-white">
       <div className="px-4 sm:px-6 lg:px-8 py-3.5">
         <div className="flex items-center gap-3">
           
@@ -35,11 +35,11 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
 
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h1 className="text-xl font-semibold text-gray-900 leading-none">Ask Auric</h1>
+              <h1 className="text-xl font-semibold tracking-[-0.03em] text-slate-950 leading-none">Ask Auric</h1>
 
               </div>
               <p className="mt-0.5 text-sm text-gray-400 truncate">
-                AI-powered insights from your feedback
+                Your customer intelligence workspace
               </p>
             </div>
           </div>

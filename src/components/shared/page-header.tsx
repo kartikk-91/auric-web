@@ -37,8 +37,8 @@ export default function PageHeader({
   progress = false,
 }: PageHeaderProps) {
   return (
-    <header className="w-full shrink-0 border-b border-gray-100 bg-white">
-      <div className="px-4 py-3.5 sm:px-6 lg:px-8 lg:py-5">
+    <header className="w-full shrink-0 border-b border-slate-200 bg-white">
+      <div className="px-4 py-4 sm:px-6 lg:px-8 lg:py-5">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex min-w-0 items-center gap-2.5">
             {onOpenSidebar && (
@@ -58,11 +58,11 @@ export default function PageHeader({
             )}
 
             <div className="min-w-0">
-              <h1 className="truncate text-xl font-semibold text-gray-900 sm:text-2xl">
+              <h1 className="truncate text-xl font-semibold tracking-[-0.035em] text-slate-950 sm:text-2xl">
                 {title}
               </h1>
               {subtitle && (
-                <p className="mt-1 max-w-2xl truncate text-sm text-gray-500">
+                <p className="mt-1 max-w-2xl truncate text-sm text-slate-500">
                   {subtitle}
                 </p>
               )}

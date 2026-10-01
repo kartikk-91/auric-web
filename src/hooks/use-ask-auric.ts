@@ -16,6 +16,22 @@ export type Source = {
   error?: string;
 };
 
+export type Citation = {
+  id: string;
+  type: "knowledge" | "feedback" | "sql" | "internet";
+  title: string;
+  document_id?: string | null;
+  page?: number | null;
+  feedback_id?: string | null;
+  state?: string | null;
+  rating?: number | null;
+  sentiment?: string | null;
+  excerpt?: string | null;
+  table?: string | null;
+  rows_analyzed?: number | null;
+  url?: string | null;
+};
+
 export type Usage = {
   prompt_tokens: number;
   completion_tokens: number;
@@ -29,14 +45,19 @@ export type Message = {
   role: "user" | "assistant";
   content: string;
   sources?: Source[] | null;
+  citations?: Citation[] | null;
   usage?: Usage | null;
   createdAt: string;
   isStreaming?: boolean;
   
   statusLabel?: string | null;
 };
-const API_BASE =
-  process.env.NEXT_PUBLIC_AURIC_API_ENDPOINT ?? "http://127.0.0.1:8000";
+const API_BASE = "/api/auric";
+
+// Kept outside the hook so Ask Auric keeps its already-loaded conversations
+// when the user changes product pages and comes back in the same session.
+let cachedChats: Chat[] | null = null;
+const cachedMessages = new Map<string, Message[]>();
 
 const RETRIEVER_LABELS: Record<string, string> = {
   knowledge: "Searching knowledge base…",
@@ -47,13 +68,12 @@ const RETRIEVER_LABELS: Record<string, string> = {
 
 async function streamChat(opts: {
   query: string;
-  company_id: string;
   chat_id: string | null;
   signal: AbortSignal;
   onChatId: (id: string) => void;
   onStatus: (label: string) => void;
   onToken: (token: string) => void;
-  onSources: (sources: Source[]) => void;
+  onCitations: (citations: Citation[]) => void;
   onUsage: (usage: Usage) => void;
   onDone: () => void;
   onError: (msg: string) => void;
@@ -68,7 +88,6 @@ async function streamChat(opts: {
       },
       body: JSON.stringify({
         query: opts.query,
-        company_id: opts.company_id,
         chat_id: opts.chat_id,
       }),
       signal: opts.signal,
@@ -80,8 +99,8 @@ async function streamChat(opts: {
   }
 
   if (!res.ok || !res.body) {
-    const text = await res.text().catch(() => "Unknown error");
-    opts.onError(`Server error ${res.status}: ${text}`);
+    const body = await res.json().catch(() => ({}));
+    opts.onError((body as { error?: string }).error ?? `Request failed (${res.status}).`);
     return;
   }
 
@@ -139,7 +158,7 @@ async function streamChat(opts: {
           opts.onUsage(payload as unknown as Usage);
           break;
         case "sources":
-          if (Array.isArray(payload.sources)) opts.onSources(payload.sources as Source[]);
+          if (Array.isArray(payload.citations)) opts.onCitations(payload.citations as Citation[]);
           break;
         case "done":
           opts.onDone();
@@ -154,8 +173,8 @@ async function streamChat(opts: {
   opts.onDone();
 }
 
-async function apiFetchChats(company_id: string): Promise<Chat[]> {
-  const url = `${API_BASE}/auricbot/chats?company_id=${encodeURIComponent(company_id)}&limit=100`;
+async function apiFetchChats(): Promise<Chat[]> {
+  const url = `${API_BASE}/auricbot/chats?limit=100`;
   const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`Failed to fetch chats: ${res.status}`);
@@ -169,8 +188,8 @@ async function apiFetchChats(company_id: string): Promise<Chat[]> {
   }));
 }
 
-async function apiFetchMessages(chat_id: string, company_id: string): Promise<Message[]> {
-  const url = `${API_BASE}/auricbot/chats/${encodeURIComponent(chat_id)}?company_id=${encodeURIComponent(company_id)}`;
+async function apiFetchMessages(chat_id: string): Promise<Message[]> {
+  const url = `${API_BASE}/auricbot/chats/${encodeURIComponent(chat_id)}`;
   const res = await fetch(url);
 
   if (res.status === 404) return [];
@@ -187,31 +206,32 @@ async function apiFetchMessages(chat_id: string, company_id: string): Promise<Me
     role: m.role as "user" | "assistant",
     content: (m.content ?? "") as string,
     sources: (m.sources ?? null) as Source[] | null,
+    citations: (m.citations ?? null) as Citation[] | null,
     createdAt: (m.createdAt ?? m.created_at) as string,
   }));
 }
 
-async function apiDeleteChat(chat_id: string, company_id: string): Promise<void> {
+async function apiDeleteChat(chat_id: string): Promise<void> {
   const res = await fetch(
-    `${API_BASE}/auricbot/chats/${encodeURIComponent(chat_id)}?company_id=${encodeURIComponent(company_id)}`,
+    `${API_BASE}/auricbot/chats/${encodeURIComponent(chat_id)}`,
     { method: "DELETE" },
   );
   if (!res.ok) throw new Error(`Failed to delete chat: ${res.status}`);
 }
 
-async function apiClearHistory(company_id: string): Promise<void> {
+async function apiClearHistory(): Promise<void> {
   const res = await fetch(
-    `${API_BASE}/auricbot/chats?company_id=${encodeURIComponent(company_id)}`,
+    `${API_BASE}/auricbot/chats`,
     { method: "DELETE" },
   );
   if (!res.ok) throw new Error(`Failed to clear history: ${res.status}`);
 }
 
-export function useAskAuric({ companyId }: { companyId: string | undefined | null }) {
-  const [chats, setChats] = useState<Chat[]>([]);
+export function useAskAuric() {
+  const [chats, setChats] = useState<Chat[]>(cachedChats ?? []);
   const [activeChatId, setActiveChatIdRaw] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
-  const [loadingChats, setLoadingChats] = useState(true);
+  const [loadingChats, setLoadingChats] = useState(!cachedChats);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [sendingMessage, setSendingMessage] = useState(false);
   const [deletingChatId, setDeletingChatId] = useState<string | null>(null);
@@ -221,14 +241,17 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
   const abortRef = useRef<AbortController | null>(null);
   const didAutoSelect = useRef(false);
   const skipNextMessageLoadRef = useRef(false);
+  const messagesChatIdRef = useRef("");
 
   const loadChats = useCallback(
     async (opts?: { autoSelectFirst?: boolean }) => {
-      if (!companyId) return;
       try {
-        setLoadingChats(true);
+        // Revalidate cached history quietly; don't replace the visible list
+        // with skeletons on a route remount.
+        if (!cachedChats) setLoadingChats(true);
         setError(null);
-        const data = await apiFetchChats(companyId);
+        const data = await apiFetchChats();
+        cachedChats = data;
         setChats(data);
         if (opts?.autoSelectFirst && !didAutoSelect.current && data.length > 0) {
           didAutoSelect.current = true;
@@ -241,15 +264,24 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
         setLoadingChats(false);
       }
     },
-    [companyId],
+    [],
   );
 
   const loadMessages = useCallback(
     async (chatId: string) => {
-      if (!companyId || !chatId) return;
+      if (!chatId) return;
+      const cached = cachedMessages.get(chatId);
+      if (cached) {
+        messagesChatIdRef.current = chatId;
+        setMessages(cached);
+        setLoadingMessages(false);
+        return;
+      }
       try {
         setLoadingMessages(true);
-        const data = await apiFetchMessages(chatId, companyId);
+        const data = await apiFetchMessages(chatId);
+        cachedMessages.set(chatId, data);
+        messagesChatIdRef.current = chatId;
         setMessages(data);
       } catch (err) {
         console.error("[AuricBot] loadMessages error:", err);
@@ -258,12 +290,21 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
         setLoadingMessages(false);
       }
     },
-    [companyId],
+    [],
   );
 
   const setActiveChatId = useCallback((id: string) => {
     abortRef.current?.abort();
     setSendingMessage(false);
+    // Swap to the cached conversation synchronously. The effect below only
+    // fetches when this is the first visit to that chat.
+    if (cachedMessages.has(id)) {
+      messagesChatIdRef.current = id;
+      setMessages(cachedMessages.get(id)!);
+    } else {
+      messagesChatIdRef.current = "";
+      setMessages([]);
+    }
     setActiveChatIdRaw(id);
   }, []);
 
@@ -271,6 +312,7 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
     abortRef.current?.abort();
     setSendingMessage(false);
     setActiveChatIdRaw("");
+    messagesChatIdRef.current = "";
     setMessages([]);
   }, []);
 
@@ -278,11 +320,6 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
     async (text: string) => {
       const trimmed = text.trim();
       if (!trimmed) return;
-      if (!companyId) {
-        setError("Missing company context — please refresh the page.");
-        return;
-      }
-
       abortRef.current?.abort();
       const controller = new AbortController();
       abortRef.current = controller;
@@ -320,7 +357,6 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
       try {
         await streamChat({
           query: trimmed,
-          company_id: companyId,
           chat_id: startChatId || null,
           signal: controller.signal,
 
@@ -329,6 +365,7 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
               skipNextMessageLoadRef.current = true;
             }
             setActiveChatIdRaw(id);
+            messagesChatIdRef.current = id;
             setMessages((prev) =>
               prev.map((m) =>
                 m.messageId === tempUserId || m.messageId === tempAiId
@@ -368,9 +405,9 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
             );
           },
 
-          onSources: (sources) => {
+          onCitations: (citations) => {
             setMessages((prev) =>
-              prev.map((m) => (m.messageId === tempAiId ? { ...m, sources } : m)),
+              prev.map((m) => (m.messageId === tempAiId ? { ...m, citations } : m)),
             );
           },
 
@@ -436,7 +473,7 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
         setSendingMessage(false);
       }
     },
-    [activeChatId, companyId, loadChats],
+    [activeChatId, loadChats],
   );
 
   const stopStreaming = useCallback(() => {
@@ -449,10 +486,10 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
 
   const deleteChat = useCallback(
     async (chatId: string) => {
-      if (!companyId) return;
       setDeletingChatId(chatId);
       try {
-        await apiDeleteChat(chatId, companyId);
+        await apiDeleteChat(chatId);
+        cachedMessages.delete(chatId);
         setChats((prev) => prev.filter((c) => c.chatId !== chatId));
         if (activeChatId === chatId) {
           abortRef.current?.abort();
@@ -467,30 +504,41 @@ export function useAskAuric({ companyId }: { companyId: string | undefined | nul
         setDeletingChatId(null);
       }
     },
-    [activeChatId, companyId],
+    [activeChatId],
   );
 
   const clearHistory = useCallback(async () => {
-    if (!companyId) return;
     setClearingHistory(true);
     try {
-      await apiClearHistory(companyId);
+      await apiClearHistory();
       abortRef.current?.abort();
       setSendingMessage(false);
       setChats([]);
       setMessages([]);
       setActiveChatIdRaw("");
+      cachedChats = [];
+      cachedMessages.clear();
     } catch (err) {
       console.error("[AuricBot] clearHistory error:", err);
       setError("Couldn't clear chat history. Please try again.");
     } finally {
       setClearingHistory(false);
     }
-  }, [companyId]);
+  }, []);
 
   useEffect(() => {
-    if (companyId) loadChats({ autoSelectFirst: true });
-  }, [companyId, loadChats]);
+    loadChats({ autoSelectFirst: true });
+  }, [loadChats]);
+
+  useEffect(() => {
+    cachedChats = chats;
+  }, [chats]);
+
+  useEffect(() => {
+    if (activeChatId && messagesChatIdRef.current === activeChatId) {
+      cachedMessages.set(activeChatId, messages);
+    }
+  }, [activeChatId, messages]);
 
   useEffect(() => {
     if (activeChatId) {

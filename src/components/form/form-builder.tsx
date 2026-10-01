@@ -39,7 +39,7 @@ export default function FormBuilder({
   }, [showSidebar, showSettings]);
 
   return (
-    <div className="relative flex flex-col pb-4 bg-gradient-to-b from-gray-50/80 to-white lg:h-[calc(100vh-100px)] lg:flex-row lg:overflow-hidden">
+    <div className="relative flex flex-col pb-4 bg-transparent lg:h-[calc(100vh-100px)] lg:flex-row lg:overflow-hidden">
 
       <div className="sticky top-0 z-20 flex items-center justify-between border-b border-gray-200 bg-white/95 px-4 py-2.5 backdrop-blur-sm lg:hidden">
         <button

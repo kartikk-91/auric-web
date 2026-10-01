@@ -13,17 +13,17 @@ const features = [
   },
   {
     icon: BarChart3,
-    title: 'AI-Powered Insights',
-    description: 'Uncover key themes and sentiment with AI analysis that helps you act faster.',
-    iconColor: 'text-purple-600',
-    iconBgColor: 'bg-purple-50'
+    title: 'See the pattern',
+    description: 'Surface the themes and sentiment shifts that matter before they become a bigger problem.',
+    iconColor: 'text-indigo-600',
+    iconBgColor: 'bg-indigo-50'
   },
   {
     icon: Star,
-    title: 'Create Testimonials',
-    description: 'Transform feedback into beautiful, on-brand testimonials in seconds.',
-    iconColor: 'text-yellow-500',
-    iconBgColor: 'bg-yellow-50'
+    title: 'Share the proof',
+    description: 'Turn the strongest customer moments into polished proof your team can use anywhere.',
+    iconColor: 'text-sky-600',
+    iconBgColor: 'bg-sky-50'
   },
   {
     icon: Send,
@@ -36,25 +36,15 @@ const features = [
 
 export default function FeaturesGrid() {
   return (
-    <section className="py-16">
+    <section id="capabilities" className="bg-white py-20 sm:py-24">
       <div className="max-w-7xl mx-auto px-6">
 
-        <div className="flex justify-center mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full">
-            <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium text-blue-700">
-              Everything you need
-            </span>
-          </div>
-        </div>
+        <p className="text-center text-xs font-semibold tracking-[0.16em] text-blue-600">CAPABILITIES</p>
+        <h2 className="mx-auto mt-4 max-w-2xl text-center text-3xl font-semibold tracking-[-0.04em] text-slate-950 md:text-4xl">A complete feedback loop, without the busywork.</h2>
+        <p className="mx-auto mt-4 max-w-xl text-center leading-7 text-slate-600">Collect the signal, understand the pattern, and share what deserves to be heard.</p>
 
 
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-16">
-          Collect. Analyze. Showcase. All in one place.
-        </h2>
-
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 md:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => (
             <FeatureCard key={index} {...feature} />
           ))}

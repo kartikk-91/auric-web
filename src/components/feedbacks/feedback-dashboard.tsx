@@ -28,21 +28,38 @@ interface FeedbackListResponse {
   stats: FeedbackStatsData;
 }
 
+// Route components are unmounted during navigation. Retain complete responses
+// in the client so returning to a filter/page renders useful data immediately.
+const feedbackCache = new Map<string, FeedbackListResponse>();
+
+function getCacheKey(params: {
+  page: number;
+  dateRange: string;
+  sentiment: string;
+  location: string;
+  ageRange: string;
+}) {
+  return JSON.stringify(params);
+}
+
 export default function FeedbackDashboard() {
-  const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
-  const [total, setTotal] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
+  const initial = feedbackCache.get(getCacheKey({
+    page: 1, dateRange: 'All Time', sentiment: '', location: '', ageRange: '',
+  }));
+  const [feedbacks, setFeedbacks] = useState<Feedback[]>(initial?.data ?? []);
+  const [total, setTotal] = useState(initial?.total ?? 0);
+  const [totalPages, setTotalPages] = useState(initial?.totalPages ?? 1);
   const [stats, setStats] = useState<FeedbackStatsData>({
-    total: 0,
-    positive: 0,
-    neutral: 0,
-    negative: 0,
+    total: initial?.stats.total ?? 0,
+    positive: initial?.stats.positive ?? 0,
+    neutral: initial?.stats.neutral ?? 0,
+    negative: initial?.stats.negative ?? 0,
   });
 
   const [selectedFeedback, setSelectedFeedback] = useState<Feedback | null>(null);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(!initial);
   const [isFetching, setIsFetching] = useState(false);
-  const hasLoadedOnce = useRef(false);
+  const hasLoadedOnce = useRef(Boolean(initial));
 
   const [error, setError] = useState<string | null>(null);
 
@@ -73,14 +90,30 @@ export default function FeedbackDashboard() {
     return () => clearTimeout(handle);
   }, [selectedLocation]);
   useEffect(() => {
-    setCurrentPage(1);
-  }, [dateRange, selectedSentiment, debouncedLocation, ageRange]);
-  useEffect(() => {
     const controller = new AbortController();
 
     async function fetchFeedbacks() {
+      const cacheKey = getCacheKey({
+        page: currentPage,
+        dateRange,
+        sentiment: selectedSentiment,
+        location: debouncedLocation,
+        ageRange,
+      });
+      const cached = feedbackCache.get(cacheKey);
+
       try {
-        if (!hasLoadedOnce.current) {
+        // A cached result is shown first, then revalidated without blocking the
+        // table. This prevents the empty/name-only flash on tab switches.
+        if (cached) {
+          setFeedbacks(cached.data);
+          setTotal(cached.total);
+          setTotalPages(cached.totalPages);
+          setStats(cached.stats);
+          hasLoadedOnce.current = true;
+          setIsInitialLoading(false);
+          setIsFetching(true);
+        } else if (!hasLoadedOnce.current) {
           setIsInitialLoading(true);
         } else {
           setIsFetching(true);
@@ -107,6 +140,7 @@ export default function FeedbackDashboard() {
 
         const json: FeedbackListResponse = await response.json();
 
+        feedbackCache.set(cacheKey, json);
         setFeedbacks(json.data);
         setTotal(json.total);
         setTotalPages(json.totalPages);
@@ -233,17 +267,29 @@ export default function FeedbackDashboard() {
 
   return (
     <>
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 mt-12 md:mt-0 py-6 lg:py-8">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 mt-12 md:mt-0 py-7 lg:py-9">
 
         <FeedbackHeader
           dateRange={dateRange}
-          onDateRangeChange={setDateRange}
+          onDateRangeChange={(value) => {
+            setCurrentPage(1);
+            setDateRange(value);
+          }}
           selectedSentiment={selectedSentiment}
-          onSentimentChange={setSelectedSentiment}
+          onSentimentChange={(value) => {
+            setCurrentPage(1);
+            setSelectedSentiment(value);
+          }}
           selectedLocation={selectedLocation}
-          onLocationChange={setSelectedLocation}
+          onLocationChange={(value) => {
+            setCurrentPage(1);
+            setSelectedLocation(value);
+          }}
           ageRange={ageRange}
-          onAgeRangeChange={setAgeRange}
+          onAgeRangeChange={(value) => {
+            setCurrentPage(1);
+            setAgeRange(value);
+          }}
           onExportCSV={handleExportCSV}
           onExportJSON={handleExportJSON}
           totalFeedbacks={total}

@@ -107,6 +107,7 @@ export default function ChatWindow({
                     role: message.role,
                     content: message.content,
                     sources: message.sources,
+                    citations: message.citations,
                     usage: message.usage,
                     createdAt: message.createdAt,
                     isStreaming: message.isStreaming,

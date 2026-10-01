@@ -1,5 +1,5 @@
-import { CheckOrgExists } from "@/app/actions/check-organization";
 import { auth } from "@/auth";
+import { getOrgByUserId } from "@/data/organization";
 import LeftPanel from "@/components/org/left-panel";
 import RightPanel from "@/components/org/right-panel";
 import Image from "next/image";
@@ -10,7 +10,7 @@ export default async function OnboardingPage() {
 
     if (!session) redirect("/auth/login");
 
-    const orgExists = await CheckOrgExists(session.user.id);
+    const orgExists = await getOrgByUserId(session.user.id);
 
     if (orgExists) redirect("/dashboard");
 

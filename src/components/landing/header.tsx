@@ -1,58 +1,56 @@
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function Header() {
-  const router=useRouter();
+  const router = useRouter();
   return (
-    <header className="border-b border-gray-200 bg-white/80 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Image
-              src={'/logo.png'}
-              width={100}
-              height={100}
-              alt={'Auric'}
-            />
-          </div>
-
-          <nav className="hidden md:flex items-center gap-8">
-            {['Product', 'Use Cases', 'Resources'].map((item) => (
-              <button
-                key={item}
-                className="text-gray-700 hover:text-gray-900 font-medium flex items-center gap-1"
-              >
-                {item}
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-            ))}
-
-            <button className="text-gray-700 hover:text-gray-900 font-medium">
-              Pricing
-            </button>
-          </nav>
-
-          <div className="flex items-center gap-4">
-            <button onClick={()=>{router.push('/auth/login')}} className="text-gray-700 hover:text-gray-900 font-medium text-[15px]">
-              Log in
-            </button>
-
-            <button onClick={()=>{router.push('/auth/signup')}} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-[15px] rounded-md font-medium transition-colors">
-              Sign up
-            </button>
-          </div>
+    <header className="sticky top-0 z-50 bg-white/92 backdrop-blur-xl">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+        <a href="/" className="flex items-center gap-3">
+          <Image
+            src="/logo.png"
+            width={100}
+            height={38}
+            alt="Auric"
+            className="h-8 w-auto"
+            priority
+          />
+        </a>
+        <nav className="hidden items-center gap-8 text-sm font-medium text-slate-500 lg:flex">
+          <a
+            href="#workflow"
+            className="relative py-2 transition hover:text-slate-950 after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-blue-600 after:transition-all hover:after:w-full"
+          >
+            Platform
+          </a>
+          <a
+            href="#capabilities"
+            className="relative py-2 transition hover:text-slate-950 after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-blue-600 after:transition-all hover:after:w-full"
+          >
+            Solutions
+          </a>
+          <a
+            href="#start"
+            className="relative py-2 transition hover:text-slate-950 after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-blue-600 after:transition-all hover:after:w-full"
+          >
+            Resources
+          </a>
+        </nav>
+        <div className="flex items-center gap-5">
+          <button
+            onClick={() => router.push("/auth/login")}
+            className="border-b border-transparent pb-0.5 text-sm font-semibold text-slate-600 transition hover:border-slate-950 hover:text-slate-950"
+          >
+            Sign in
+          </button>
+          <button
+            onClick={() => router.push("/auth/signup")}
+            className="group inline-flex items-center gap-2 rounded-full bg-[#1769e8] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_10px_20px_-12px_rgba(23,105,232,0.8)] transition hover:-translate-y-px hover:bg-[#0f58ca]"
+          >
+            Start free{" "}
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+          </button>
         </div>
       </div>
     </header>

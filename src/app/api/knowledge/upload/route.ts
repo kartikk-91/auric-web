@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getCurrentCompany } from "@/lib/auth-session";
+import { auricFetch } from "@/lib/auric-api";
 export const maxDuration = 120;
 
 const MAX_FILE_BYTES = 20 * 1024 * 1024; // 20MB 
@@ -44,7 +45,6 @@ export async function POST(req: NextRequest) {
     const blob = new Blob([bytes], { type: file.type || "application/octet-stream" });
 
     const engineForm = new FormData();
-    engineForm.append("c_id", company.c_id);
     engineForm.append("document_id", document.document_id);
     engineForm.append("file", blob, file.name);
 
@@ -53,11 +53,11 @@ export async function POST(req: NextRequest) {
 
     let engineRes: Response;
     try {
-      engineRes = await fetch(`${process.env.NEXT_PUBLIC_AURIC_API_ENDPOINT}/knowledge/upload`, {
+      engineRes = await auricFetch("/knowledge/upload", {
         method: "POST",
         body: engineForm,
         signal: controller.signal,
-      });
+      }, ["knowledge:write"]);
     } finally {
       clearTimeout(timeout);
     }

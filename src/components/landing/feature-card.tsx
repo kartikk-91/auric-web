@@ -17,24 +17,22 @@ export default function FeatureCard({
   iconBgColor,
 }: FeatureCardProps) {
   return (
-    <div className="group relative overflow-hidden rounded-3xl border border-white/40 bg-white/70 backdrop-blur-xl p-7 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/10">
+    <div className="group relative overflow-hidden bg-white p-7 transition-colors hover:bg-slate-50">
       
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/0 via-purple-50/0 to-blue-100/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
       <div className="relative flex h-full flex-col">
         
         <div
-          className={`mb-6 flex h-14 w-14 items-center justify-center rounded-2xl ${iconBgColor} shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3`}
+          className={`mb-6 flex h-11 w-11 items-center justify-center rounded-xl ${iconBgColor}`}
         >
           <Icon className={`h-7 w-7 ${iconColor}`} />
         </div>
 
         <div className="space-y-3">
-          <h3 className="text-xl font-semibold tracking-tight text-gray-900">
+          <h3 className="text-lg font-semibold tracking-tight text-slate-900">
             {title}
           </h3>
 
-          <p className="text-sm leading-7 text-gray-600">
+          <p className="text-sm leading-6 text-slate-600">
             {description}
           </p>
         </div>

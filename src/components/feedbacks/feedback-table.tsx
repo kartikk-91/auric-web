@@ -72,17 +72,20 @@ export default function FeedbackTable({
     };
   }, []);
 
+  // The detail panel shares horizontal space on desktop. These breakpoints keep
+  // the most useful feedback context visible instead of collapsing to only a
+  // customer name and sentiment badge on ordinary laptop widths.
   const showRating =
-    tableWidth > 620;
+    tableWidth > 480;
 
   const showSummary =
-    tableWidth > 850;
+    tableWidth > 620;
 
   const showReceived =
-    tableWidth > 1050;
+    tableWidth > 760;
 
   const showActions =
-    tableWidth > 1180;
+    tableWidth > 920;
 
   const getInitials = (
     name: string

@@ -12,11 +12,11 @@ export default function StatCard({ title, value, change, icon, iconBgColor }: St
   const isPositive = change.startsWith('+');
   
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-5">
+    <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-[0_12px_28px_-24px_rgba(15,23,42,0.35)] transition-shadow hover:shadow-[0_16px_32px_-24px_rgba(15,23,42,0.45)]">
       <div className="flex items-start justify-between mb-3">
         <div>
-          <p className="text-sm text-gray-600 font-medium mb-1">{title}</p>
-          <h3 className="text-3xl font-bold text-gray-900">{value}</h3>
+          <p className="text-sm text-slate-500 font-medium mb-1">{title}</p>
+          <h3 className="text-3xl font-semibold tracking-[-0.04em] text-slate-950">{value}</h3>
         </div>
         <div className={`p-2.5 rounded-lg ${iconBgColor}`}>
           {icon}

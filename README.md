@@ -40,6 +40,21 @@ Auric transforms raw customer feedback into actionable insights through an async
 
 ---
 
+## Auric API integration
+
+The web app uses its authenticated API routes as a backend-for-frontend for Auric. Configure these server-only variables (do not prefix them with `NEXT_PUBLIC_`):
+
+```env
+AURIC_API_URL=https://your-auric-api.example
+AURIC_API_JWT_SECRET=your-shared-hs256-secret
+AURIC_API_JWT_ISSUER=auric-auth
+AURIC_API_JWT_AUDIENCE=auric-api
+```
+
+The API deployment must use the same secret, issuer, and audience. The app mints five-minute bearer tokens only on the server from the authenticated session; browsers never receive the signing secret or send a tenant ID to Auric.
+
+---
+
 ## Tech Stack
 
 | Category | Technologies |

@@ -20,7 +20,7 @@ const FeedbackForm = async ({
 
   if (!form) {
     return (
-      <div className="relative flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-pink-50 via-white to-purple-50 px-4">
+      <div className="relative flex min-h-screen w-full items-center justify-center bg-slate-50 px-4">
         <div className="w-full max-w-md rounded-3xl border border-neutral-200 bg-white p-8 text-center shadow-sm">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-neutral-50 border border-neutral-200">
             <svg className="h-6 w-6 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,7 +37,7 @@ const FeedbackForm = async ({
   }
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-pink-50 via-white to-purple-50">
+    <div className="relative min-h-screen w-full overflow-x-hidden bg-slate-50">
       <FeedbackBackground />
 
       <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-start px-0 py-0 sm:px-4 sm:py-8 md:justify-center md:py-10">

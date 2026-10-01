@@ -7,7 +7,7 @@ import Sidebar from "@/components/shared/sidebar"
 const Feedbacks = () => {
 
   return (
-    <div className="w-full h-screen flex overflow-y-hidden">
+    <div className="app-shell w-full h-screen flex overflow-y-hidden">
       <div><Sidebar/></div>
       <div className="w-full overflow-y-scroll">
         <FeedbackDashboard/>

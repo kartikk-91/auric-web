@@ -6,14 +6,10 @@ import Header from "./header";
 import Sidebar from "./sidebar";
 import { useAskAuric } from "@/hooks/use-ask-auric";
 
-interface AskAuricWindowProps {
-  companyId: string | undefined | null;
-}
-
 const OPEN_THRESHOLD_PX = 30;
 const CLOSE_THRESHOLD_PX = 50;
 
-export default function AskAuricWindow({ companyId }: AskAuricWindowProps) {
+export default function AskAuricWindow() {
   const {
     chats,
     messages,
@@ -30,7 +26,7 @@ export default function AskAuricWindow({ companyId }: AskAuricWindowProps) {
     stopStreaming,
     deleteChat,
     clearHistory,
-  } = useAskAuric({ companyId });
+  } = useAskAuric();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -173,20 +169,6 @@ export default function AskAuricWindow({ companyId }: AskAuricWindowProps) {
     setActiveChatId(chatId);
     setSidebarOpen(false);
   };
-
-  if (!companyId) {
-    return (
-      <div
-        className="flex items-center justify-center bg-white px-6 text-center"
-        style={{ height: "var(--app-height, 100dvh)" }}
-      >
-        <div>
-          <p className="text-sm font-medium text-gray-700">Couldn&apos;t load your account</p>
-          <p className="mt-1 text-sm text-gray-400">Please refresh the page, or sign in again.</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div

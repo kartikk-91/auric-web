@@ -4,7 +4,7 @@ import SettingsView from "@/components/settings/settings-view";
 
 const Settings = () => {
   return (
-    <div className="w-full h-screen flex overflow-y-hidden">
+    <div className="app-shell w-full h-screen flex overflow-y-hidden">
       <div><Sidebar/></div>
       <div className="w-full overflow-y-auto">
         <SettingsView />

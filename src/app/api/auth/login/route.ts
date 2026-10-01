@@ -4,7 +4,7 @@ import { getUserByEmail } from "@/data/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { sendVerificationAction } from "@/app/actions/send-verification";
+import { sendVerificationEmail } from "@/lib/mailer";
 
 export async function POST(req: Request) {
   try {
@@ -54,9 +54,9 @@ export async function POST(req: Request) {
     if (!existingUser.isVerified) {
       try {
         const verificationToken = await generateVerificationToken(existingUser.email);
-        await sendVerificationAction(
+        await sendVerificationEmail(
           existingUser.email,
-          existingUser.name,
+          existingUser.name ?? "user",
           verificationToken.token
         );
       } catch (emailError) {
